@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText'
@@ -7,88 +8,139 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+
+import green from '@material-ui/core/colors/green';
+import lightGreen from '@material-ui/core/colors/lightGreen';
+import red from '@material-ui/core/colors/red';
+import blue from '@material-ui/core/colors/grey';
 
 const useStyles = makeStyles({
-  root: {
+  listItem: {
     height: 216,
     flexGrow: 1,
     maxWidth: 500,
   },
 });
 
+const StyledListItem = withStyles({
+  root: {
+    '&:hover, &:focus, &$selected, &$selected:hover': {
+      backgroundColor: 'rgba(0,0,0,0)',
+    },
+  },
+  button: {
+    '&:hover, &:focus': {
+      backgroundColor: 'rgba(0,0,0,0)',
+    }
+  },
+  selected: {}
+})(ListItem);
+StyledListItem.muiName = ListItem.muiName;
 
-function listJsx({data, selected, onNodeSelected, focused, setFocused, isExpanded}) {
-  
-  return data.map(item => {
-    const id = item.id;
-    const expanded = isExpanded(id);
-    const children = item.children ? item.children : [];
-    const renderChildren = children.length > 0;
-    return (
-      <TreeItem 
-        onFocus={e => {
-          e.stopPropagation();
-          setFocused(id);
-        }}
-        onClick ={e => onNodeSelected(e, id)}
-        key={id} 
-        nodeId={id}
-        label={
-        <ListItem>
-          <ListItemText>{item.value}</ListItemText>
-        </ListItem>}
-      >
-        
+const StyledTreeItem = withStyles({
+  content: {
+    backgroundColor: props => props.selected ? 'green' : 'white',
+  }
+})(TreeItem);
+StyledTreeItem.muiName = TreeItem.muiName;
 
-      </TreeItem>
-    )
-  })
-}
+
+export const styles = theme => ({
+  itemRoot: {
+    '&:focus > $itemContent$selected': {
+      backgroundColor: green[400],
+    }
+  },
+  itemContent: {
+    transition: theme.transitions.create('background-color', {
+      duration: theme.transitions.duration.shortest,}),
+    '&:hover': {
+      backgroundColor: red[100]
+    },
+    '&$selected, &$selected:hover': {
+      backgroundColor: green[400]
+    }
+  },
+  /* pseudo class applied to the itemContent when selected */
+  selected: {},
+});
 
 const TreeList = (props) => {
-  const { data, selected, onNodeSelected, expanded, onNodeToggle } = props;
-  const [focused, setFocused] = useState(null);
-  // const isExpanded = useCallback(id => expanded.indexOf(id) !== -1, [expanded]);
+  const { 
+    data,
+    selected,
+    onNodeSelected,
+    expanded,
+    onNodeToggle,
+    onKeyDown,
+    onClick,
+    dummyChildrenComponent,
+    classes,
+    ...other
+  } = props;
 
-  const classes = useStyles();
+  const [focused, setFocused] = useState(null);
+  const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <span>Loading ...</span>; 
+
+  const listItemClasses = {
+    button: classes.item,
+    selected: classes.selected,
+  };
+  // const classes = useStyles();
+
   // recursive function to rendrer data
   const listJsx = (data, d = 0) => {
     return data.map(item => {
       const id = item.id;
       const children = item.children ? item.children : [];
+      const renderDummyChildren = children.length > 0 && !children[0].id;
+      const isSelected = selected === id;
       return (
-        <TreeItem 
+        <TreeItem
+          // className={clsx({[classes.nodeSelected]: isSelected})}
+          classes= {{
+            root: classes.itemRoot,
+            content: clsx(classes.itemContent, {[classes.selected]: isSelected}),
+          }}
           onFocus={e => {
             e.stopPropagation();
             setFocused(id);
           }}
-          onClick ={e => onNodeSelected(e, id)}
+          onClick ={e => handleNodeClick(e, id)}
           key={id} 
           nodeId={id}
           onKeyDown={handleKeyDown}
+          selected={isSelected}
           label={
-          <List dense disablePadding>
-            <ListItem key={id} selected={selected === id}>
-            <ListItemText>{item.value}</ListItemText>
-            </ListItem>
-          </List>
-          // item.value
+          // <List 
+             
+          //   disablePadding
+          // >
+          //   <StyledListItem 
+          //     button 
+          //     key={id} 
+          //     selected={isSelected}
+          //     classes= {listItemClasses}
+          //   >
+          //   <ListItemText>{item.value}</ListItemText>
+          //   </StyledListItem>
+          // </List>
+          item.value
           }
         >
-          { listJsx(children, d + 1) }
+          { renderDummyChildren ? dummyChildren : listJsx(children, d + 1) }
         </TreeItem>
       )
     })
-  }
+  };
 
   const handleKeyDown = (event) => {
     const key = event.key;
-    console.log('key', key);
     let flag =false;
-    if (event.altKey || event.ctrlKey || event.metaKey) {
-      return;
-    }
+    // if (event.altKey || event.ctrlKey || event.metaKey) {
+    //   return;
+    // }
     switch (key) {
       case 'Enter':
       case ' ':
@@ -106,26 +158,33 @@ const TreeList = (props) => {
       default:
         break;
     }
-    if(flag) {
-      event.preventDefault();
-      event.stopPropagation();
-    }   
-  }
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+    // if(flag) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }   
+  };
+
+  const handleNodeClick = (event, id) => {
+    onNodeSelected(event, id);
+    if (onClick) {
+      onClick(event);
+    }
+  };
 
   return (
-    // <List>
-      <TreeView
-        className={classes.root}
-        expanded={expanded}
-        onNodeToggle={onNodeToggle}
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronLeftIcon />}
-      >
-        { listJsx(data) }
-      </TreeView>
-    // </List>
-  )
-
+    <TreeView
+      className={classes.root}
+      expanded={expanded}
+      onNodeToggle={onNodeToggle}
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronLeftIcon />}
+    >
+      { listJsx(data) }
+    </TreeView>
+  );
 }
 
-export default TreeList;
+export default withStyles(styles)(TreeList);
