@@ -1,9 +1,17 @@
 import React from 'react';
-import '../../App.css';
+import { makeStyles } from '@material-ui/core/styles';
+import AddHuman from './AddHuman/AddHuman';
+import ManageTable from './ManageTable/ManageTable'
+
+
 
 export default function ManagePage() {
   return (
-      <p>ManagePage</p>
+      <>
+        <ManageTable/>
+        <AddHuman/>
+      </>
+     
   );
 }
 
