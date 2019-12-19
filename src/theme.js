@@ -8,7 +8,7 @@ export const theme = createMuiTheme({
     palette: {
       primary: teal,
       secondary: red, // Indigo is probably a good match with pink
-      type: 'light'
+      type: 'light',
     },
 });
   
