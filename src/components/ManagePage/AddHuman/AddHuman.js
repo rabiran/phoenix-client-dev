@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function Add(){
+export default function Add(props){
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -25,13 +25,19 @@ export default function Add(){
         setOpen(false);
     };
 
+    const dialogDone = (person) => {
+        props.gotPerson(person);
+        setOpen(false);
+    };
+
+
 
     return (
         <div className={classes.add}>
             <Fab color="primary" aria-label="add" onClick={dialogClick}>
                 <AddIcon/>
             </Fab>
-            <AddDialog open={open} dialogClose={dialogClose}/>
+            <AddDialog open={open} dialogClose={dialogClose} dialogDone={dialogDone}/>
         </div>
     );
 }

@@ -91,10 +91,7 @@ export default function ManageTable() {
     return (
         <div className={classes.content}>
             <Paper className={classes.paper}>
-            {/* <div className={classes.tableHeader}> 
-                <Title title="Manage"/>
-                <TextField id="standard-basic" label="find" />
-            </div> */}
+            
                 <Title title="Manage"/>
               <TableContainer>
                 <Table className={classes.table} aria-label="simple table">
@@ -138,3 +135,8 @@ export default function ManageTable() {
         </div>
     );
 }
+
+{/* <div className={classes.tableHeader}> 
+                <Title title="Manage"/>
+                <TextField id="standard-basic" label="find" />
+            </div> */}

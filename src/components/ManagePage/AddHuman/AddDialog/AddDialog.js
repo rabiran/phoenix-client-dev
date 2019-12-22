@@ -21,12 +21,13 @@ const useStyles = makeStyles({
     }
 });
 
+let person;
 export default function AddDialog(props) {
     const classes = useStyles();
     const [disabled, setDisabled] = React.useState(true);
 
     function getHuman(value){
-        console.log(value);
+        person = value;
         if(value)
             setDisabled(false);
         else
@@ -53,7 +54,7 @@ export default function AddDialog(props) {
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={props.dialogClose} color="primary" variant="contained">NO</Button>
-                    <Button onClick={props.dialogClose} color="primary" variant="contained" disabled={disabled}>Add</Button>
+                    <Button onClick={()=>props.dialogDone(person)} color="primary" variant="contained" disabled={disabled}>Add</Button>
                 </DialogActions>
             </Dialog>
         </div>
