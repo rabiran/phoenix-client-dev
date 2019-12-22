@@ -4,10 +4,8 @@ import { withStyles, makeStyles } from '@material-ui/core/styles'
 
 
 const useStyles = makeStyles({
-  treeItem: {
-    '&:hover': {
-      backgroundColor: 'teal'
-    }
+  root: {
+    maxWidth: 500,
   }
 }); 
 
@@ -27,6 +25,12 @@ export default function TreeDemo() {
         {
           id: '4',
           value: 'נייטרווווו',
+          children: [
+            {
+              id: '8',
+              value: 'אני בפנים'
+            }
+          ]
         },
         {
           id: '5',
@@ -57,6 +61,9 @@ export default function TreeDemo() {
 
   return (
     <TreeList 
+      classes={{
+        root: classes.root,
+      }}
       data={data}
       selected={selected}
       onNodeSelected={handleSelection}

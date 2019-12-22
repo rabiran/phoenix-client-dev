@@ -7,8 +7,11 @@ import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import green from '@material-ui/core/colors/green';
 import lightGreen from '@material-ui/core/colors/lightGreen';
@@ -39,10 +42,20 @@ const StyledListItem = withStyles({
 StyledListItem.muiName = ListItem.muiName;
 
 const StyledTreeItem = withStyles({
+  root: {
+    // paddingRight: props => `${(props.level * 26)}px`
+  },
+  group: {
+    marginLeft: 0,
+    // paddingRight: props => `${(props.level * 26)}px`
+  },
   content: {
-    backgroundColor: props => props.selected ? 'green' : 'white',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    paddingRight: props => `${(props.level * 26)}px`,
+    boxSizing: 'border-box',
   }
-})(TreeItem);
+}, {name: 'DividerTreeItem'})(TreeItem);
 StyledTreeItem.muiName = TreeItem.muiName;
 
 
@@ -53,13 +66,12 @@ export const styles = theme => ({
     }
   },
   itemContent: {
-    transition: theme.transitions.create('background-color', {
-      duration: theme.transitions.duration.shortest,}),
     '&:hover': {
       backgroundColor: red[100]
     },
     '&$selected, &$selected:hover': {
-      backgroundColor: green[400]
+      backgroundColor: green[400],
+      color: 'white'
     }
   },
   /* pseudo class applied to the itemContent when selected */
@@ -81,7 +93,7 @@ const TreeList = (props) => {
   } = props;
 
   const [focused, setFocused] = useState(null);
-  const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <span>Loading ...</span>; 
+  const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <Skeleton height={40} variant='rect'>loading</Skeleton>; 
 
   const listItemClasses = {
     button: classes.item,
@@ -97,7 +109,10 @@ const TreeList = (props) => {
       const renderDummyChildren = children.length > 0 && !children[0].id;
       const isSelected = selected === id;
       return (
-        <TreeItem
+        <React.Fragment key={id} nodeId={id}>
+          {/* <Divider style={{backgroundColor: 'grey'}}></Divider> */}
+         <StyledTreeItem
+          level={d}
           // className={clsx({[classes.nodeSelected]: isSelected})}
           classes= {{
             root: classes.itemRoot,
@@ -118,9 +133,11 @@ const TreeList = (props) => {
           //   disablePadding
           // >
           //   <StyledListItem 
+          //     // disableGutters
+          //     disableRipple
           //     button 
           //     key={id} 
-          //     selected={isSelected}
+          //     // selected={isSelected}
           //     classes= {listItemClasses}
           //   >
           //   <ListItemText>{item.value}</ListItemText>
@@ -130,7 +147,9 @@ const TreeList = (props) => {
           }
         >
           { renderDummyChildren ? dummyChildren : listJsx(children, d + 1) }
-        </TreeItem>
+        </StyledTreeItem>   
+        </React.Fragment>
+       
       )
     })
   };
@@ -179,8 +198,10 @@ const TreeList = (props) => {
       className={classes.root}
       expanded={expanded}
       onNodeToggle={onNodeToggle}
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronLeftIcon />}
+      defaultExpandIcon={<ExpandMoreIcon/>}
+      defaultCollapseIcon={<ChevronLeftIcon/>}
+      // defaultCollapseIcon={<IconButton tabIndex={-1} size='small'><ExpandMoreIcon /></IconButton>}
+      // defaultExpandIcon={<IconButton tabIndex={-1} size='small'><ChevronLeftIcon /></IconButton>}
     >
       { listJsx(data) }
     </TreeView>
