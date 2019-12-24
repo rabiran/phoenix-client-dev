@@ -27,17 +27,21 @@ export default function ManagePage() {
   }
 
   // got new person from addhuman
-  function gotPerson(person) {
+  function onNewPerson(person) {
     // setData(data.push(person));
     console.log(person);
+  }
+
+  function onDelete(index){
+    console.log(index);
   }
 
   
 
   return (
     <>
-      <ManageTable2 data={data} />
-      <AddHuman gotPerson={gotPerson} />
+      <ManageTable2 data={data} onDelete={onDelete}/>
+      <AddHuman onNewPerson={onNewPerson} />
     </>
 
   );

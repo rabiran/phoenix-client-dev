@@ -27,7 +27,8 @@ export default function Ctrlk(props) {
     }
     return (
         <Autocomplete
-            style={{ width: 300 }}
+            // style={{ width: 300 }}
+            
             open={open}
             // onOpen={() => {
             //     setOpen(true);
@@ -42,6 +43,7 @@ export default function Ctrlk(props) {
             loading={loading}
             renderInput={params => (
                 <TextField
+                    fullWidth
                     {...params}
                     onChange={(e) => {
                         getThings(e);

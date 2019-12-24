@@ -50,9 +50,9 @@ const useStyles = makeStyles({
 
 export default function ManageTable2(props) {
     const classes = useStyles();
-  const [state, setState] = React.useState({
+//   const [state, setState] = React.useState({
     
-  });
+//   });
 
   let columns  =  [
     { title: 'Name', field: 'name' },
@@ -71,16 +71,9 @@ export default function ManageTable2(props) {
         data={props.data}
         editable={{
             onRowDelete: oldData =>
-            new Promise(resolve => {
-                setTimeout(() => {
-                resolve();
-                setState(prevState => {
-                    const data = [...prevState.data];
-                    data.splice(data.indexOf(oldData), 1);
-                    return { ...prevState, data };
-                });
-                }, 600);
-            }),
+                new Promise(resolve => {
+                    resolve()
+                    props.onDelete(props.data.indexOf(oldData)) })
         }}
         />
     </div>
@@ -134,3 +127,14 @@ export default function ManageTable2(props) {
 //       birthCity: 34,
 //     },
 //   ],
+
+// new Promise(resolve => {
+//     setTimeout(() => {
+//     resolve();
+//     setState(prevState => {
+//         const data = [...prevState.data];
+//         data.splice(data.indexOf(oldData), 1);
+//         return { ...prevState, data };
+//     });
+//     }, 600);
+// }),

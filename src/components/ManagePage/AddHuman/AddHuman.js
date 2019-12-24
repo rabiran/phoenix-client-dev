@@ -26,7 +26,7 @@ export default function Add(props){
     };
 
     const dialogDone = (person) => {
-        props.gotPerson(person);
+        props.onNewPerson(person);
         setOpen(false);
     };
 
