@@ -1,7 +1,24 @@
+body {
+  overflow-x:hidden;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate {
+  animation: 1s ease-out slideInFromLeft 1;
+}
+
 .header-root {
   flex-grow: 1;
 }
 
-.header-title{
+.header-title {
   flex-grow: 1;
 }

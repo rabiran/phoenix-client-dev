@@ -5,7 +5,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function Ctrlk(props) {
-    // const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
@@ -27,16 +26,11 @@ export default function Ctrlk(props) {
     }
     return (
         <Autocomplete
-            // style={{ width: 300 }}
-            
             open={open}
-            // onOpen={() => {
-            //     setOpen(true);
-            // }}
             onClose={() => {
                 setOpen(false);
             }}
-            onChange={(event,value) => props.getHuman(value)}
+            onChange={(event,value) => props.getCtrlkValue(value)}
             getOptionSelected={(option, value) => option.name === value.name}
             getOptionLabel={option => option.name}
             options={options}

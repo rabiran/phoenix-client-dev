@@ -20,62 +20,61 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const tableIcons = {
-Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
-ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
+
 const useStyles = makeStyles({
-    content: {
-        margin: '0 auto',
-        width: '75%',
-        textAlign: 'center',
-        marginTop: '50px',
-    },
+  content: {
+    margin: '0 auto',
+    width: '75%',
+    textAlign: 'center',
+    marginTop: '50px',
+  },
 });
 
 export default function ManageTable2(props) {
-    const classes = useStyles();
-//   const [state, setState] = React.useState({
-    
-//   });
+  const classes = useStyles();
 
-  let columns  =  [
+  let columns = [
     { title: 'Name', field: 'name' },
     { title: 'number', field: 'number' },
-    { title: 'unit', field: 'unit'},
-    { title: 'something',field: 'something'},
-    { title: 'manages',field: 'manages'},
+    { title: 'unit', field: 'unit' },
+    { title: 'something', field: 'something' },
+    { title: 'manages', field: 'manages' },
   ]
 
   return (
     <div className={classes.content}>
-        <MaterialTable
+      <MaterialTable
         icons={tableIcons}
         title="Manage"
         columns={columns}
         data={props.data}
         editable={{
-            onRowDelete: oldData =>
-                new Promise(resolve => {
-                    resolve()
-                    props.onDelete(props.data.indexOf(oldData)) })
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              resolve()
+              props.onDelete(props.data.indexOf(oldData))
+            })
         }}
-        />
+      />
     </div>
   );
 }

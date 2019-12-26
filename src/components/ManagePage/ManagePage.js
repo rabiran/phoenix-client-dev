@@ -1,8 +1,24 @@
 import React from 'react';
+import '../../App.css'
 import { makeStyles } from '@material-ui/core/styles';
 import AddHuman from './AddHuman/AddHuman';
 import ManageTable from './ManageTable/ManageTable'
 import ManageTable2 from './ManageTable/ManageTable2'
+
+// const useStyles = makeStyles({
+//   '@keyframes slideInFromLeft': {
+//     '0%': {
+//       transform: 'translateX(-100%)'
+//     },
+//     '100%': {
+//       transform: 'translateX(0%)'
+//     }
+//   },
+//   animate: {
+//     animation: '1s ease out 0s 1 $slideInFromLeft'
+//   }
+// });
+
 
 const test = [
   { name: 'Meh', number: 84813, unit: "haha", something: "da", manages: "react" },
@@ -14,6 +30,7 @@ const test = [
 ];
 
 export default function ManagePage() {
+  // const classes = useStyles();
   const [data, setData] = React.useState([]);
 
   // init ( componentdidmount )
@@ -28,7 +45,6 @@ export default function ManagePage() {
 
   // got new person from addhuman
   function onNewPerson(person) {
-    // setData(data.push(person));
     console.log(person);
   }
 
@@ -36,14 +52,11 @@ export default function ManagePage() {
     console.log(index);
   }
 
-  
-
   return (
     <>
-      <ManageTable2 data={data} onDelete={onDelete}/>
-      <AddHuman onNewPerson={onNewPerson} />
+      <div className="animate"><ManageTable2 data={data} onDelete={onDelete}/></div>
+      <AddHuman onNewPerson={onNewPerson}/>
     </>
-
   );
 }
 

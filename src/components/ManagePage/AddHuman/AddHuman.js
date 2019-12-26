@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     add:{
         position: 'absolute',
         bottom: '0',
-        right: '0',
+        left: '0',
         padding: '20px'
     }
 });
@@ -29,8 +29,6 @@ export default function Add(props){
         props.onNewPerson(person);
         setOpen(false);
     };
-
-
 
     return (
         <div className={classes.add}>
