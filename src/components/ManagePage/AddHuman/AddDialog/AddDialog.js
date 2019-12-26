@@ -50,6 +50,19 @@ export default function AddDialog(props) {
             setHierarchy(null);
     }
 
+    function onRadio(hiera){ // value from hierarchy suggestion radio onchange
+        let value = hiera;
+        if(value.length > 0)
+            setHierarchy(value);
+        else
+            setHierarchy(null)
+    }
+
+    function onSubmit(){ // onsubmit
+        props.dialogDone({id: person.id, manages: hierarchy});
+        setPerson();
+    } 
+
     let personTxt = [];
     let addTitle = <p></p>
     let hierarchyfield;
@@ -59,7 +72,7 @@ export default function AddDialog(props) {
         addTitle = <p>Add {person.name} to manage:</p>;
         hierarchyfield = <HierarchyFIeld onHierarchy={onHierarchy}/>;
         console.log(person);
-        hierarchysuggest=<HierarchySuggest hierarchy={person.hierarchy}/>
+        hierarchysuggest=<HierarchySuggest hierarchy={person.hierarchy} onRadio={onRadio}/>
     }
     
     return (
@@ -82,7 +95,7 @@ export default function AddDialog(props) {
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={props.dialogClose} color="primary" variant="contained">NO</Button>
-                    <Button onClick={()=>props.dialogDone({id: person.id, manages: hierarchyId})} color="primary" variant="contained" disabled={!(hierarchy && person)}>Add</Button>
+                    <Button onClick={onSubmit} color="primary" variant="contained" disabled={!(hierarchy && person)}>Add</Button>
                 </DialogActions>
             </Dialog>
         </div>

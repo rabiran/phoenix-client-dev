@@ -8,10 +8,10 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
 export default function HierarchySuggest(props) {
-    const [value, setValue] = React.useState('google');
+    const [value, setValue] = React.useState('a');
 
     const handleChange = event => {
-        console.log(event.target.value);
+        props.onRadio(event.target.value);
         setValue(event.target.value);
     };
 
@@ -34,9 +34,9 @@ export default function HierarchySuggest(props) {
             <RadioGroup aria-label="position" name="position" value={value} onChange={handleChange}>
                 {arr.map((e, index) => 
                     <FormControlLabel
-                        value={props.hierarchy.split('/',index+1).toString().replace(',','/')}
+                        value={props.hierarchy.split('/',index+1).toString().replace(/,/g,'/')}
                         control={<Radio color="primary" />}
-                        label={props.hierarchy.split('/',index+1).toString().replace(',','/')}
+                        label={props.hierarchy.split('/',index+1).toString().replace(/,/g,'/')}
                         labelPlacement="end"
                         key={index}
                     />
