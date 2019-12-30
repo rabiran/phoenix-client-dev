@@ -31,7 +31,7 @@ CleanButton.muiName = Button.muiName;
  *              :                   |
  * ----------------------------------
  * itemRoot contains the itemContent and it's children
- * focus occurs on the itemRoot, but styles should be applied to the itemContent
+ * focus event occurs on the itemRoot, but styles should be applied to the itemContent
  */
 export const styles = theme => ({
   root: {
@@ -60,8 +60,8 @@ export const styles = theme => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-start',
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   /* styles applied to the button component if dense */
   dense: {
@@ -117,6 +117,7 @@ const TreeList = (props) => {
           selected={isSelected}
           label={
           <CleanButton
+            tabIndex={-1}
             classes={{
               root: clsx(
                 classes.button, 
@@ -126,7 +127,6 @@ const TreeList = (props) => {
           >
             { item.value }
           </CleanButton>
-          // item.value
           }
         >
           { renderDummyChildren ? dummyChildren : listJsx(children, d + 1) }
@@ -219,7 +219,7 @@ TreeList.propTypes = {
    * Callback fired when tree items are expanded/collapsed.
    *
    * @param {object} event The event source of the callback
-   * @param {array} nodeIds The ids of the expanded items.
+   * @param {Array} nodeIds The ids of the expanded items.
    */
   onNodeToggle: PropTypes.func,
   /**
