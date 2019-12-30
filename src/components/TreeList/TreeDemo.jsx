@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import TreeList from './TreeList';
-import { withStyles, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 
 const useStyles = makeStyles({
@@ -69,6 +69,7 @@ export default function TreeDemo() {
       onNodeSelected={handleSelection}
       expanded={expanded}
       onNodeToggle={handleExpandedChange}
+      
     >
     </TreeList>
   )

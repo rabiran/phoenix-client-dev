@@ -1,81 +1,77 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText'
+import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Divider from '@material-ui/core/Divider';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import Button from '@material-ui/core/Button';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import green from '@material-ui/core/colors/green';
-import lightGreen from '@material-ui/core/colors/lightGreen';
-import red from '@material-ui/core/colors/red';
-import blue from '@material-ui/core/colors/grey';
-
-const useStyles = makeStyles({
-  listItem: {
-    height: 216,
-    flexGrow: 1,
-    maxWidth: 500,
-  },
-});
-
-const StyledListItem = withStyles({
+const CleanButton = withStyles({
   root: {
-    '&:hover, &:focus, &$selected, &$selected:hover': {
-      backgroundColor: 'rgba(0,0,0,0)',
-    },
-  },
-  button: {
-    '&:hover, &:focus': {
-      backgroundColor: 'rgba(0,0,0,0)',
+    '&:hover': {
+      backgroundColor: 'transparent',
     }
-  },
-  selected: {}
-})(ListItem);
-StyledListItem.muiName = ListItem.muiName;
-
-const StyledTreeItem = withStyles({
-  root: {
-    // paddingRight: props => `${(props.level * 26)}px`
-  },
-  group: {
-    marginLeft: 0,
-    // paddingRight: props => `${(props.level * 26)}px`
-  },
-  content: {
-    paddingTop: '8px',
-    paddingBottom: '8px',
-    paddingRight: props => `${(props.level * 26)}px`,
-    boxSizing: 'border-box',
   }
-}, {name: 'DividerTreeItem'})(TreeItem);
-StyledTreeItem.muiName = TreeItem.muiName;
+}, { name: 'CleanButton' })(Button);
+CleanButton.muiName = Button.muiName;
 
 
+/**
+ * ---------- itemRoot --------------
+ *  ---------itemContent--------    |
+ * |  |\   -------------------  |   |
+ * |  | + |      Button       | |   |
+ * |  |/   -------------------  |   |
+ *  ----------------------------    |
+ *      { children items }          |
+ *              :                   |
+ * ----------------------------------
+ * itemRoot contains the itemContent and it's children
+ * focus occurs on the itemRoot, but styles should be applied to the itemContent
+ */
 export const styles = theme => ({
+  root: {
+    // backgroundColor: theme.palette.background.default,
+  },
+  /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
+    // '&$expanded': {
+    //   backgroundColor: green[100],
+    // },
     '&:focus > $itemContent$selected': {
-      backgroundColor: green[400],
+      backgroundColor: theme.palette.action.selected,
     }
   },
+  /* styles applied to the 'treeItem' component's 'content' */
   itemContent: {
     '&:hover': {
-      backgroundColor: red[100]
+      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
     '&$selected, &$selected:hover': {
-      backgroundColor: green[400],
-      color: 'white'
-    }
+      backgroundColor: theme.palette.action.selected,
+    },
+  },
+  /* styles applied to the 'button' component (inside itemContent) */
+  button: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  /* styles applied to the button component if dense */
+  dense: {
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   /* pseudo class applied to the itemContent when selected */
   selected: {},
+  /* pseudo class applied to the itemRoot when expanded */
+  expanded: {},
 });
 
 const TreeList = (props) => {
@@ -87,19 +83,15 @@ const TreeList = (props) => {
     onNodeToggle,
     onKeyDown,
     onClick,
+    onFocus,
     dummyChildrenComponent,
     classes,
+    dense,
     ...other
   } = props;
 
   const [focused, setFocused] = useState(null);
   const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <Skeleton height={40} variant='rect'>loading</Skeleton>; 
-
-  const listItemClasses = {
-    button: classes.item,
-    selected: classes.selected,
-  };
-  // const classes = useStyles();
 
   // recursive function to rendrer data
   const listJsx = (data, d = 0) => {
@@ -109,62 +101,46 @@ const TreeList = (props) => {
       const renderDummyChildren = children.length > 0 && !children[0].id;
       const isSelected = selected === id;
       return (
-        <React.Fragment key={id} nodeId={id}>
-          {/* <Divider style={{backgroundColor: 'grey'}}></Divider> */}
-         <StyledTreeItem
-          level={d}
+         <TreeItem
+          // level={d}
           // className={clsx({[classes.nodeSelected]: isSelected})}
           classes= {{
             root: classes.itemRoot,
             content: clsx(classes.itemContent, {[classes.selected]: isSelected}),
+            expanded: classes.expanded,
           }}
-          onFocus={e => {
-            e.stopPropagation();
-            setFocused(id);
-          }}
-          onClick ={e => handleNodeClick(e, id)}
+          onFocus={e => handleNodeFocus(e, id)}
+          onClick={e => handleNodeClick(e, id)}
           key={id} 
           nodeId={id}
           onKeyDown={handleKeyDown}
           selected={isSelected}
           label={
-          // <List 
-             
-          //   disablePadding
-          // >
-          //   <StyledListItem 
-          //     // disableGutters
-          //     disableRipple
-          //     button 
-          //     key={id} 
-          //     // selected={isSelected}
-          //     classes= {listItemClasses}
-          //   >
-          //   <ListItemText>{item.value}</ListItemText>
-          //   </StyledListItem>
-          // </List>
-          item.value
+          <CleanButton
+            classes={{
+              root: clsx(
+                classes.button, 
+                { [classes.dense]: dense }
+              ) 
+            }}
+          >
+            { item.value }
+          </CleanButton>
+          // item.value
           }
         >
           { renderDummyChildren ? dummyChildren : listJsx(children, d + 1) }
-        </StyledTreeItem>   
-        </React.Fragment>
-       
+        </TreeItem>   
       )
     })
   };
 
   const handleKeyDown = (event) => {
     const key = event.key;
-    let flag =false;
-    // if (event.altKey || event.ctrlKey || event.metaKey) {
-    //   return;
-    // }
     switch (key) {
       case 'Enter':
       case ' ':
         onNodeSelected(event, focused);
-        flag = true;
         break;
       case 'ArrowUp':
       case 'ArrowDown':
@@ -172,24 +148,27 @@ const TreeList = (props) => {
       case 'ArrowRight':
       case 'Home':
       case 'End':
-        flag = true
         break;
       default:
         break;
     }
     if (onKeyDown) {
       onKeyDown(event);
-    }
-    // if(flag) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    // }   
+    } 
   };
 
   const handleNodeClick = (event, id) => {
     onNodeSelected(event, id);
     if (onClick) {
       onClick(event);
+    }
+  };
+
+  const handleNodeFocus = (event, id) => {
+    event.stopPropagation();
+    setFocused(id);
+    if(onFocus) {
+      onFocus(event);
     }
   };
 
@@ -200,12 +179,71 @@ const TreeList = (props) => {
       onNodeToggle={onNodeToggle}
       defaultExpandIcon={<ExpandMoreIcon/>}
       defaultCollapseIcon={<ChevronLeftIcon/>}
-      // defaultCollapseIcon={<IconButton tabIndex={-1} size='small'><ExpandMoreIcon /></IconButton>}
-      // defaultExpandIcon={<IconButton tabIndex={-1} size='small'><ChevronLeftIcon /></IconButton>}
+      {...other}
     >
       { listJsx(data) }
     </TreeView>
   );
 }
+
+TreeList.propTypes = {
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: PropTypes.object,
+  /**
+   * array of data items (top level items), each item may contain an array of children items 
+   * which will be displayed as a nested list
+   */
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    children: PropTypes.array,
+  })),
+  /**
+   * The id of the selected item. (Controlled)
+   */
+  selected: PropTypes.string,
+  /**
+   * Callback fired when tree item is selected
+   * 
+   * @param {object} event The event source of the callback
+   * @param {string} id The id of the selected item
+   */
+  onNodeSelected: PropTypes.func.isRequired,
+  /**
+   * Expanded items ids. (Controlled)
+   */
+  expanded: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * Callback fired when tree items are expanded/collapsed.
+   *
+   * @param {object} event The event source of the callback
+   * @param {array} nodeIds The ids of the expanded items.
+   */
+  onNodeToggle: PropTypes.func,
+  /**
+   * @ignore
+   */
+  onClick: PropTypes.func,
+  /**
+   * @ignore
+   */
+  onFocus: PropTypes.func,
+  /**
+   * @ignore
+   */
+  onKeyDown: PropTypes.func,
+  /**
+   * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
+   */
+  dense: PropTypes.bool,
+  /**
+   * component to render when the nested items (of a parent item) has not 
+   * been loaded yet (but their ids are known)
+   */
+  dummyChildrenComponent: PropTypes.element,
+}
+
 
 export default withStyles(styles)(TreeList);
