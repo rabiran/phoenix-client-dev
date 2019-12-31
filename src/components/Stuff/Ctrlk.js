@@ -4,18 +4,24 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+/**
+ * Gets api ,label and getCtrlkValue method
+ * @param {string} props.api
+ * @param {string} props.label
+ * @param {function} props.getCtrlkValue(value)
+ */
 export default function Ctrlk(props) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
 
-    async function getThings(e){
+    async function getThings(e){ // get typed text and search for it in api.
         let value = e.target.value;
         setOptions([]);
         if(value.length > 1){
             setOpen(true);
             const response = await fetch(props.api);
-            await sleep(1e3); // For demo purposes.
+            await sleep(1e3); // remove this line on prod.
             const countries = await response.json();
 
             setOptions(Object.keys(countries).map(key => countries[key].item[0]));
@@ -43,7 +49,6 @@ export default function Ctrlk(props) {
                         getThings(e);
                     }}
                     label={props.label}
-                    fullWidth
                     variant="outlined"
                     InputProps={{
                         ...params.InputProps,

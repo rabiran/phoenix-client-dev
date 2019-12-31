@@ -11,8 +11,21 @@ body {
   }
 }
 
+@keyframes scaleIn {
+  0% {
+    transform: scale(1,1);
+  }
+  100% {
+    transform: scale(3,3);
+  }
+}
+
 .animate {
   animation: 1s ease-out slideInFromLeft 1;
+}
+
+.scaleIn{
+  animation: 1s ease-out scaleIn 1;
 }
 
 .header-root {

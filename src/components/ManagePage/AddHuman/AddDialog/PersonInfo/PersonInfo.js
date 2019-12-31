@@ -15,7 +15,10 @@ const useStyles = makeStyles({
   }
 });
 
-
+/**
+ * Gets person, and renders his values with the keys
+ * @param {object} props.person
+ */
 export default function PersonInfo(props) {
   const classes = useStyles();
 

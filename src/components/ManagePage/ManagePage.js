@@ -1,25 +1,9 @@
 import React from 'react';
 import '../../App.css'
-import { makeStyles } from '@material-ui/core/styles';
 import AddHuman from './AddHuman/AddHuman';
-import ManageTable from './ManageTable/ManageTable'
 import ManageTable2 from './ManageTable/ManageTable2'
 
-// const useStyles = makeStyles({
-//   '@keyframes slideInFromLeft': {
-//     '0%': {
-//       transform: 'translateX(-100%)'
-//     },
-//     '100%': {
-//       transform: 'translateX(0%)'
-//     }
-//   },
-//   animate: {
-//     animation: '1s ease out 0s 1 $slideInFromLeft'
-//   }
-// });
-
-
+// Test data, erase on prod and get from server instead with getData()
 const test = [
   { name: 'Meh', number: 84813, unit: "haha", something: "da", manages: "react" },
   { name: 'met', number: 83813, unit: "ha", something: "da", manages: "angular" },
@@ -29,8 +13,10 @@ const test = [
   { name: 'wow', number: 84853, unit: "haha2", something: "da2", manages: "react" },
 ];
 
+/**
+ * Renders table, with add option
+ */
 export default function ManagePage() {
-  // const classes = useStyles();
   const [data, setData] = React.useState([]);
 
   // init ( componentdidmount )
@@ -48,13 +34,16 @@ export default function ManagePage() {
     console.log(person);
   }
 
+  // Delete person by index from table click
   function onDelete(index){
     console.log(index);
   }
 
   return (
     <>
-      <div className="animate"><ManageTable2 data={data} onDelete={onDelete}/></div>
+      <div className="animate">
+        <ManageTable2 data={data} onDelete={onDelete}/>
+      </div>
       <AddHuman onNewPerson={onNewPerson}/>
     </>
   );

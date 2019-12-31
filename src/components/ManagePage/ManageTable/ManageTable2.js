@@ -49,6 +49,11 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * Gets data and delete method, renders table
+ * @param {Array} props.data
+ * @param {function} props.onDelete(index)
+ */
 export default function ManageTable2(props) {
   const classes = useStyles();
 
@@ -59,7 +64,6 @@ export default function ManageTable2(props) {
     { title: 'something', field: 'something' },
     { title: 'manages', field: 'manages' },
   ]
-
   return (
     <div className={classes.content}>
       <MaterialTable

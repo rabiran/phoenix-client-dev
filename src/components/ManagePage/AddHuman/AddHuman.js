@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../../App.css';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import AddDialog from './AddDialog/AddDialog';
@@ -13,6 +14,10 @@ const useStyles = makeStyles({
     }
 });
 
+/**
+ * Gets onNewPerson method, renders add button and dialog
+ * @param {function} props.onNewPerson(person)
+ */
 export default function Add(props){
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
