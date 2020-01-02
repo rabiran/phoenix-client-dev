@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import Skeleton from '@material-ui/lab/Skeleton';
+import TreeListConetxt from './TreeListContext';
 
 const CleanButton = withStyles({
   root: {
@@ -91,6 +92,8 @@ const TreeList = (props) => {
   } = props;
 
   const [focused, setFocused] = useState(null);
+  const isSelected = useCallback(id => id === selected, [selected])
+
   const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <Skeleton height={40} variant='rect'>loading</Skeleton>; 
 
   // recursive function to rendrer data
@@ -122,7 +125,7 @@ const TreeList = (props) => {
               root: clsx(
                 classes.button, 
                 { [classes.dense]: dense }
-              ) 
+              )
             }}
           >
             { item.value }
