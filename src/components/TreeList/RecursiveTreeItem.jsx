@@ -24,19 +24,25 @@ const RecursiveTreeItem = (props) => {
     // selectedId,
     onClick,
     onKeyDown,
-    dense
+    dense,
+    notLoaded,
   } = props;
 
   const {
     isSelected,
-    setFocused
+    setFocused,
   } = useContext(TreeListContext);
+
+  // the treeItem's data has not been loaded yet
+  if(notLoaded || !(item.id)) return (<span>loading...</span>)
 
   const nodeId = item.id;
   const nestedItems = item.children ? item.children : [];
   //
   const children = nestedItems.map(i => 
     <RecursiveTreeItem
+      nodeId={i.id ? i.id : i} // because of MUI treeView implementation
+      key={i.id ? i.id : i}
       item={i}
       classes={classes}
       onSelect={onSelect}
@@ -57,13 +63,6 @@ const RecursiveTreeItem = (props) => {
       case ' ':
         onSelect(event, nodeId);
         break;
-      case 'ArrowUp':
-      case 'ArrowDown':
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      case 'Home':
-      case 'End':
-        break;
       default:
         break;
     }
@@ -71,8 +70,8 @@ const RecursiveTreeItem = (props) => {
       onKeyDown(event);
     } 
   };
-
-  return (
+  
+  return ( 
     <TreeItem
       nodeId={nodeId}
       classes= {{
@@ -81,6 +80,7 @@ const RecursiveTreeItem = (props) => {
         expanded: classes.expanded,
      }}
      onClick={handleClick}
+     onKeyDown={handleKeyDown}
      label={
       <CleanButton
         tabIndex={-1}
@@ -99,3 +99,6 @@ const RecursiveTreeItem = (props) => {
     </TreeItem>   
  );
 }
+
+RecursiveTreeItem.muiName = TreeItem.muiName;
+export default RecursiveTreeItem;

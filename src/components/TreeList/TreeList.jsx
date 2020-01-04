@@ -10,6 +10,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import Skeleton from '@material-ui/lab/Skeleton';
 import TreeListConetxt from './TreeListContext';
+import RecursiveTreeItem from './RecursiveTreeItem';
 
 const CleanButton = withStyles({
   root: {
@@ -82,6 +83,7 @@ const TreeList = (props) => {
     onNodeSelected,
     expanded,
     onNodeToggle,
+    onLoadData,
     onKeyDown,
     onClick,
     onFocus,
@@ -176,16 +178,40 @@ const TreeList = (props) => {
   };
 
   return (
-    <TreeView
-      className={classes.root}
-      expanded={expanded}
-      onNodeToggle={onNodeToggle}
-      defaultExpandIcon={<ExpandMoreIcon/>}
-      defaultCollapseIcon={<ChevronLeftIcon/>}
-      {...other}
+    <TreeListConetxt.Provider
+      value={{
+        isSelected,
+      }}
     >
-      { listJsx(data) }
-    </TreeView>
+      <TreeView
+        className={classes.root}
+        expanded={expanded}
+        onNodeToggle={onNodeToggle}
+        defaultExpandIcon={<ExpandMoreIcon/>}
+        defaultCollapseIcon={<ChevronLeftIcon/>}   
+      >
+        { 
+          data.map(i => 
+          <RecursiveTreeItem 
+            nodeId={i.id ? i.id : i} // because of MUI treeView implementation
+            key={i.id ? i.id : i}
+            item={i}
+            classes={classes}
+            onSelect={onNodeSelected}
+          />)
+        }
+      </TreeView>
+    </TreeListConetxt.Provider>
+    // <TreeView
+    //   className={classes.root}
+    //   expanded={expanded}
+    //   onNodeToggle={onNodeToggle}
+    //   defaultExpandIcon={<ExpandMoreIcon/>}
+    //   defaultCollapseIcon={<ChevronLeftIcon/>}
+    //   {...other}
+    // >
+    //   { listJsx(data) }
+    // </TreeView>
   );
 }
 
