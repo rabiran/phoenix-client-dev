@@ -6,6 +6,7 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
+import {wrap as w} from './wrapper'
 
 const CleanButton = withStyles({
   root: {
@@ -19,38 +20,32 @@ CleanButton.muiName = Button.muiName;
 const RecursiveTreeItem = (props) => {
   const {
     item,
+    // nestedItems,
     classes,
     onSelect,
     // selectedId,
     onClick,
     onKeyDown,
     dense,
-    notLoaded,
+    renderDummy,
   } = props;
 
   const {
     isSelected,
     setFocused,
   } = useContext(TreeListContext);
-
-  // the treeItem's data has not been loaded yet
-  if(notLoaded || !(item.id)) return (<span>loading...</span>)
-
-  const nodeId = item.id;
   const nestedItems = item.children ? item.children : [];
-  //
-  const children = nestedItems.map(i => 
-    <RecursiveTreeItem
-      nodeId={i.id ? i.id : i} // because of MUI treeView implementation
-      key={i.id ? i.id : i}
-      item={i}
-      classes={classes}
-      onSelect={onSelect}
-    />
+  const children = renderDummy ? <span>loading...</span> : 
+  nestedItems.map(i => 
+    w(false)({
+      classes,
+      onSelect,
+      item: i,
+    }, RecursiveTreeItem)
   );
 
   const handleClick = (e) => {
-    onSelect(e, nodeId);
+    onSelect(e, item.id);
     if(onClick) {
       onClick(e);
     }
@@ -61,7 +56,7 @@ const RecursiveTreeItem = (props) => {
     switch (key) {
       case 'Enter':
       case ' ':
-        onSelect(event, nodeId);
+        onSelect(event, item.id);
         break;
       default:
         break;
@@ -73,12 +68,12 @@ const RecursiveTreeItem = (props) => {
   
   return ( 
     <TreeItem
-      nodeId={nodeId}
+      nodeId={item.id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemContent, {[classes.selected]: isSelected(nodeId)}),
+        content: clsx(classes.itemContent, {[classes.selected]: isSelected(item.id)}),
         expanded: classes.expanded,
-     }}
+      }}
      onClick={handleClick}
      onKeyDown={handleKeyDown}
      label={
@@ -100,5 +95,5 @@ const RecursiveTreeItem = (props) => {
  );
 }
 
-RecursiveTreeItem.muiName = TreeItem.muiName;
+// RecursiveTreeItem.muiName = TreeItem.muiName;
 export default RecursiveTreeItem;

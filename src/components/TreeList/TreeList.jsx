@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Skeleton from '@material-ui/lab/Skeleton';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem from './RecursiveTreeItem';
+import { wrap as w } from './wrapper';
 
 const CleanButton = withStyles({
   root: {
@@ -191,14 +192,11 @@ const TreeList = (props) => {
         defaultCollapseIcon={<ChevronLeftIcon/>}   
       >
         { 
-          data.map(i => 
-          <RecursiveTreeItem 
-            nodeId={i.id ? i.id : i} // because of MUI treeView implementation
-            key={i.id ? i.id : i}
-            item={i}
-            classes={classes}
-            onSelect={onNodeSelected}
-          />)
+          data.map(i => w(false)({
+            classes,
+            onSelect: onNodeSelected,
+            item: i,
+          }, RecursiveTreeItem))
         }
       </TreeView>
     </TreeListConetxt.Provider>
