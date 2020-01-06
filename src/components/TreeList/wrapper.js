@@ -14,12 +14,17 @@ export const wrap = useRedux => (props, Component) => {
     
   } else {
     if(children && children.length > 0 && !children[0].id) { 
-      renderDummy = true; //so this function wont be called when the item is a string (and not redux)
+      renderDummy = true; //so this function won't be called when the item is a string (while not using redux)
     }
     key = item.id;
   }
-  const newprops = {...props, renderDummy}
-  return (
-    <Component {...newprops} nodeId={key} key={key}/>
-  )
+  const newprops = {...props, renderDummy, key, nodeId: key}
+  return React.createElement(Component, newprops);
+  // return (
+  //   <Component {...newprops} nodeId={key} key={key}/>
+  // );
+}
+
+export const wrapNodeId = (props, Component) => {
+  
 }

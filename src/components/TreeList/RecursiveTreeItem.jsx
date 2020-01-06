@@ -8,6 +8,8 @@ import { withStyles } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import {wrap as w} from './wrapper'
 
+const NOT_TABABLE = -1;
+
 const CleanButton = withStyles({
   root: {
     '&:hover': {
@@ -19,53 +21,34 @@ CleanButton.muiName = Button.muiName;
 
 const RecursiveTreeItem = (props) => {
   const {
-    item,
-    // nestedItems,
+    // nodeId,
+    item, //supplied via Redux connect()
     classes,
-    onSelect,
-    // selectedId,
-    onClick,
-    onKeyDown,
-    dense,
-    renderDummy,
+    // onSelect,
+    // onClick,
+    // onKeyDown,
+    isAleaf,
   } = props;
+
 
   const {
     isSelected,
-    setFocused,
+    handleNodeClick,
+    handleKeyDown,
+    dense
   } = useContext(TreeListContext);
+
   const nestedItems = item.children ? item.children : [];
+  const renderDummy = nestedItems.length === 0 && !isAleaf;
+
   const children = renderDummy ? <span>loading...</span> : 
   nestedItems.map(i => 
-    w(false)({
-      classes,
-      onSelect,
-      item: i,
-    }, RecursiveTreeItem)
+    <RecursiveTreeItem
+      key={i}
+      nodeId={i}
+    />
   );
 
-  const handleClick = (e) => {
-    onSelect(e, item.id);
-    if(onClick) {
-      onClick(e);
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    const key = event.key;
-    switch (key) {
-      case 'Enter':
-      case ' ':
-        onSelect(event, item.id);
-        break;
-      default:
-        break;
-    }
-    if (onKeyDown) {
-      onKeyDown(event);
-    } 
-  };
-  
   return ( 
     <TreeItem
       nodeId={item.id}
@@ -74,11 +57,11 @@ const RecursiveTreeItem = (props) => {
         content: clsx(classes.itemContent, {[classes.selected]: isSelected(item.id)}),
         expanded: classes.expanded,
       }}
-     onClick={handleClick}
-     onKeyDown={handleKeyDown}
-     label={
+      onClick={e=> handleNodeClick(e, item.id)}
+      onKeyDown={e=> handleKeyDown(e, item.id)}
+      label={
       <CleanButton
-        tabIndex={-1}
+        tabIndex={NOT_TABABLE}
         classes={{
           root: clsx(
             classes.button, 
@@ -95,5 +78,5 @@ const RecursiveTreeItem = (props) => {
  );
 }
 
-// RecursiveTreeItem.muiName = TreeItem.muiName;
+RecursiveTreeItem.muiName = TreeItem.muiName;
 export default RecursiveTreeItem;

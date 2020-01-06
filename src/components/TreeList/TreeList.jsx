@@ -79,81 +79,25 @@ export const styles = theme => ({
 
 const TreeList = (props) => {
   const { 
-    data,
+    rootIds,
     selected,
     onNodeSelected,
     expanded,
     onNodeToggle,
-    onLoadData,
     onKeyDown,
     onClick,
-    onFocus,
-    dummyChildrenComponent,
     classes,
     dense,
-    ...other
   } = props;
 
-  const [focused, setFocused] = useState(null);
-  const isSelected = useCallback(id => id === selected, [selected])
+  const isSelected = useCallback(id => id === selected, [selected]) 
 
-  const dummyChildren = dummyChildrenComponent ? dummyChildrenComponent : <Skeleton height={40} variant='rect'>loading</Skeleton>; 
-
-  // recursive function to rendrer data
-  const listJsx = (data, d = 0) => {
-    return data.map(item => {
-      const id = item.id;
-      const children = item.children ? item.children : [];
-      const renderDummyChildren = children.length > 0 && !children[0].id;
-      const isSelected = selected === id;
-      return (
-         <TreeItem
-          // level={d}
-          // className={clsx({[classes.nodeSelected]: isSelected})}
-          classes= {{
-            root: classes.itemRoot,
-            content: clsx(classes.itemContent, {[classes.selected]: isSelected}),
-            expanded: classes.expanded,
-          }}
-          onFocus={e => handleNodeFocus(e, id)}
-          onClick={e => handleNodeClick(e, id)}
-          key={id} 
-          nodeId={id}
-          onKeyDown={handleKeyDown}
-          selected={isSelected}
-          label={
-          <CleanButton
-            tabIndex={-1}
-            classes={{
-              root: clsx(
-                classes.button, 
-                { [classes.dense]: dense }
-              )
-            }}
-          >
-            { item.value }
-          </CleanButton>
-          }
-        >
-          { renderDummyChildren ? dummyChildren : listJsx(children, d + 1) }
-        </TreeItem>   
-      )
-    })
-  };
-
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event, id) => {
     const key = event.key;
     switch (key) {
       case 'Enter':
       case ' ':
-        onNodeSelected(event, focused);
-        break;
-      case 'ArrowUp':
-      case 'ArrowDown':
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      case 'Home':
-      case 'End':
+        onNodeSelected(event, id);
         break;
       default:
         break;
@@ -170,18 +114,13 @@ const TreeList = (props) => {
     }
   };
 
-  const handleNodeFocus = (event, id) => {
-    event.stopPropagation();
-    setFocused(id);
-    if(onFocus) {
-      onFocus(event);
-    }
-  };
-
   return (
     <TreeListConetxt.Provider
       value={{
         isSelected,
+        handleNodeClick,
+        handleKeyDown,
+        dense
       }}
     >
       <TreeView
@@ -191,13 +130,7 @@ const TreeList = (props) => {
         defaultExpandIcon={<ExpandMoreIcon/>}
         defaultCollapseIcon={<ChevronLeftIcon/>}   
       >
-        { 
-          data.map(i => w(false)({
-            classes,
-            onSelect: onNodeSelected,
-            item: i,
-          }, RecursiveTreeItem))
-        }
+        { rootIds.map(i => <RecursiveTreeItem key={i} nodeId={i}/>) }
       </TreeView>
     </TreeListConetxt.Provider>
     // <TreeView
@@ -222,11 +155,15 @@ TreeList.propTypes = {
    * array of data items (top level items), each item may contain an array of children items 
    * which will be displayed as a nested list
    */
-  data: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    children: PropTypes.array,
-  })),
+  // data: PropTypes.arrayOf(PropTypes.shape({
+  //   id: PropTypes.string.isRequired,
+  //   value: PropTypes.string.isRequired,
+  //   children: PropTypes.array,
+  // })),
+  /**
+   * array of ids of the root items
+   */
+  rootIds: PropTypes.arrayOf(PropTypes.string);
   /**
    * The id of the selected item. (Controlled)
    */
