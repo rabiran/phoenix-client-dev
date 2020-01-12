@@ -7,8 +7,6 @@ const useStyles = makeStyles({
   info: {
     backgroundColor: fade(theme.palette.primary.main, 0.2),
     marginTop: '20px',
-    display: 'flex',
-    flexFlow: 'wrap',
   },
   txt:{
     margin: '10px',

@@ -35,3 +35,14 @@ body {
 .header-title {
   flex-grow: 1;
 }
+
+/* .dialogContent{
+  transform: translateY(-100%);
+  transition-duration: 1s;
+}
+
+.dialogContentAfterPerson{
+  transform: translateY(0%);
+  transition-duration: 1s;
+} */
+

@@ -14,9 +14,10 @@ const test = [
 ];
 
 /**
- * Renders table, with add option
+ * Gets type and Renders table, with add option
+ * @param {String} props.type
  */
-export default function ManagePage() {
+export default function ManagePage(props) {
   const [data, setData] = React.useState([]);
 
   // init ( componentdidmount )
@@ -42,9 +43,9 @@ export default function ManagePage() {
   return (
     <>
       <div className="animate">
-        <ManageTable2 data={data} onDelete={onDelete}/>
+        <ManageTable2 data={data} onDelete={onDelete} type={props.type}/>
       </div>
-      <AddHuman onNewPerson={onNewPerson}/>
+      <AddHuman onNewPerson={onNewPerson} type={props.type}/>
     </>
   );
 }

@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 export default function HierarchyField(props) {
   return (
     <>
-      <p> Or choose other hierarchy: </p>
+      <p> או שבחר איררכיה אחרת: </p>
       <TextField
         onChange={(e) => {
             props.onHierarchy(e);

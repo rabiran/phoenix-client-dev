@@ -15,8 +15,9 @@ const useStyles = makeStyles({
 });
 
 /**
- * Gets onNewPerson method, renders add button and dialog
+ * Gets onNewPerson method and table type, renders add button and dialog
  * @param {function} props.onNewPerson(person)
+ * @param {String} props.type
  */
 export default function Add(props){
     const classes = useStyles();
@@ -40,7 +41,7 @@ export default function Add(props){
             <Fab color="primary" aria-label="add" onClick={dialogClick}>
                 <AddIcon/>
             </Fab>
-            <AddDialog open={open} dialogClose={dialogClose} dialogDone={dialogDone}/>
+            <AddDialog open={open} dialogClose={dialogClose} dialogDone={dialogDone} type={props.type}/>
         </div>
     );
 }

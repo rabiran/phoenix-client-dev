@@ -25,7 +25,7 @@ export default function HierarchySuggest(props) {
 
     return (
         <FormControl component="fieldset">
-            <FormLabel component="legend">Suggested groups:</FormLabel>
+            <FormLabel component="legend">קבוצות מומלצות ל{props.name}:</FormLabel>
             <RadioGroup aria-label="position" name="position" value={value} onChange={handleChange}>
                 {arr.map((e, index) => 
                     <FormControlLabel
