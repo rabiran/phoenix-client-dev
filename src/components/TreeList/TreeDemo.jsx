@@ -64,7 +64,8 @@ export default function TreeDemo() {
       classes={{
         root: classes.root,
       }}
-      data={data}
+      // rootData
+      // data={data}
       selected={selected}
       onNodeSelected={handleSelection}
       expanded={expanded}

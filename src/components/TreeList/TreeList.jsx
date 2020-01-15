@@ -1,27 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import clsx from 'clsx';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
-import TreeItem from '@material-ui/lab/TreeItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
-import Skeleton from '@material-ui/lab/Skeleton';
 import TreeListConetxt from './TreeListContext';
-import RecursiveTreeItem from './RecursiveTreeItem';
-import { wrap as w } from './wrapper';
-
-const CleanButton = withStyles({
-  root: {
-    '&:hover': {
-      backgroundColor: 'transparent',
-    }
-  }
-}, { name: 'CleanButton' })(Button);
-CleanButton.muiName = Button.muiName;
-
+import RecursiveTreeItem  from './RecursiveTreeItem';
 
 /**
  * ---------- itemRoot --------------
@@ -79,7 +66,7 @@ export const styles = theme => ({
 
 const TreeList = (props) => {
   const { 
-    rootIds,
+    rootData,
     selected,
     onNodeSelected,
     expanded,
@@ -130,19 +117,17 @@ const TreeList = (props) => {
         defaultExpandIcon={<ExpandMoreIcon/>}
         defaultCollapseIcon={<ChevronLeftIcon/>}   
       >
-        { rootIds.map(i => <RecursiveTreeItem key={i} nodeId={i}/>) }
+        { 
+          rootData.map(item => 
+          <RecursiveTreeItem 
+            classes={classes} 
+            key={item.id} 
+            nodeId={item.id} 
+            item={item}
+          />)
+        }
       </TreeView>
     </TreeListConetxt.Provider>
-    // <TreeView
-    //   className={classes.root}
-    //   expanded={expanded}
-    //   onNodeToggle={onNodeToggle}
-    //   defaultExpandIcon={<ExpandMoreIcon/>}
-    //   defaultCollapseIcon={<ChevronLeftIcon/>}
-    //   {...other}
-    // >
-    //   { listJsx(data) }
-    // </TreeView>
   );
 }
 
@@ -152,18 +137,14 @@ TreeList.propTypes = {
    */
   classes: PropTypes.object,
   /**
-   * array of data items (top level items), each item may contain an array of children items 
+   * array of root data items (top level items), each item may contain an array of children items 
    * which will be displayed as a nested list
    */
-  // data: PropTypes.arrayOf(PropTypes.shape({
-  //   id: PropTypes.string.isRequired,
-  //   value: PropTypes.string.isRequired,
-  //   children: PropTypes.array,
-  // })),
-  /**
-   * array of ids of the root items
-   */
-  rootIds: PropTypes.arrayOf(PropTypes.string);
+  rootData: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name:  PropTypes.string.isRequired,
+    children: PropTypes.array,
+  })),
   /**
    * The id of the selected item. (Controlled)
    */
@@ -209,5 +190,14 @@ TreeList.propTypes = {
   dummyChildrenComponent: PropTypes.element,
 }
 
+const mapStateToProps = (state, ownProps) => ({
+  rootData: state.groups.rootGroupsIds.map(id => state.groups.byId[id]).filter(group => group),
+}) 
 
-export default withStyles(styles)(TreeList);
+const ConnectedTreeList = connect(
+  mapStateToProps,
+)(TreeList);
+
+export const StyledTreeList = withStyles(styles)(TreeList);
+
+export default withStyles(styles)(ConnectedTreeList);
