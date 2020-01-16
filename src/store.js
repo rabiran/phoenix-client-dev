@@ -31,6 +31,6 @@ export const mockIntialState = {
 
 const store = createStore(combineReducers({
   groups,
-}), mockIntialState);
+}));
 
 export default store;
