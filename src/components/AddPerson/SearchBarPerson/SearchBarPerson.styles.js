@@ -47,6 +47,10 @@ export default makeStyles(theme => {
             fontSize: "0.75em",
             marginLeft: "12px",
             fontWeight: "bold"
+        },
+        searchBarContainer: {
+            padding: '24px 24px 5px 24px',
+            minHeight: '83px',
         }
     };
 });

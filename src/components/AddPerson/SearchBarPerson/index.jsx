@@ -61,11 +61,11 @@ export default props => {
     );
   }
   return (
-    <>
+    <div className={classes.searchBarContainer}>
       <div className={classes.titleLabel}>
-        <label>הקלד מספר אישי להשלמת פרטי החייל:</label>
+        <span>הקלד מספר אישי להשלמת פרטי החייל:</span>
       </div>
       {display}
-    </>
+    </div>
   );
 };

@@ -18,10 +18,10 @@ export default makeStyles(theme => ({
       position: "relative",
       top: "120px",
       width: "60%",
-      minWidth: "478px"
+      minWidth: "min-content"
     },
     tabPanel: {
       borderRadius: "10px 0 10px 10px",
-      backgroundColor: "rgb(183, 204, 183)"
+      backgroundColor: "rgb(220, 222, 222)",     
     }
   }));

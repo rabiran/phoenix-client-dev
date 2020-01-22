@@ -1,15 +1,19 @@
 import React from "react";
 import SearchBarPerson from "../SearchBarPerson";
-// import styles from "./PersonDetails.style";
+import PersonalInfo from '../PersonalInfo';
 
-export default (props) => {
+export default props => {
   return (
-    <>
-      <SearchBarPerson 
-        person={props.person}
-        onClickSearch={props.onClickSearch}
-      />
-      
-    </>
+    <div>
+      <form>
+        <SearchBarPerson
+          person={props.person}
+          onClickSearch={props.onClickSearch}
+        />
+        <PersonalInfo
+          
+        />
+      </form>
+    </div>
   );
 };
