@@ -9,6 +9,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
+import { selectRootGroups } from 'features/groups/groupsSlice';
 
 /**
  * ---------- itemRoot --------------
@@ -73,11 +74,15 @@ const TreeList = (props) => {
     onNodeToggle,
     onKeyDown,
     onClick,
+    loadData,
     classes,
     dense,
   } = props;
 
-  const isSelected = useCallback(id => id === selected, [selected]) 
+  const isSelected = useCallback(id => id === selected, [selected]);
+  const loadDataCb =  useCallback(id => {
+    if(loadData) loadData(id);
+  }, [loadData]); 
 
   const handleKeyDown = (event, id) => {
     const key = event.key;
@@ -107,7 +112,8 @@ const TreeList = (props) => {
         isSelected,
         handleNodeClick,
         handleKeyDown,
-        dense
+        dense,
+        loadData: loadDataCb,
       }}
     >
       <TreeView
@@ -123,7 +129,6 @@ const TreeList = (props) => {
             classes={classes} 
             key={item.id} 
             nodeId={item.id} 
-            item={item}
           />)
         }
       </TreeView>
@@ -180,6 +185,13 @@ TreeList.propTypes = {
    */
   onKeyDown: PropTypes.func,
   /**
+   * Callback fired when tree node need it's children data.
+   * shape: (id: string) => void
+   * this callback (probably) should trigger an API call to fetch the data.
+   * @param {string} id The node's id
+   */
+  loadData: PropTypes.func,
+  /**
    * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
    */
   dense: PropTypes.bool,
@@ -191,8 +203,8 @@ TreeList.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  rootData: state.groups.rootGroupsIds.map(id => state.groups.byId[id]).filter(group => group),
-}) 
+  rootData: selectRootGroups(state),
+});
 
 const ConnectedTreeList = connect(
   mapStateToProps,

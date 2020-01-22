@@ -7,6 +7,7 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
+import { selectGroupByid } from 'features/groups/groupsSlice';
 
 const NOT_TABABLE = -1;
 
@@ -21,52 +22,62 @@ CleanButton.muiName = Button.muiName;
 
 export const RecursiveTreeItem = (props) => {
   const {
-    item, 
-    childItems,
+    group, 
+    // childItems,
     classes,
     // onSelect,
     // onClick,
     // onKeyDown,
     isAleaf,
+    // renderDummy,
   } = props;
 
   const {
     isSelected,
     handleNodeClick,
     handleKeyDown,
+    loadData,
     dense
   } = useContext(TreeListContext);
 
-  // first priority- the supplied prop
-  const nestedItems = childItems ? childItems : 
-  /* second priority- item.children 
-  only if exists and contains at least one object with id property
-  */
-  item.children && item.children.length > 0 && item.children[0].id ? item.children 
-  : [];
-  const renderDummy = nestedItems.length === 0 && !item.isAleaf;
+  // // first priority- the supplied prop
+  // const nestedItems = childItems ? childItems : 
+  // /* second priority- item.children 
+  // only if exists and contains at least one object with id property
+  // */
+  // item.children && item.children.length > 0 && item.children[0].id ? item.children 
+  // : [];
+  // const renderDummy = nestedItems.length === 0 && !item.isAleaf;
+
+  const nestedItems = group.children ? group.children : [];
+  const renderDummy = nestedItems.length === 0 && !group.isAleaf;
 
   const children = renderDummy ? 
   <></>:
-  nestedItems.map(child => 
+  nestedItems.map(childId => 
     <ConnectedTreeItem
-      key={child.id}
-      nodeId={child.id}
-      item={child}
+      key={childId}
+      nodeId={childId}
       classes={classes}
     />
   );
 
+  const handleClick = event => {
+    // request the real children data
+    if(renderDummy && loadData) loadData(group.id);
+    handleNodeClick(event, group.id);
+  };
+
   return ( 
     <TreeItem
-      nodeId={item.id}
+      nodeId={group.id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemContent, {[classes.selected]: isSelected(item.id)}),
+        content: clsx(classes.itemContent, {[classes.selected]: isSelected(group.id)}),
         expanded: classes.expanded,
       }}
-      onClick={e=> handleNodeClick(e, item.id)}
-      onKeyDown={e=> handleKeyDown(e, item.id)}
+      onClick={handleClick}
+      onKeyDown={e=> handleKeyDown(e, group.id)}
       label={
       <CleanButton
         tabIndex={NOT_TABABLE}
@@ -77,7 +88,7 @@ export const RecursiveTreeItem = (props) => {
           )
         }}
       >
-        { item.name }
+        { group.name }
       </CleanButton>
      }
     >
@@ -98,32 +109,20 @@ RecursiveTreeItem.propTypes = {
    */
   nodeId: PropTypes.string.isRequired,
   /**
-   * the data item of this tree node
+   * the group data of this tree node
    */
-  item: PropTypes.shape({
+  group: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     children: PropTypes.array,
+    isAleaf: PropTypes.bool,
   }).isRequired,
-  /**
-   * Array of child items 
-   */
-  childItems: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    children: PropTypes.array,
-  })),
-  /**
-   * Whether the node is a leaf (have no child nodes). 
-   * if false and also this node was not given children: 
-   * a dummy child and expander icon will be rendered
-   */
-  isAleaf: PropTypes.bool
-}
+
+
+};
 
 const mapStateToProps = (state, ownProps) => ({
-  childItems: ownProps.item.children ?
-    ownProps.item.children.map(id => state.groups.byId[id]).filter(group => group): [],
+  group: selectGroupByid(state, ownProps.nodeId),
 });
 
 const ConnectedTreeItem = connect(
