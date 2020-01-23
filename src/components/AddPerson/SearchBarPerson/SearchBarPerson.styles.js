@@ -32,7 +32,7 @@ export default makeStyles(theme => {
         },
         inputLabel: {
             fontWeight: 'unset',
-            color: 'black'
+            color: 'black',            
         },
         containerSearch: {
             display: 'flex',
@@ -46,7 +46,8 @@ export default makeStyles(theme => {
             color: "red",
             fontSize: "0.75em",
             marginLeft: "12px",
-            fontWeight: "bold"
+            fontWeight: "bold",
+            // zIndex: '2',
         },
         searchBarContainer: {
             padding: '24px 24px 5px 24px',

@@ -8,8 +8,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  FormLabel,
-  Divider
+  FormLabel
 } from "@material-ui/core";
 
 export default props => {
