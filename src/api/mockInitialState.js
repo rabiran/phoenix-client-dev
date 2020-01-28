@@ -4,22 +4,22 @@ export default {
     byId: {
       "1": {
         id: '1',
-        name: 'one',
+        name: 'אחד',
         children: ['2','3']
       },
       "2": {
         id: '2',
-        name: 'two',
+        name: 'שתיים',
         isAleaf: true
       },
       "3": {
         id: '3',
-        name: 'three',
+        name: 'שלוש',
         isAleaf: true
       },
       "4": {
         id: '4',
-        name: 'four',
+        name: 'מיאו',
         // children: ['5']
       },
     }

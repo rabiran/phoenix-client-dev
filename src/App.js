@@ -7,7 +7,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import RTL from './components/RTL';
 import ManagePage from './components/ManagePage/ManagePage';
 import LandingPage from './components/LandingPage/LandingPage';
-import TreeDemo from './components/TreeList/TreeDemo';
+import TreeDemo from './components/TreeListDemo/TreeDemo';
 import Header from './components/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
