@@ -7,7 +7,7 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid } from 'features/groups/groupsSlice';
+import { selectGroupByid } from '../groupsSlice';
 
 const NOT_TABABLE = -1;
 
@@ -16,20 +16,16 @@ const CleanButton = withStyles({
     '&:hover': {
       backgroundColor: 'transparent',
     }
-  }
+  },
+  // label: {
+  //   fontWeight: 'bold',
+  // },
 }, { name: 'CleanButton' })(Button);
 CleanButton.muiName = Button.muiName;
 
 export const RecursiveTreeItem = (props) => {
   const {
-    group, 
-    // childItems,
-    classes,
-    // onSelect,
-    // onClick,
-    // onKeyDown,
-    isAleaf,
-    // renderDummy,
+    group,
   } = props;
 
   const {
@@ -37,17 +33,9 @@ export const RecursiveTreeItem = (props) => {
     handleNodeClick,
     handleKeyDown,
     loadData,
-    dense
+    dense,
+    classes,
   } = useContext(TreeListContext);
-
-  // // first priority- the supplied prop
-  // const nestedItems = childItems ? childItems : 
-  // /* second priority- item.children 
-  // only if exists and contains at least one object with id property
-  // */
-  // item.children && item.children.length > 0 && item.children[0].id ? item.children 
-  // : [];
-  // const renderDummy = nestedItems.length === 0 && !item.isAleaf;
 
   const nestedItems = group.children ? group.children : [];
   const renderDummy = nestedItems.length === 0 && !group.isAleaf;
@@ -58,17 +46,16 @@ export const RecursiveTreeItem = (props) => {
     <ConnectedTreeItem
       key={childId}
       nodeId={childId}
-      classes={classes}
     />
   );
 
   const handleClick = event => {
     // request the real children data
     if(renderDummy && loadData) loadData(group.id);
-    handleNodeClick(event, group.id);
+    handleNodeClick(event, group.id, group);
   };
 
-  return ( 
+  return (
     <TreeItem
       nodeId={group.id}
       classes= {{
@@ -84,7 +71,10 @@ export const RecursiveTreeItem = (props) => {
         classes={{
           root: clsx(
             classes.button, 
-            { [classes.dense]: dense }
+            { 
+              [classes.dense]: dense, 
+              [classes.selected]: isSelected(group.id),
+            }
           )
         }}
       >

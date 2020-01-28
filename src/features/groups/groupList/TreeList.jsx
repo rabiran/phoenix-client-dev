@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
 import { selectRootGroups } from 'features/groups/groupsSlice';
+import teal from '@material-ui/core/colors/red';
+
 
 /**
  * ---------- itemRoot --------------
@@ -35,6 +37,9 @@ export const styles = theme => ({
     // },
     '&:focus > $itemContent$selected': {
       backgroundColor: theme.palette.action.selected,
+      color: theme.palette.primary.contrastText
+      // backgroundColor: theme.palette.primary
+
     }
   },
   /* styles applied to the 'treeItem' component's 'content' */
@@ -44,6 +49,8 @@ export const styles = theme => ({
     },
     '&$selected, &$selected:hover': {
       backgroundColor: theme.palette.action.selected,
+      color: theme.palette.primary.contrastText
+      // backgroundColor: theme.palette.primary
     },
   },
   /* styles applied to the 'button' component (inside itemContent) */
@@ -53,13 +60,17 @@ export const styles = theme => ({
     justifyContent: 'flex-start',
     paddingTop: 10,
     paddingBottom: 10,
+    fontWeight: 'bold',
+    '&$selected': {
+      color: theme.palette.primary.contrastText
+    },
   },
   /* styles applied to the button component if dense */
   dense: {
     paddingTop: 4,
     paddingBottom: 4,
   },
-  /* pseudo class applied to the itemContent when selected */
+  /* pseudo class applied to the itemContent and button when selected */
   selected: {},
   /* pseudo class applied to the itemRoot when expanded */
   expanded: {},
@@ -84,6 +95,7 @@ const TreeList = (props) => {
     if(loadData) loadData(id);
   }, [loadData]); 
 
+  // provided to list items via context
   const handleKeyDown = (event, id) => {
     const key = event.key;
     switch (key) {
@@ -99,8 +111,9 @@ const TreeList = (props) => {
     } 
   };
 
-  const handleNodeClick = (event, id) => {
-    onNodeSelected(event, id);
+  // provided to list items via context
+  const handleNodeClick = (event, id, item) => {
+    onNodeSelected(event, id, item);
     if (onClick) {
       onClick(event);
     }
@@ -113,6 +126,7 @@ const TreeList = (props) => {
         handleNodeClick,
         handleKeyDown,
         dense,
+        classes,
         loadData: loadDataCb,
       }}
     >
@@ -126,7 +140,6 @@ const TreeList = (props) => {
         { 
           rootData.map(item => 
           <RecursiveTreeItem 
-            classes={classes} 
             key={item.id} 
             nodeId={item.id} 
           />)
@@ -159,6 +172,7 @@ TreeList.propTypes = {
    * 
    * @param {object} event The event source of the callback
    * @param {string} id The id of the selected item
+   * @param {object} item The selected Item
    */
   onNodeSelected: PropTypes.func.isRequired,
   /**
