@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import axios from 'axios';
 
 /**
  * Gets api ,label and getCtrlkValue method
@@ -20,11 +21,14 @@ export default function Ctrlk(props) {
         setOptions([]);
         if(value.length > 1){
             setOpen(true);
-            const response = await fetch(props.api);
-            await sleep(1e3); // remove this line on prod.
-            const countries = await response.json();
-
-            setOptions(Object.keys(countries).map(key => countries[key].item[0]));
+            //'https://country.register.gov.uk/records.json?page-size=5000'
+            // console.log(props.api+value);
+            const response = await axios.get(props.api+value);
+            // await sleep(1e3); // remove this line on prod.
+            // const countries = await response.json();
+            const persons = response.data;
+            // setOptions(Object.keys(countries).map(key => countries[key].item[0]));
+            setOptions(persons);
         }
         else{
             setOpen(false);
@@ -38,7 +42,7 @@ export default function Ctrlk(props) {
             }}
             onChange={(event,value) => props.getCtrlkValue(value)}
             getOptionSelected={(option, value) => option.name === value.name}
-            getOptionLabel={option => option.name}
+            getOptionLabel={option => option.fullName}
             options={options}
             loading={loading}
             renderInput={params => (
@@ -66,8 +70,8 @@ export default function Ctrlk(props) {
 }
 
 
-function sleep(delay = 0) {
-    return new Promise(resolve => {
-        setTimeout(resolve, delay);
-    });
-}
+// function sleep(delay = 0) {
+//     return new Promise(resolve => {
+//         setTimeout(resolve, delay);
+//     });
+// }

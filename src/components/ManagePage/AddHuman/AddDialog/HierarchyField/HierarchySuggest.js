@@ -30,7 +30,7 @@ export default function HierarchySuggest(props) {
                 {arr.map((e, index) => 
                     <FormControlLabel
                         value={props.hierarchy.split('/',index+1).toString().replace(/,/g,'/')}
-                        control={<Radio color="primary" />}
+                        control={<Radio color="primary" size="small"/>}
                         label={props.hierarchy.split('/',index+1).toString().replace(/,/g,'/')}
                         labelPlacement="end"
                         key={index}

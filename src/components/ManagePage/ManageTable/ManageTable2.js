@@ -57,12 +57,12 @@ const useStyles = makeStyles({
  */
 export default function ManageTable2(props) {
   const classes = useStyles();
-
+  
   let columns = [
     { title: 'Name', field: 'name' },
     { title: 'number', field: 'number' },
     { title: 'unit', field: 'unit' },
-    { title: 'something', field: 'something' },
+    { title: 'rank', field: 'rank' },
     { title: 'manages', field: 'manages' },
   ]
   return (
@@ -76,13 +76,15 @@ export default function ManageTable2(props) {
           onRowDelete: oldData =>
             new Promise(resolve => {
               resolve()
-              props.onDelete(props.data.indexOf(oldData))
+              props.onDelete(oldData)
             })
         }}
       />
     </div>
   );
 }
+
+//props.data.indexOf(oldData)
 
 // onRowAdd: newData =>
 //             new Promise(resolve => {

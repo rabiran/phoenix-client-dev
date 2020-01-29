@@ -1,6 +1,7 @@
 import React from 'react';
 import { theme } from '../../../../theme.js';
 import '../../../../App.css'
+import config from '../../../../config'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -54,8 +55,15 @@ export default function AddDialog(props) {
     const [hierarchy, setHierarchy] = React.useState();
 
     function getCtrlkValue(value) { //get value from ctrlk component
-        if (value)
-            setPerson({ ...value, ...{ hierarchy: "earth/google/something/group3", id: 1 } });
+        console.log(value);
+        if (value){
+            // setPerson({ ...value, ...{ hierarchy: "earth/google/something/group3", id: 1 } });
+            let hiera = value.hierarchy.join('/');
+
+            setPerson({...value , hierarchy: hiera});
+            setHierarchy(hiera);
+            console.log(hiera);
+        }
         else
             setPerson();
 
@@ -82,7 +90,7 @@ export default function AddDialog(props) {
         setPerson();
     }
     function onSubmit() { // onsubmit
-        props.dialogDone({ id: person.id, manages: hierarchy });
+        props.dialogDone({ id: person.id, manages: hierarchy , currentUnit: person.currentUnit});
         setPerson();
         setHierarchy();
     }
@@ -98,7 +106,7 @@ export default function AddDialog(props) {
                 <DialogTitle id="alert-dialog-title" className={classes.title}>{"הוסף "+props.type}</DialogTitle>
                 <DialogContent>
                     <div className={classes.input}>
-                        <Ctrlk api='https://country.register.gov.uk/records.json?page-size=5000'
+                        <Ctrlk api={`${config.backend}/api/find/`}
                             label="חפש" getCtrlkValue={getCtrlkValue} />
                     </div>
                     {person && 

@@ -16,7 +16,8 @@ function App() {
             <Router>
               <Switch>
                   <Route exact path='/' component={LandingPage} />
-                  <Route path='/managepage' component={()=><ManagePage type="טיפש"/>} />
+                  <Route path='/cookspage' component={()=><ManagePage/>} />
+                  <Route path='/hrspage' component={()=><ManagePage/>} />
               </Switch>
             </Router>
         </ThemeProvider>
