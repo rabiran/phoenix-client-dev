@@ -23,8 +23,8 @@ const useStyles = makeStyles({
     dialog: {
         minHeight: '50%',
         height: '75%',
-        minWidth: '400px',
-        width: '50%',
+        minWidth: '900px',
+        width: '70%',
     },
     title: {
         display:'flex',
@@ -32,9 +32,15 @@ const useStyles = makeStyles({
         backgroundColor: fade(theme.palette.primary.main, 0.2),
     },
     input: {
+        width: '50%',
+        margin: '0 auto',
         '& div':{
             zIndex: '9999 !important'
         }
+    },
+    info: {
+        width: '75%',
+        margin: '0 auto'
     },
     actions: {
         display: 'flex',
@@ -99,7 +105,7 @@ export default function AddDialog(props) {
         <div >
             <Dialog TransitionComponent={Transition} classes={{ paper: classes.dialog }}
                 open={props.open}
-                onClose={onClose}
+                // onClose={onClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
 
@@ -110,10 +116,10 @@ export default function AddDialog(props) {
                             label="חפש" getCtrlkValue={getCtrlkValue} />
                     </div>
                     {person && 
-                        <div>
+                        <div className={classes.info}>
                             <PersonInfo person={person} />
                             <p>איררכיה נוכחית: {hierarchy}</p>
-                            <HierarchySuggest hierarchy={person.hierarchy} name={person.name} onRadio={onRadio} />
+                            <HierarchySuggest hierarchy={person.hierarchy} name={person.fullName} onRadio={onRadio} />
                             <HierarchyField onHierarchy={onHierarchy} />
                         </div>
                     }

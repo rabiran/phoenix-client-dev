@@ -59,11 +59,11 @@ export default function ManageTable2(props) {
   const classes = useStyles();
   
   let columns = [
-    { title: 'Name', field: 'name' },
-    { title: 'number', field: 'number' },
-    { title: 'unit', field: 'unit' },
-    { title: 'rank', field: 'rank' },
-    { title: 'manages', field: 'manages' },
+    { title: 'שם מלא', field: 'name' },
+    { title: 'מספר אישי', field: 'number' },
+    { title: 'יחידה', field: 'unit' },
+    { title: 'דרגה', field: 'rank' },
+    { title: 'מנהל את', field: 'manages' },
   ]
   return (
     <div className={classes.content}>
@@ -79,6 +79,43 @@ export default function ManageTable2(props) {
               props.onDelete(oldData)
             })
         }}
+        options = {{ pageSizeOptions: [3,5,10] }}
+        localization={{
+          pagination: {
+              labelDisplayedRows: '{from}-{to} מתוך {count}',
+              labelRowsSelect: "אנשים",
+              labelRowsPerPage: "אנשים בעמוד:",
+              firstAriaLabel: "עמוד ראשון",
+              firstTooltip: "עמוד ראשון",
+              previousAriaLabel: "עמוד קודם",
+              previousTooltip: "עמוד קודם",
+              nextAriaLabel: "עמוד הבא",
+              nextTooltip: "עמוד הבא",
+              lastAriaLabel: "עמוד אחרון",
+              lastTooltip: "עמוד אחרון",
+
+          },
+          toolbar: {
+              nRowsSelected: '{0} אנשים נבחרו',
+              searchTooltip: "חפש",
+              searchPlaceholder: "חפש"
+          },
+          header: {
+              actions: 'פעולות'
+          },
+          body: {
+              emptyDataSourceMessage: 'אין פה אף אחד!',
+              filterRow: {
+                  filterTooltip: 'Filter'
+              },
+              deleteTooltip: "מחק",
+              editRow: {
+                deleteText: "למחוק בן אדם זה מתפקיד זה?",
+                cancelTooltip: "לא",
+                saveTooltip: "כן"
+              }
+          }
+      }}
       />
     </div>
   );
