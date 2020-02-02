@@ -61,9 +61,6 @@ export const styles = theme => ({
     paddingTop: 10,
     paddingBottom: 10,
     fontWeight: 'bold',
-    '&$selected': {
-      color: theme.palette.primary.contrastText
-    },
   },
   /* styles applied to the button component if dense */
   dense: {

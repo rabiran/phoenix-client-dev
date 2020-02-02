@@ -13,6 +13,7 @@ const NOT_TABABLE = -1;
 
 const CleanButton = withStyles({
   root: {
+    color: 'inherit',
     '&:hover': {
       backgroundColor: 'transparent',
     }
