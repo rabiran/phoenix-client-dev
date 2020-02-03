@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
@@ -61,7 +60,7 @@ export const RecursiveTreeItem = (props) => {
       nodeId={group.id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemContent, {[classes.selected]: isSelected(group.id)}),
+        content: clsx(classes.itemRow, {[classes.selected]: isSelected(group.id)}),
         expanded: classes.expanded,
       }}
       onClick={handleClick}
@@ -71,7 +70,7 @@ export const RecursiveTreeItem = (props) => {
         tabIndex={NOT_TABABLE}
         classes={{
           root: clsx(
-            classes.button, 
+            classes.itemContent, 
             { 
               [classes.dense]: dense, 
               [classes.selected]: isSelected(group.id),
