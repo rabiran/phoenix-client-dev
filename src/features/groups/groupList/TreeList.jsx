@@ -13,16 +13,16 @@ import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSl
 
 /**
  * ---------- itemRoot --------------
- *  ---------itemContent--------    |
+ *  ---------itemRow------------    |
  * |  |\   -------------------  |   |
- * |  | + |      Button       | |   |
+ * |  | + |    itemContent    | |   |
  * |  |/   -------------------  |   |
  *  ----------------------------    |
  *      { children items }          |
  *              :                   |
  * ----------------------------------
- * itemRoot contains the itemContent and it's children
- * focus event occurs on the itemRoot, but styles should be applied to the itemContent
+ * itemRoot contains the itemrow and it's children
+ * focus event occurs on the itemRoot, but styles should be applied to the itemRow
  */
 export const styles = theme => ({
   root: {
@@ -33,7 +33,7 @@ export const styles = theme => ({
     // '&$expanded': {
     //   backgroundColor: green[100],
     // },
-    '&:focus > $itemContent$selected': {
+    '&:focus > $itemRow$selected': {
       backgroundColor: theme.palette.action.selected,
       color: theme.palette.primary.contrastText
       // backgroundColor: theme.palette.primary
@@ -41,7 +41,7 @@ export const styles = theme => ({
     }
   },
   /* styles applied to the 'treeItem' component's 'content' */
-  itemContent: {
+  itemRow: {
     '&:hover': {
       backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
@@ -51,8 +51,8 @@ export const styles = theme => ({
       // backgroundColor: theme.palette.primary
     },
   },
-  /* styles applied to the 'button' component (inside itemContent) */
-  button: {
+  /* styles applied to the 'itemContent' component (inside itemRow) */
+  itemContent: {
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-start',
@@ -65,7 +65,7 @@ export const styles = theme => ({
     paddingTop: 4,
     paddingBottom: 4,
   },
-  /* pseudo class applied to the itemContent and button when selected */
+  /* pseudo class applied to the itemRow and itemContent when selected */
   selected: {},
   /* pseudo class applied to the itemRoot when expanded */
   expanded: {},
