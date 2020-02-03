@@ -6,11 +6,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import Button from '@material-ui/core/Button';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
-import { selectRootGroups } from 'features/groups/groupsSlice';
-import teal from '@material-ui/core/colors/red';
+import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSlice';
 
 
 /**
@@ -153,12 +151,15 @@ TreeList.propTypes = {
   classes: PropTypes.object,
   /**
    * array of root data items (top level items), each item may contain an array of children items 
-   * which will be displayed as a nested list
+   * which will be displayed as a nested list.
+   * if a node's 'children' is empty and 'isAleaf' is false, a dummy children 
+   * is rendered, and the 'loadData' callback will be called upon the node's toggle.
    */
   rootData: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     name:  PropTypes.string.isRequired,
     children: PropTypes.array,
+    isAleaf: PropTypes.bool,
   })),
   /**
    * The id of the selected item. (Controlled)
@@ -217,8 +218,13 @@ const mapStateToProps = (state, ownProps) => ({
   rootData: selectRootGroups(state),
 });
 
+const mapDispatchToProps = {
+  loadData: fetchChildrenRequest,
+}
+
 const ConnectedTreeList = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(TreeList);
 
 export const StyledTreeList = withStyles(styles)(TreeList);
