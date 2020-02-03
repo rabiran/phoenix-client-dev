@@ -19,7 +19,7 @@ export default {
       },
       "4": {
         id: '4',
-        name: 'מיאו',
+        name: 'ארבע',
         // children: ['5']
       },
     }
