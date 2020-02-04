@@ -22,8 +22,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const useStyles = makeStyles({
     dialog: {
         minHeight: '50%',
-        height: '75%',
-        minWidth: '900px',
+        height: '85%',
+        minWidth: '300px',
         width: '70%',
     },
     title: {
@@ -41,6 +41,12 @@ const useStyles = makeStyles({
     info: {
         width: '75%',
         margin: '0 auto'
+    },
+    formArea: {
+        marginTop: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "16px",
+        padding: "10px"
     },
     actions: {
         display: 'flex',
@@ -67,7 +73,7 @@ export default function AddDialog(props) {
             let hiera = value.hierarchy.join('/');
 
             setPerson({...value , hierarchy: hiera});
-            setHierarchy(hiera);
+            // setHierarchy(hiera);
             console.log(hiera);
         }
         else
@@ -118,9 +124,12 @@ export default function AddDialog(props) {
                     {person && 
                         <div className={classes.info}>
                             <PersonInfo person={person} />
-                            <p>איררכיה נוכחית: {hierarchy}</p>
-                            <HierarchySuggest hierarchy={person.hierarchy} name={person.fullName} onRadio={onRadio} />
-                            <HierarchyField onHierarchy={onHierarchy} />
+                            <p>בחר קבוצה לניהול:</p>
+                            <div className={classes.formArea}>
+                                {hierarchy && <p>איררכיה נוכחית: {hierarchy}</p> }
+                                <HierarchySuggest hierarchy={person.hierarchy} name={person.fullName} onRadio={onRadio} />
+                                <HierarchyField onHierarchy={onHierarchy} />
+                            </div>
                         </div>
                     }
                 </DialogContent>

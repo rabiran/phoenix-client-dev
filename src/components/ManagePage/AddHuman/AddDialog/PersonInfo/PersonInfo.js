@@ -7,14 +7,16 @@ const useStyles = makeStyles({
     info: {
         backgroundColor: fade(theme.palette.primary.main, 0.2),
         marginTop: '20px',
+        padding: '10px'
     },
     txt: {
         margin: '10px',
+    },
+    bold: {
+        fontWeight: 'bold',
+        textDecoration: 'underline'
     }
 });
-
-
-
 
 /**
  * Gets person, and renders his values with the keys
@@ -31,11 +33,9 @@ export default function PersonInfo(props) {
         { label: "דרגה", value: props.person.rank || "אין" },
     ]
     let values = [];
-    //   Object.entries(props.person).forEach((entry) => {
-    //     values.push(<div key={entry[0]} className={classes.txt}>{`${entry[0]}: ${entry[1]}`}</div>);
-    //   });
 
-    values = something.map((obj, index) =>  <div key={index} className={classes.txt}>{`${obj.label}: ${obj.value}`}</div> );
+    values = something.map((obj, index) =>  <div key={index} className={classes.txt}>
+         <span className={classes.bold}>{`${obj.label}:`}</span><span>{`  ${obj.value}`}</span></div> );
 
     return (
         <div className={classes.info}>

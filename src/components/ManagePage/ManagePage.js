@@ -4,6 +4,14 @@ import '../../App.css';
 import AddHuman from './AddHuman/AddHuman';
 import ManageTable2 from './ManageTable/ManageTable2'
 import config from '../../config';
+import Alert from '../Stuff/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+// import Slide from '@material-ui/core/Slide';
+
+
+// function TransitionUp(props) {
+//     return <Slide direction="up" />;
+// }
 
 // import Alert from '../Stuff/Snack'
 
@@ -24,57 +32,95 @@ import config from '../../config';
  * @param {String} props.type
  */
 export default function ManagePage(props) {
-  const [data, setData] = React.useState([]);
-  const [type, setType] = React.useState({value: "", label: ""});
-  //{value: "HR", label: "שליש"}
+    const [data, setData] = React.useState([]);
+    const [type, setType] = React.useState({ value: "", label: "" });
+    //{value: "HR", label: "שליש"}
+    const [isAlert, setOpenAlert] = React.useState(false);
+    const [AlertMessage, setAlertMessage] = React.useState("warning");
+    const [AlertSeverity, setAlertSeverity] = React.useState("something");
 
-  // init ( componentdidmount )
-  React.useEffect(() => {
-    async function init() {
-      // await getType();
-      await getData();
+    const onAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
+
+    const openAlert = (type, message) => {
+        setAlertMessage(message);
+        setAlertSeverity(type);
+        setOpenAlert(true);
     }
-    init();
-  }, [])
 
-  // async function getType() {
-  //   const res = await axios.get(`${config.backend}/api/auth`);
-  //   res.status === 200 ? console.log("success") : console.log(`Error ${res.status}`);
-  //   tempdata = res.data;
-  // }
+    // init ( componentdidmount )
+    React.useEffect(() => {
+        // async function init() {
+        //     // await getType();
+        //     await getData();
+        // }
+        // init();
+        getData();
+        document.title = "Manage page"
+    // eslint-disable-next-line 
+    }, [])
 
-  //get Data from backend
-  async function getData() {
-    const res = await axios.get(`${config.backend}/api/findbyrespo`);
-    res.status === 200 ? console.log("success") : console.log(`Error ${res.status}`);
-    setData(res.data.table);
-    setType(res.data.type);
-  }
+    // async function getType() {
+    //   const res = await axios.get(`${config.backend}/api/auth`);
+    //   res.status === 200 ? console.log("success") : console.log(`Error ${res.status}`);
+    //   tempdata = res.data;
+    // }
 
-  // got new person from addhuman
-  async function onNewPerson(person) {
-    console.log(person.manages);
-    console.log(person.currentUnit);
-    const res = await axios.put(`${config.backend}/api/updaterespo`,{personid: person.id, responsibility: type.value, hierarchy: person.manages})
-    const res2 = await axios.put(`${config.backend}/api/updateunit`,{hierarchy: person.manages, akaUnit: person.currentUnit});
-    (res.status === 200 && res2.status === 200) ? console.log("success") : console.log(`Error ${res.status}`);
-    await getData();
-  }
+    //get Data from backend
+    async function getData() {
+        try{
+            const res = await axios.get(`${config.backend}/api/findbyrespo`);
+            res.status === 200 ? openAlert("success", "Got data succesfuly") : openAlert("error", `Getting data failed: Error ${res.status}`);
+            setData(res.data.table);
+            setType(res.data.type);
+        }
+        catch(err){
+            openAlert("error", `Failed connecting to server`);
+        }
+    }
 
-  // Delete person by index from table click
-  async function onDelete(person) {
-    const res = await axios.delete(`${config.backend}/api/deleterespo/${person.id}`)
-    res.status === 200 ? console.log("success") : console.log(`Error ${res.status}`);
-    await getData();
-  }
+    // got new person from addhuman
+    async function onNewPerson(person) {
+        try{
+            const res = await axios.put(`${config.backend}/api/updaterespo`, { personid: person.id, responsibility: type.value, hierarchy: person.manages })
+            const res2 = await axios.put(`${config.backend}/api/updateunit`, { hierarchy: person.manages, akaUnit: person.currentUnit });
+            (res.status === 200 && res2.status === 200) ? openAlert("success", "Added person succesfuly") : openAlert("error", `Add failed: Error ${res.status}`);
+            await getData();
+        }
+        catch(err){
+            openAlert("error", `Failed connecting to server`);
+        }
+    }
 
-  return (
-    <>
-      <div className="animate">
-        <ManageTable2 data={data} onDelete={onDelete} type={type.label}/>
-      </div>
-      <AddHuman onNewPerson={onNewPerson} type={type.label}/>
-    </>
-  );
+    // Delete person by index from table click
+    async function onDelete(person) {
+        try{
+            const res = await axios.delete(`${config.backend}/api/deleterespo/${person.id}`)
+            res.status === 200 ? openAlert("success", "Removed person succesfuly") : openAlert("error", `Remove failed: Error ${res.status}`);
+            await getData();
+        }
+        catch(err){
+            openAlert("error", `Failed connecting to server`);
+        }
+    }
+
+    return (
+        <div>
+            <div className="animate">
+                <ManageTable2 data={data} onDelete={onDelete} type={type.label} />
+            </div>
+            <AddHuman onNewPerson={onNewPerson} type={type.label} />
+            <Snackbar open={isAlert} autoHideDuration={2000} onClose={onAlertClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                <Alert onClose={onAlertClose} severity={AlertSeverity} className="alertAnimate">
+                    {AlertMessage}
+                </Alert>
+            </Snackbar>
+        </div>
+    );
 }
 

@@ -1,5 +1,7 @@
-body {
+body,html, #root {
   overflow-x:hidden;
+  height: 100%;
+  background-color: whitesmoke;
 }
 
 @keyframes slideInFromLeft {
@@ -22,6 +24,10 @@ body {
 
 .animate {
   animation: 1s ease-out slideInFromLeft 1;
+}
+
+.alertAnimate {
+  animation: 0.3s ease-out slideInFromLeft 1;
 }
 
 .scaleIn{
