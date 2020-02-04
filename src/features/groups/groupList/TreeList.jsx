@@ -91,12 +91,12 @@ const TreeList = (props) => {
   }, [loadData]); 
 
   // provided to list items via context
-  const handleKeyDown = (event, id) => {
+  const handleNodeKeyDown = (event, id, item) => {
     const key = event.key;
     switch (key) {
       case 'Enter':
       case ' ':
-        onNodeSelected(event, id);
+        onNodeSelected(event, id, item);
         break;
       default:
         break;
@@ -119,7 +119,7 @@ const TreeList = (props) => {
       value={{
         isSelected,
         handleNodeClick,
-        handleKeyDown,
+        handleNodeKeyDown,
         dense,
         classes,
         loadData: loadDataCb,
