@@ -26,12 +26,12 @@ import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSl
  */
 export const styles = theme => ({
   root: {
-    // backgroundColor: theme.palette.background.default,
-  },
+    backgroundColor: theme.palette.background.default,
+  },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
     // '&$expanded': {
-    //   backgroundColor: green[100],
+    //   backgroundColor: theme.palette.action.expanded,
     // },
     '&:focus > $itemRow$selected': {
       backgroundColor: theme.palette.action.selected,

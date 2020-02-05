@@ -6,18 +6,20 @@ const groupsSlice = createSlice({
   name: 'groups',
   initialState: mockIntialState.groups,
   reducers: {
-    fetchChildrenSuccess(state, action) {
-      const { parentId, children } = action.payload;
-      const newChildrenById = children.map(c => ({
-        [c.id]: c,
-      }));
-      const newChildrenIds = children.map(c => c.id);
+    fetchGroupsSuccess(state, action) {
+      const { groups } = action.payload;
+      const newChildrenById = createLookup(groups);
+      // const newChildrenIds = children.map(c => c.id);
       Object.assign(state.byId, ...newChildrenById);
-      state.byId[parentId].children = newChildrenIds;
+      // state.byId[parentId].children = newChildrenIds;
     },
     fetchChildrenRequest(){}
   },
 });
+
+// reducer helpers
+const createLookup = groupArr => groupArr.map(g => ({ [g.id]: g }));
+// const 
 
 // selectors
 const getGroups = (state) => state.groups.byId;
@@ -40,6 +42,6 @@ export const {
    * @param payload.parentId the id of the parent group
    * @param payload.children the fetched children group objects
    */
-  fetchChildrenSuccess 
+  fetchGroupsSuccess
 } = groupsSlice.actions;
 export default groupsSlice.reducer;

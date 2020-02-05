@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { withStyles, useTheme } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import { selectGroupByid } from '../groupsSlice';
@@ -17,11 +19,15 @@ const CleanButton = withStyles({
       backgroundColor: 'transparent',
     }
   },
-  // label: {
-  //   fontWeight: 'bold',
-  // },
 }, { name: 'CleanButton' })(Button);
 CleanButton.muiName = Button.muiName;
+
+const Spinner = withStyles({
+  root: {
+    marginTop: '2px',
+  }
+})(CircularProgress);
+Spinner.muiName = CircularProgress.muiName;
 
 export const RecursiveTreeItem = (props) => {
   const {
@@ -44,7 +50,8 @@ export const RecursiveTreeItem = (props) => {
   const renderDummy = nestedItems.length === 0 && !group.isAleaf;
 
   const children = renderDummy ? 
-  <></>:
+  // <></>:
+  <Spinner/>:
   nestedItems.map(childId => 
     <ConnectedTreeItem
       key={childId}
@@ -88,12 +95,10 @@ export const RecursiveTreeItem = (props) => {
         tabIndex={NOT_TABABLE}
         classes={{
           root: clsx(
-            classes.itemContent, 
-            { 
+            classes.itemContent, { 
               [classes.dense]: dense, 
               [classes.selected]: isSelected(group.id),
-            }
-          )
+            })
         }}
       >
         { group.name }

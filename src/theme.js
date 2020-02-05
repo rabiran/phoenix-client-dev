@@ -8,7 +8,8 @@ export const theme = responsiveFontSizes(createMuiTheme({
     direction: 'rtl',
     palette: {
       action: {
-        selected: teal[400]
+        selected: teal[400],
+        expanded: teal[100]
       },
       primary: teal,
       secondary: red,

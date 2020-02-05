@@ -1,6 +1,7 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
-import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
-import { fetchGroupChildren } from 'api/groups';
+import { takeLatest, put, call, takeEvery, all } from 'redux-saga/effects';
+import { fetchChildrenRequest , fetchGroupsSuccess } from './groupsSlice';
+import { fetchChildren2 } from 'api/groups';
+import _ from 'lodash';
 
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
@@ -17,6 +18,9 @@ export function* watchFetchChildrenRequest() {
  */
 function* fetchChildren(action) {
   const id = action.payload;
-  const children = yield call(fetchGroupChildren, id);
-  yield put(fetchChildrenSuccess({ parentId: id, children }));
+  const groups = yield call(fetchChildren2, id);
+  yield put(fetchGroupsSuccess({ groups }));
+  const subChildren = yield all(groups.slice(1).map(g=> call(fetchChildren2, g.id)));
+  const flattend = _.flatten(subChildren);
+  yield put(fetchGroupsSuccess({groups: flattend}));
 }
