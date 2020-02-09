@@ -17,7 +17,7 @@ export default makeStyles(theme => {
             padding: '24px',
             '&:before': {
                 position: 'absolute',
-                top: 139,
+                top: 165,
                 left: 63,
                 content: '" "',
                 height: 27,

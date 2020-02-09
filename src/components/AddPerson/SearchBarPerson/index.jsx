@@ -44,7 +44,7 @@ export default props => {
           />
           <span className={classes.errorLabel}>{errorLabel}</span>
         </div>
-        <ButtonBase className={classes.button} onClick={handleSearch}>
+        <ButtonBase classes={{root: classes.buttonBaseRoot}} onClick={handleSearch}>
           חפש
         </ButtonBase>
       </div>
@@ -56,7 +56,7 @@ export default props => {
           מספר אישי:
         </InputLabel>
         <InputLabel className={classes.inputLabel}>{personalNumber}</InputLabel>
-        <Link underline="always">עדכן</Link>
+        <Link underline="always" className={classes.updateLink}>עדכן</Link>
       </div>
     );
   }

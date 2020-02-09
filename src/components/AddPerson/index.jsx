@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./AddPerson.styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import SoldierForm from "./SoldierForm";
+import SoldierScreen from "./SoldierScreen";
 import persons from "../../assets/mock.json";
 
 //
@@ -27,6 +27,7 @@ export default function AddPerson() {
 
   return (
     <div className={classes.AddPerson}>
+      <div className={classes.background}></div>
       <div className={classes.tabContent}>
         <AppBar position="static">
           <Tabs
@@ -39,7 +40,7 @@ export default function AddPerson() {
           </Tabs>
         </AppBar>
         <TabPanel className={classes.tabPanel} value={value} index={0}>
-          <SoldierForm person={currPerson} onClickSearch={handleSearch} />
+          <SoldierScreen person={currPerson} onClickSearch={handleSearch} />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value={value} index={1}>
           Item Two

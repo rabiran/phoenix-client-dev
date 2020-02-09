@@ -8,7 +8,7 @@ export default function Header() {
 
     return (
         <div className='header-root'>
-            <AppBar position="static">
+            <AppBar position="relative">
                 <Toolbar>
                     <Typography variant="h6" className='header-title'>
                         Phoenix

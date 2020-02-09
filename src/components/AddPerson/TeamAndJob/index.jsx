@@ -1,37 +1,61 @@
 import React from "react";
-import { TextField, InputAdornment } from "@material-ui/core";
+import {
+  TextField,
+  InputAdornment,
+  Link,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Typography,
+  Divider
+} from "@material-ui/core";
+import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
-import clsx from 'clsx';
 
 export default props => {
-  const [personalNumber, setPersonalNumber] = React.useState("");
-  const [errorLabel, setErrorLabel] = React.useState("");
   const classes = styles();
-  const handleSearch = () => {
-    props.onClickSearch(personalNumber);
-  };
-
-  const handleChangeInput = event => {
-    if (/^\d{0,9}$/.test(event.target.value)) {
-      setPersonalNumber(event.target.value);
-      setErrorLabel("");
-    } else {
-      setErrorLabel("יש להכניס 6-9 ספרות בלבד!");
-    }
-  };
-
-  const handleKeyUp = event => {
-    if (event.key === "Enter") {
-      handleSearch();
-    }
-  };
 
   return (
     <div className={classes.teamAndJobContainer}>
-      <div>
+      <div className={classes.expansionPanelContainer}>
         <span>
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
+        <ExpansionPanel
+          classes={{
+            root: classes.expansionPanelRoot,
+            rounded: classes.expansionPanelRounded,
+            expanded: classes.expansionPanelExpanded
+          }}
+        >
+          <ExpansionPanelSummary
+            classes={{
+              root: classes.expansionPanelSummaryRoot,
+              expanded: classes.expansionPanelSummaryExpanded
+            }}
+            expandIcon={<ExpandMore />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <Typography>בחר צוות</Typography>
+          </ExpansionPanelSummary>
+          {/* <Divider /> */}
+          <ExpansionPanelDetails
+            classes={{
+              root: classes.expendDetails
+            }}
+          >
+            <div className={classes.treeGroupsTitle}>
+              <span>בחר מחלקה אליה מגיע החייל</span>
+              <Link 
+                color='inherit'
+                underline='none'
+              >+ הוסף מחלקה</Link>
+            </div>
+            <Divider />
+            <div className={classes.treeGroups}></div>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       </div>
       <div className={classes.descriptionContainer}>
         <TextField
@@ -46,7 +70,7 @@ export default props => {
           placeholder="הקלד פה תיאור תפקיד"
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start" >תיאור:</InputAdornment>
+              <InputAdornment position="start">תיאור:</InputAdornment>
             )
           }}
         />
