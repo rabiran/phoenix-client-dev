@@ -1,18 +1,15 @@
 import React from "react";
-import styles from "./AddPerson.styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { styles, tabItemStyles } from "./addPerson.style";
 import SoldierScreen from "./SoldierScreen";
 import persons from "../../assets/mock.json";
-
-//
 import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-//
 
 export default function AddPerson() {
+  const tabStyles = tabItemStyles();
   const classes = styles();
   const [value, setValue] = React.useState(0);
   const [currPerson, setCurrPerson] = React.useState({});
@@ -29,33 +26,24 @@ export default function AddPerson() {
     <div className={classes.AddPerson}>
       <div className={classes.background}></div>
       <div className={classes.tabContent}>
-        <AppBar position="static">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="simple tabs example"
-          >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-          </Tabs>
-        </AppBar>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+        >
+          <Tab label="חייל" disableRipple classes={tabStyles} />
+          <Tab label="אזרח" disableRipple classes={tabStyles} />
+        </Tabs>
         <TabPanel className={classes.tabPanel} value={value} index={0}>
           <SoldierScreen person={currPerson} onClickSearch={handleSearch} />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value={value} index={1}>
-          Item Two
+          Civilian in process...
         </TabPanel>
       </div>
-      {/*       <Tabs>
-        <Tab label="Kartoffel"></Tab>
-        <Tab label="Karting"></Tab>
-        <Tab label="Spike"></Tab>
-      </Tabs> */}
     </div>
   );
 }
-
-////////////////////////////////////////////////////////////////
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,7 +57,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box >{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </Typography>
   );
 }
@@ -79,35 +67,3 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired
 };
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`
-  };
-}
-
-// const useStyles = makeStyles(theme => ({
-//   /*   root: {
-//     flexGrow: 1,
-//     backgroundColor: theme.palette.background.paper
-//   }, */
-//   AddPerson: {
-//     backgroundImage: `url(${bg})`,
-//     height: "100%",
-//     width: "100%",
-//     position: "fixed",
-//     display: "flex",
-//     justifyContent: "center"
-//   },
-//   tabContent: {
-//     position: "relative",
-//     top: "120px",
-//     width: "60%",
-//     minWidth: "478px"
-//   },
-//   tabPanel: {
-//     borderRadius: "10px 0 10px 10px",
-//     backgroundColor: "rgb(183, 204, 183)"
-//   }
-// }));

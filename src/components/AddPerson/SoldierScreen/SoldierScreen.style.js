@@ -7,12 +7,13 @@ export default makeStyles(theme => {
         },
         avatarContainer: {
             position: 'absolute',
-            top: '-51px',
+            top: '-98px',
             right: '47px',
-            zIndex: '1'
+            zIndex: '3'
         },
         SearchBarPersonContainer: {
             position: 'relative',
+            zIndex: '2',
         },
         buttonBaseRoot: {
             color: 'white',

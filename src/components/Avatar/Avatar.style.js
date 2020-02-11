@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core/styles";
-import bg from "../../assets/formes_background.jpg";
 
 export default makeStyles(theme => ({
     iconColorPrimary:{

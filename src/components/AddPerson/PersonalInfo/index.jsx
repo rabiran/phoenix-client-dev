@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import styles from "./PersonalInfo.style";
+import styles from "./personalInfo.style";
 import {
   TextField,
   InputAdornment,

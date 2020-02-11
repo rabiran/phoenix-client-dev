@@ -2,11 +2,10 @@ import React from "react";
 import SearchBarPerson from "../SearchBarPerson";
 import PersonalInfo from "../PersonalInfo";
 import TeamAndJob from "../TeamAndJob";
-import styles from "./SoldierScreen.style";
-import { ButtonBase, ThemeProvider } from "@material-ui/core";
+import styles from "./soldierScreen.style";
+import { ButtonBase } from "@material-ui/core";
 import Avatar from "../../Avatar/index";
 import faker from 'faker';
-import AcUnitOutlinedIcon from '@material-ui/icons/AcUnitOutlined';
 
 export default props => {
   const classes = styles();
@@ -14,7 +13,7 @@ export default props => {
   return (
     <div>
       <div className={classes.avatarContainer}>
-        <Avatar rootClassAvatar={classes.avatarRoot} uploadImage={true}/>
+        <Avatar rootClassAvatar={classes.avatarRoot} uploadImage/>
       </div>
       <div className={classes.SearchBarPersonContainer}>
         <SearchBarPerson

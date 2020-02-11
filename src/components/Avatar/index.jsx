@@ -1,8 +1,7 @@
 import React from "react";
 import { Avatar, Link, Badge, Tooltip } from "@material-ui/core";
-import styles from "./Avatar.style";
+import styles from "./avatar.style";
 import AddAPhotoOutlinedIcon from "@material-ui/icons/AddAPhotoOutlined";
-import { withStyles } from "@material-ui/core/styles";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import RecordVoiceOverOutlinedIcon from "@material-ui/icons/RecordVoiceOverOutlined";

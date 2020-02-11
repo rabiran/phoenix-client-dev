@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles(theme => {
     return {
-        prsnlinfSubContainer: {
+        prsnlinfSubContainer: {           
             display: 'flex',
             flexDirection: 'column',            
             minWidth: '169px',
@@ -10,6 +10,7 @@ export default makeStyles(theme => {
             margin: '0px 15px',
         },
         prsnlinfContainer: {
+            position: 'relative',
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-evenly',
@@ -17,7 +18,7 @@ export default makeStyles(theme => {
             padding: '24px',
             '&:before': {
                 position: 'absolute',
-                top: 165,
+                top: -21,
                 left: 63,
                 content: '" "',
                 height: 27,

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, InputLabel, InputBase, ButtonBase } from "@material-ui/core";
-import styles from "./SearchBarPerson.styles";
+import styles from "./searchBarPerson.styles";
 //import Button from "@material-ui/core/ButtonBase";
 
 export default props => {
