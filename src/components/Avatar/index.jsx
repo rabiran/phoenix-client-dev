@@ -7,7 +7,6 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import RecordVoiceOverOutlinedIcon from "@material-ui/icons/RecordVoiceOverOutlined";
 import HourglassEmptyOutlinedIcon from "@material-ui/icons/HourglassEmptyOutlined";
 import clsx from "clsx";
-//import Button from "@material-ui/core/ButtonBase";
 
 const dictionary = {
   size: {

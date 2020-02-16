@@ -5,6 +5,7 @@ import TeamAndJob from "../TeamAndJob";
 import styles from "./soldierScreen.style";
 import { ButtonBase } from "@material-ui/core";
 import Avatar from "../../Avatar/index";
+import StyledButton from '../../withStylesComponents/StyleButton'
 import faker from 'faker';
 
 export default props => {
@@ -25,9 +26,9 @@ export default props => {
         <PersonalInfo />
         <TeamAndJob />
         <div className={classes.submitContainer}>
-          <ButtonBase classes={{ root: classes.buttonBaseRoot }}>
+          <StyledButton>
             העבר לאישור קב"ט
-          </ButtonBase>
+          </StyledButton>
         </div>
       </form>
     </div>

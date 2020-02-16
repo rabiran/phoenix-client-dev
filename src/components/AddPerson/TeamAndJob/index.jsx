@@ -38,8 +38,7 @@ export default props => {
             id="panel1-header"
           >
             <Typography>בחר צוות</Typography>
-          </ExpansionPanelSummary>
-          {/* <Divider /> */}
+          </ExpansionPanelSummary>     
           <ExpansionPanelDetails
             classes={{
               root: classes.expendDetails

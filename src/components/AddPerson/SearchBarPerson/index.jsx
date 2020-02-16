@@ -1,11 +1,9 @@
 import React from "react";
-import { Link, InputLabel, InputBase, ButtonBase } from "@material-ui/core";
+import { Link, InputLabel, InputBase } from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
-//import Button from "@material-ui/core/ButtonBase";
+import StyledButton from '../../withStylesComponents/StyleButton';
 
 export default props => {
-  // person={props.person}
-  // onClickSearch={props.onClickSearch}
   const [personalNumber, setPersonalNumber] = React.useState("");
   const [errorLabel, setErrorLabel] = React.useState("");
   const classes = styles();
@@ -44,9 +42,9 @@ export default props => {
           />
           <span className={classes.errorLabel}>{errorLabel}</span>
         </div>
-        <ButtonBase classes={{root: classes.buttonBaseRoot}} onClick={handleSearch}>
+        <StyledButton onClick={handleSearch}>
           חפש
-        </ButtonBase>
+        </StyledButton>
       </div>
     );
   } else {
