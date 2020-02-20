@@ -1,5 +1,5 @@
 import axios from 'axios';
-import rootGroup from '../rootGroup';
+import rootGroup from './rootGroup';
 export const FETCH_DEPTH = 2;
 const BASE_URL = 'api/organizationGroups';
 
