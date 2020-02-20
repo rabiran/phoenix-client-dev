@@ -6,4 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
   TreeListContext.displayName = 'TreeViewContext';
 }
 
+TreeListContext.displayName = 'TreeListContext';
+
 export default TreeListContext;
