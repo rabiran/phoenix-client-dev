@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.8.1",
+    "@material-ui/core": "^4.9.3",
     "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.37",
+    "@material-ui/lab": "^4.0.0-alpha.43",
     "@reduxjs/toolkit": "^1.2.1",
+    "@researchgate/react-intersection-observer": "^1.0.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -21,7 +22,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
-    "redux-saga": "^1.1.3"
+    "redux-saga": "^1.1.3",
+    "render-props": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -29,7 +31,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://kartoffel-master.eastus.cloudapp.azure.com:3000",
+  "proxy": "http://kartoffel-master.eastus.cloudapp.azure.com:3002",
   "eslintConfig": {
     "extends": "react-app"
   },
