@@ -4,60 +4,49 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Skeleton from '@material-ui/lab/Skeleton';
 import { withStyles, useTheme } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import { selectGroupByid } from '../groupsSlice';
+import wrapFetch from './wrapFetch';
+import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
+import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
-const NOT_TABABLE = -1, LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
-
-const CleanButton = withStyles({
-  root: {
-    color: 'inherit',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    }
-  },
-}, { name: 'CleanButton' })(Button);
-CleanButton.muiName = Button.muiName;
-
-const Spinner = withStyles({
-  root: {
-    marginTop: '2px',
-  }
-})(CircularProgress);
-Spinner.muiName = CircularProgress.muiName;
+const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
 export const RecursiveTreeItem = (props) => {
   const {
     group,
+    onClick,
+    onKeyDown,
+    children,
+    visible
   } = props;
 
   const {
     isSelected,
     handleNodeClick,
     handleNodeKeyDown,
-    loadData,
     dense,
     classes,
   } = useContext(TreeListContext);
 
   const theme = useTheme();
-
   const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
   const nestedItems = group.children ? group.children : [];
-  const renderDummy = nestedItems.length === 0 && !group.isAleaf;
 
-  const children = renderDummy ? 
-  // <></>:
-  <Spinner/>:
+  const defaultVisibility = nestedItems.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+
+  // if children given - render them
+  const renderChildren = children ? children :
   nestedItems.map(childId => 
-    <ConnectedTreeItem
+    <VisibilityOptimizer
       key={childId}
       nodeId={childId}
+      component={ConnectedTreeItem}
+      defaultVisibility={defaultVisibility}
     />
   );
+  
 
   const handleKeyDown = event => {
     const key = event.key;
@@ -65,19 +54,21 @@ export const RecursiveTreeItem = (props) => {
       case 'Enter':
       case ' ':
       case nextArrowKey:
-        // request the real children data
-        if(renderDummy && loadData) loadData(group.id);
         handleNodeKeyDown(event, group.id, group)
         break;
       default:
         break;
     }
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
   }
 
   const handleClick = event => {
-    // request the real children data
-    if(renderDummy && loadData) loadData(group.id);
     handleNodeClick(event, group.id, group);
+    if (onClick) {
+      onClick(event);
+    }
   };
 
   return (
@@ -87,27 +78,18 @@ export const RecursiveTreeItem = (props) => {
         root: classes.itemRoot,
         content: clsx(classes.itemRow, {[classes.selected]: isSelected(group.id)}),
         expanded: classes.expanded,
+        label: clsx(classes.itemContent, {
+          [classes.dense]: dense,
+          [classes.selected]: isSelected(group.id)
+        })
       }}
       onClick={handleClick}
-      onKeyDown={e=> handleKeyDown(e, group.id)}
-      label={
-      <CleanButton
-        tabIndex={NOT_TABABLE}
-        classes={{
-          root: clsx(
-            classes.itemContent, { 
-              [classes.dense]: dense, 
-              [classes.selected]: isSelected(group.id),
-            })
-        }}
-      >
-        { group.name }
-      </CleanButton>
-     }
+      onKeyDown={handleKeyDown}
+      label={group.name}
     >
-      { children }
-    </TreeItem>   
- );
+      { renderChildren }  
+    </TreeItem>
+  );
 }
 
 RecursiveTreeItem.muiName = TreeItem.muiName;
@@ -131,6 +113,14 @@ RecursiveTreeItem.propTypes = {
     isAleaf: PropTypes.bool,
   }).isRequired,
 
+  /**
+   * override default behaviour: render `children` instead of 
+   * recursivley generate them from the given `group` prop
+   */
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 
 };
 
@@ -140,6 +130,12 @@ const mapStateToProps = (state, ownProps) => ({
 
 const ConnectedTreeItem = connect(
   mapStateToProps,
-)(RecursiveTreeItem);
+)(wrapFetch(RecursiveTreeItem));
+
+ConnectedTreeItem.muiName = TreeItem.muiName;
+
+ConnectedTreeItem.propTypes = {
+  nodeId: PropTypes.string.isRequired,
+} 
 
 export default ConnectedTreeItem;

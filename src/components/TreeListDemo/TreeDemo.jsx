@@ -5,21 +5,20 @@ import teal from '@material-ui/core/colors/teal';
 
 
 const useStyles = makeStyles({
-  root: {
-    maxWidth: 500,
-  },
-  itemRoot: {
-    // '&$expanded': {
-    //   backgroundColor: green[100],
+  itemRow: {
+    // borderRadius: '35px',
+    // '&:hover': {
+    //   borderRadius: '35px',
     // },
-    '&:focus > $itemContent$selected': {
-      backgroundColor: teal,
-    }
+    // '&$selected, &$selected:hover': {
+    //   borderRadius: '35px',
+    // }
   },
   itemContent: {
-    '&$selected, &$selected:hover': {
-      backgroundColor: teal
-    },
+    // borderRadius: '35px',
+    // : '35px',
+    // borderTopRightRadius: '35px',
+    // borderBottomRightRadius: '35px',
   },
   selected: {}
 }); 
@@ -37,7 +36,8 @@ export default function TreeDemo() {
   const classes = useStyles();
 
   return (
-    <TreeList 
+    <div style={{maxHeight: 'calc(100vh - 64px)', overflowY: 'scroll', maxWidth:'500px'}}>
+      <TreeList 
       classes={classes}
       selected={selected}
       onNodeSelected={handleSelection}
@@ -45,5 +45,7 @@ export default function TreeDemo() {
       onNodeToggle={handleExpandedChange}
     >
     </TreeList>
+    </div>
+    
   )
 }

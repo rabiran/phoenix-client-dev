@@ -2,14 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ExpandMoreIcon from '@material-ui/icons/ChevronLeft';
+import CollapseIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
 import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSlice';
+import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer'
 
+export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
 
 /**
  * ---------- itemRoot --------------
@@ -21,17 +23,23 @@ import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSl
  *      { children items }          |
  *              :                   |
  * ----------------------------------
- * itemRoot contains the itemrow and it's children
+ * itemRoot contains a `div` that contains itemrow and it's children
  * focus event occurs on the itemRoot, but styles should be applied to the itemRow
  */
 export const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
+    '& > div > $itemRoot  > $itemRow': {
+      fontWeight: 'bold',
+    },
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
     // '&$expanded': {
     //   backgroundColor: theme.palette.action.expanded,
+    // },
+    // '&$expanded > $itemRow': {
+    //   fontWeight: 'bold',
     // },
     '&:focus > $itemRow$selected': {
       backgroundColor: theme.palette.action.selected,
@@ -47,7 +55,8 @@ export const styles = theme => ({
     },
     '&$selected, &$selected:hover': {
       backgroundColor: theme.palette.action.selected,
-      color: theme.palette.primary.contrastText
+      color: theme.palette.primary.contrastText,
+      fontWeight: 'bold'
       // backgroundColor: theme.palette.primary
     },
   },
@@ -58,9 +67,12 @@ export const styles = theme => ({
     justifyContent: 'flex-start',
     paddingTop: 10,
     paddingBottom: 10,
-    fontWeight: 'bold',
+    fontWeight: 'inherit',
+    '&:only-child': {
+      paddingLeft: 10
+    }
   },
-  /* styles applied to the button component if dense */
+  /* styles applied to the 'itemContent' component if dense */
   dense: {
     paddingTop: 4,
     paddingBottom: 4,
@@ -114,6 +126,8 @@ const TreeList = (props) => {
     }
   };
 
+  const defaultVisibility = rootData.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+
   return (
     <TreeListConetxt.Provider
       value={{
@@ -130,13 +144,15 @@ const TreeList = (props) => {
         expanded={expanded}
         onNodeToggle={onNodeToggle}
         defaultExpandIcon={<ExpandMoreIcon/>}
-        defaultCollapseIcon={<ChevronLeftIcon/>}   
+        defaultCollapseIcon={<CollapseIcon/>}   
       >
         { 
           rootData.map(item => 
-          <RecursiveTreeItem 
+          <VisibilityOptimizer 
             key={item.id} 
-            nodeId={item.id} 
+            nodeId={item.id}
+            defaultVisibility={defaultVisibility}
+            component={RecursiveTreeItem}
           />)
         }
       </TreeView>
