@@ -1,36 +1,24 @@
 import React from "react";
 import SearchBarPerson from "../SearchBarPerson";
-import PersonalInfo from "../PersonalInfo";
-import TeamAndJob from "../TeamAndJob";
+import SoldierForm from './SoldierForm';
 import styles from "./soldierScreen.style";
-import { ButtonBase } from "@material-ui/core";
 import Avatar from "../../Avatar/index";
-import StyledButton from '../../withStylesComponents/StyleButton'
-import faker from 'faker';
+import faker from "faker";
 
-export default props => {
+export default ({person, onClickSearch}) => {
   const classes = styles();
-
   return (
     <div>
       <div className={classes.avatarContainer}>
-        <Avatar rootClassAvatar={classes.avatarRoot} uploadImage/>
+        <Avatar rootClassAvatar={classes.avatarRoot} uploadImage />
       </div>
       <div className={classes.SearchBarPersonContainer}>
         <SearchBarPerson
-          person={props.person}
-          onClickSearch={props.onClickSearch}
+          person={person}
+          onClickSearch={onClickSearch}
         />
       </div>
-      <form>
-        <PersonalInfo />
-        <TeamAndJob />
-        <div className={classes.submitContainer}>
-          <StyledButton>
-            העבר לאישור קב"ט
-          </StyledButton>
-        </div>
-      </form>
+      <SoldierForm soldier={person}/>
     </div>
   );
 };

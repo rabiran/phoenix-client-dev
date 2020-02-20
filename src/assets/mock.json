@@ -27,12 +27,12 @@
         ],
         "domainUsers": [
             {
-                "uniqueID": "nitro@jello.com",
-                "adfsUID": "nitro@jellouid"
+                "uniqueID": "lieberman@jello.com",
+                "adfsUID": "lieberman@jellouid"
             }
         ],
         "createdAt": "2019-10-07T15:20:25.284Z",
-        "updatedAt": "2019-10-29T08:30:35.824Z",
+        "updatedAt": "2020-02-04T11:41:09.606Z",
         "fullName": "ליברמן כבר",
         "id": "5d9b57b9d8c49cc66964b1f6"
     },
@@ -46,7 +46,7 @@
         "mobilePhone": [
             "052-1234567"
         ],
-        "clearance": "0",
+        "clearance": "4",
         "_id": "5da83a0bb02d1dcfd9ccd57c",
         "identityCard": "200654093",
         "personalNumber": "9999999",
@@ -62,9 +62,15 @@
         "hierarchy": [
             "כובעי הקש"
         ],
-        "domainUsers": [],
+        "domainUsers": [
+            {
+                "dataSource": "dataSource1",
+                "uniqueID": "nitro@jello.com",
+                "adfsUID": "nitro@jellouid"
+            }
+        ],
         "createdAt": "2019-10-17T09:53:15.582Z",
-        "updatedAt": "2019-12-23T10:34:06.465Z",
+        "updatedAt": "2020-02-04T11:41:45.935Z",
         "fullName": "נייטרו הג'לו",
         "id": "5da83a0bb02d1dcfd9ccd57c"
     },
@@ -94,9 +100,15 @@
         "hierarchy": [
             "כובעי הקש"
         ],
-        "domainUsers": [],
+        "domainUsers": [
+            {
+                "dataSource": "dataSource1",
+                "uniqueID": "nike@jello.com",
+                "adfsUID": "nike@jellouid"
+            }
+        ],
         "createdAt": "2019-10-23T10:59:01.819Z",
-        "updatedAt": "2019-10-23T10:59:01.819Z",
+        "updatedAt": "2020-02-04T14:51:24.543Z",
         "fullName": "נייקי אדידס",
         "id": "5db03275b02d1dcfd9ccd57e"
     },

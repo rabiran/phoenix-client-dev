@@ -2,6 +2,11 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles(theme => {
     return {
+        rootFormControl: {
+            marginBottom: '4px',
+            marginTop: '4px',
+            height: '40px',
+        },
         prsnlinfSubContainer: {           
             display: 'flex',
             flexDirection: 'column',            
@@ -36,7 +41,7 @@ export default makeStyles(theme => {
         divider: {
             borderLeft: '1px dashed grey',
             margin: '0 10px',
-            height:'110px',
+            height:'192px',
         },
         prsnlinfsabatContainer : {              
             minWidth: '246px',

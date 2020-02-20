@@ -29,7 +29,7 @@ export const styles = makeStyles(theme => ({
     padding: '24px 0px',
     boxShadow: '0px 0px 13px 11px #0e0e0e2e',
     minWidth: '1152px',
-    minHeight: '543px',
+    minHeight: '609px',
   },
   tabsRoot: {
     position: 'relative',

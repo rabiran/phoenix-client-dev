@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import {
   TextField,
   InputAdornment,
@@ -12,9 +13,9 @@ import {
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
 
-export default props => {
+export default ({ formInputs, onChangeHandle, personDetails }) => {
   const classes = styles();
-
+  let disabled = _.isEmpty(personDetails);
   return (
     <div className={classes.teamAndJobContainer}>
       <div className={classes.expansionPanelContainer}>
@@ -22,6 +23,7 @@ export default props => {
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
         <ExpansionPanel
+          disabled={disabled}
           classes={{
             root: classes.expansionPanelRoot,
             rounded: classes.expansionPanelRounded,
@@ -38,7 +40,7 @@ export default props => {
             id="panel1-header"
           >
             <Typography>בחר צוות</Typography>
-          </ExpansionPanelSummary>     
+          </ExpansionPanelSummary>
           <ExpansionPanelDetails
             classes={{
               root: classes.expendDetails
@@ -46,10 +48,9 @@ export default props => {
           >
             <div className={classes.treeGroupsTitle}>
               <span>בחר מחלקה אליה מגיע החייל</span>
-              <Link 
-                color='inherit'
-                underline='none'
-              >+ הוסף מחלקה</Link>
+              <Link color="inherit" underline="none">
+                + הוסף מחלקה
+              </Link>
             </div>
             <Divider />
             <div className={classes.treeGroups}></div>
@@ -58,6 +59,10 @@ export default props => {
       </div>
       <div className={classes.descriptionContainer}>
         <TextField
+          onChange={onChangeHandle}
+          name="job"
+          value={formInputs.job.value}
+          disabled={disabled}
           placeholder="הקלד תפקיד"
           InputProps={{
             startAdornment: (
@@ -66,6 +71,10 @@ export default props => {
           }}
         />
         <TextField
+          onChange={onChangeHandle}
+          name="description"
+          value={formInputs.description.value}
+          disabled={disabled}
           placeholder="הקלד פה תיאור תפקיד"
           InputProps={{
             startAdornment: (
