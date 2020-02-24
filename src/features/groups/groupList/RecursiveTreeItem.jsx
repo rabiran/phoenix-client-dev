@@ -1,10 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
-import Button from '@material-ui/core/Button';
-import { withStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import { selectGroupByid } from '../groupsSlice';
 import wrapFetch from './wrapFetch';
@@ -19,7 +18,6 @@ export const RecursiveTreeItem = (props) => {
     onClick,
     onKeyDown,
     children,
-    visible
   } = props;
 
   const {
@@ -42,7 +40,7 @@ export const RecursiveTreeItem = (props) => {
     <VisibilityOptimizer
       key={childId}
       nodeId={childId}
-      component={ConnectedTreeItem}
+      render={props => (<ConnectedTreeItem {...props}/>)}
       defaultVisibility={defaultVisibility}
     />
   );

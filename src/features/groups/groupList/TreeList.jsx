@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
@@ -152,13 +152,13 @@ const TreeList = (props) => {
             key={item.id} 
             nodeId={item.id}
             defaultVisibility={defaultVisibility}
-            component={RecursiveTreeItem}
+            render={props => (<RecursiveTreeItem {...props}/>)}
           />)
         }
       </TreeView>
     </TreeListConetxt.Provider>
   );
-}
+};
 
 TreeList.propTypes = {
   /**
@@ -228,7 +228,7 @@ TreeList.propTypes = {
    * been loaded yet (but their ids are known)
    */
   dummyChildrenComponent: PropTypes.element,
-}
+};
 
 const mapStateToProps = (state, ownProps) => ({
   rootData: selectRootGroups(state),
@@ -236,7 +236,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = {
   loadData: fetchChildrenRequest,
-}
+};
 
 const ConnectedTreeList = connect(
   mapStateToProps,
