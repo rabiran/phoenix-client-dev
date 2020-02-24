@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme, withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import { isChildrenFetched, fetchChildrenIfNeeded} from 'features/groups/groupsSlice';
+import { isChildrenFetched, fetchSubtreeIfNeeded } from 'features/groups/groupsSlice';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -75,7 +75,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = {
-  loadData: fetchChildrenIfNeeded,
+  loadData: fetchSubtreeIfNeeded,
 };
 
 const wrap = (wrappedComponent) => connect(mapStateToProps, mapDispatchToProps)(wrapFetch(wrappedComponent));

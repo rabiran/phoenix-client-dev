@@ -97,7 +97,7 @@ export const {
 
 } = groupsSlice.actions;
 
-export const fetchChildrenIfNeeded = id => (dispatch, getState) => {
+export const fetchSubtreeIfNeeded = id => (dispatch, getState) => {
   if (!isSubtreeLoaded(getState(), id)) {
     return dispatch(fetchChildrenRequest(id));
   }

@@ -92,15 +92,11 @@ const TreeList = (props) => {
     onNodeToggle,
     onKeyDown,
     onClick,
-    loadData,
     classes,
     dense,
   } = props;
 
   const isSelected = useCallback(id => id === selected, [selected]);
-  const loadDataCb =  useCallback(id => {
-    if(loadData) loadData(id);
-  }, [loadData]); 
 
   // provided to list items via context
   const handleNodeKeyDown = (event, id, item) => {
@@ -136,7 +132,6 @@ const TreeList = (props) => {
         handleNodeKeyDown,
         dense,
         classes,
-        loadData: loadDataCb,
       }}
     >
       <TreeView
@@ -234,13 +229,13 @@ const mapStateToProps = (state, ownProps) => ({
   rootData: selectRootGroups(state),
 });
 
-const mapDispatchToProps = {
-  loadData: fetchChildrenRequest,
-};
+// const mapDispatchToProps = {
+//   loadData: fetchChildrenRequest,
+// };
 
 const ConnectedTreeList = connect(
   mapStateToProps,
-  mapDispatchToProps
+  // mapDispatchToProps
 )(TreeList);
 
 export const StyledTreeList = withStyles(styles)(TreeList);

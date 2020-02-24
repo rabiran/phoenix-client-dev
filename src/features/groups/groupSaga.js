@@ -27,7 +27,6 @@ function* fetchChildren(action) {
   if (groups.length !== 0) {
     yield put(fetchGroupsSuccess({ groups }));
   }
-  
 }
 
 // function* fetchAllGroups() {
