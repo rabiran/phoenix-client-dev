@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTheme, withStyles } from '@material-ui/styles';
-import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchChildrenRequest, isChildrenFetched, isSubtreeLoaded } from 'features/groups/groupsSlice';
+import { isChildrenFetched, fetchChildrenIfNeeded} from 'features/groups/groupsSlice';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -25,14 +24,13 @@ const wrapFetch = WrappedComponent => {
       loadData,
       group,
       childrenFetched,
-      loadCalled,
       ...rest
     } = props;
 
     const passThrough = { group, ...rest };
 
     const handleClick = event => {
-      if(!loadCalled && !group.isAleaf) {
+      if(!group.isAleaf) {
         loadData(group.id);
       }
       if (onClick) {
@@ -46,7 +44,7 @@ const wrapFetch = WrappedComponent => {
         case 'Enter':
         case ' ':
         case nextArrowKey:
-          if(!loadCalled && !group.isAleaf) {
+          if(!group.isAleaf) {
             loadData(group.id); 
           }
           break;  
@@ -64,7 +62,7 @@ const wrapFetch = WrappedComponent => {
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         { ...passThrough }
-        children={ renderDummy && <></> }
+        children={ renderDummy && <Spinner/> }
       />
     );
   };
@@ -74,11 +72,10 @@ const wrapFetch = WrappedComponent => {
 
 const mapStateToProps = (state, ownProps) => ({
   childrenFetched: isChildrenFetched(state, ownProps.group.id),
-  loadCalled: isSubtreeLoaded(state, ownProps.group.id)
 });
 
 const mapDispatchToProps = {
-  loadData: fetchChildrenRequest,
+  loadData: fetchChildrenIfNeeded,
 };
 
 const wrap = (wrappedComponent) => connect(mapStateToProps, mapDispatchToProps)(wrapFetch(wrappedComponent));
