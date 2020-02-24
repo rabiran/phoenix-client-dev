@@ -47,7 +47,7 @@ export const isChildrenDepthExist = (state, id, depth) => {
 };
 
 /**
- * Returns whether children of a group exists in the state (I.e were fetched)
+ * Returns whether children of a group exist in the state (I.e were fetched)
  * @param {*} state state tree
  * @param {string} id id of the parent group
  * @returns {boolean}
@@ -96,4 +96,11 @@ export const {
   setRootGroupsIds
 
 } = groupsSlice.actions;
+
+export const fetchChildrenIfNeeded = id => (dispatch, getState) => {
+  if (!isSubtreeLoaded(getState(), id)) {
+    return dispatch(fetchChildrenRequest(id));
+  }
+}
+
 export default groupsSlice.reducer;
