@@ -1,10 +1,11 @@
 import React from "react";
+import _ from 'lodash';
 import { Link, InputLabel, InputBase } from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
 import StyledButton from '../../withStylesComponents/StyleButton';
 
 export default ({onClickSearch, person}) => {
-  const [personalNumber, setPersonalNumber] = React.useState("");
+  const [personalNumber, setPersonalNumber] = React.useState(() => (!_.isEmpty(person) ? person.personalNumber : ""));
   const [errorLabel, setErrorLabel] = React.useState("");
   const classes = styles();
   const handleSearch = (prsnlNmbr) => {

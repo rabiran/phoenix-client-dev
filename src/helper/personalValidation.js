@@ -136,7 +136,7 @@ export class PersonValidate extends BasicValidate {
     }
 
     static domainUsersMultiValidator(person) {
-        return person.entityType !== ENTITY_TYPE[2] || person.domainUsers && person.domainUsers.length !== 0;
+        return (person.entityType !== ENTITY_TYPE[2]) || (person.domainUsers && person.domainUsers.length !== 0);
     }
 
     static lastNameMultiValidator(person) {

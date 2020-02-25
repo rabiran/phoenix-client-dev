@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useMemo, useLayoutEffect } from "react";
-import _ from 'lodash';
+import React, { useRef, useMemo } from "react";
+import _ from "lodash";
 import PersonalInfo from "../../PersonalInfo";
 import TeamAndJob from "../../TeamAndJob";
 import styles from "./soldierForm.style";
@@ -7,14 +7,14 @@ import StyledButton from "../../../withStylesComponents/StyleButton";
 import { useFormHandled } from "../../../../helper/customHooks";
 import { PersonValidate } from "../../../../helper/personalValidation";
 
-export default ({soldier}) => {
+export default ({ soldier }) => {
   const classes = styles();
   const {
     inputs,
     handleInputChange,
-    handleSubmit,
+    // handleSubmit,
     initializeInputs,
-    updateInputs,
+    updateInputs
   } = useFormHandled();
   const initialRef = useRef(null);
   if (initialRef.current === null) {
@@ -99,7 +99,7 @@ export default ({soldier}) => {
             func: PersonValidate.phone,
             message: "מס' טלפון לא חוקי"
           }
-        ]       
+        ]
       },
       mobilePhone: {
         value: "",
@@ -110,7 +110,7 @@ export default ({soldier}) => {
             func: PersonValidate.mobilePhone,
             message: "מס' נייד לא חוקי"
           }
-        ]               
+        ]
       },
       email: {
         value: "",
@@ -119,9 +119,9 @@ export default ({soldier}) => {
         validations: [
           {
             func: PersonValidate.email,
-            message: "כתובת דוא\"ל לא חוקית"
+            message: 'כתובת דוא"ל לא חוקית'
           }
-        ]                      
+        ]
       },
       address: {
         value: ""
@@ -143,19 +143,19 @@ export default ({soldier}) => {
             message: "מיקוד צריך להכיל 7 ספרות",
             avoidWrite: true
           }
-        ]                      
+        ]
       },
       homeNumber: {
         value: "",
         errorMessage: "",
         isValid: true,
-        validations: [  
+        validations: [
           {
             func: PersonValidate.homeNumber,
             message: "",
             avoidWrite: true
           }
-        ]        
+        ]
       },
       withClearance: {
         value: "No classification"
@@ -173,45 +173,100 @@ export default ({soldier}) => {
   useMemo(() => {
     updateInputs({
       firstName: {
-       value: soldier.firstName || "",
+        value: soldier.firstName || "",
+        errorMessage: "",
+        isValid: true
       },
       lastName: {
         value: soldier.lastName || "",
+        errorMessage: "",
+        isValid: true
       },
       identityCard: {
         value: soldier.identityCard || "",
+        errorMessage: "",
+        isValid: true
       },
       rank: {
         value: soldier.rank || "",
+        errorMessage: "",
+        isValid: true
       },
       phone: {
         value: soldier.phone ? soldier.phone[0] : "",
+        errorMessage: "",
+        isValid: true
       },
       mobilePhone: {
         value: soldier.mobilePhone ? soldier.mobilePhone[0] : "",
+        errorMessage: "",
+        isValid: true
       },
       email: {
         value: soldier.mail || "",
+        errorMessage: "",
+        isValid: true
       },
       address: {
         value: soldier.address || "",
+        errorMessage: "",
+        isValid: true
       },
       withClearance: {
-        value: !soldier.clearance ? "No classification" : soldier.clearance == '0' ? "No classification" : 'There is a classification',
+        value: !soldier.clearance
+          ? "No classification"
+          : soldier.clearance === "0"
+          ? "No classification"
+          : "There is a classification",
+        errorMessage: "",
+        isValid: true
       },
       job: {
         value: soldier.job || "",
-      },  
+        errorMessage: "",
+        isValid: true
+      },
+      zipCode: {
+        value: "",
+        errorMessage: "",
+        isValid: true,
+      },
+      city: {
+        value: "",
+        errorMessage: "",
+        isValid: true,
+      },
+      description: {
+        value: "",
+        errorMessage: "",
+        isValid: true,
+      },
+      homeNumber: {
+        value: "",
+        errorMessage: "",
+        isValid: true,
+      },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [soldier]);
 
   return (
-      <form>
-        <PersonalInfo formInputs={inputs} onChangeHandle={handleInputChange} personDetails={soldier}/>
-        <TeamAndJob formInputs={inputs} onChangeHandle={handleInputChange} personDetails={soldier}/>
-        <div className={classes.submitContainer}>
-          <StyledButton disabled={_.isEmpty(soldier)}>העבר לאישור קב"ט</StyledButton>
-        </div>
-      </form>
+    <form>
+      <PersonalInfo
+        formInputs={inputs}
+        onChangeHandle={handleInputChange}
+        personDetails={soldier}
+      />
+      <TeamAndJob
+        formInputs={inputs}
+        onChangeHandle={handleInputChange}
+        personDetails={soldier}
+      />
+      <div className={classes.submitContainer}>
+        <StyledButton disabled={_.isEmpty(soldier)}>
+          העבר לאישור קב"ט
+        </StyledButton>
+      </div>
+    </form>
   );
 };
