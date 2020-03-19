@@ -1,9 +1,16 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import mockIntialState from 'api/mockInitialState';
 
+
+const initialState = {
+  rootGroupsIds: [],  
+  subtreeLoaded: {},
+  byId: {}
+};
+
 const groupsSlice = createSlice({
   name: 'groups',
-  initialState: mockIntialState.groups,
+  initialState,
   reducers: {
     fetchGroupsSuccess(state, action) {
       const { groups } = action.payload;
