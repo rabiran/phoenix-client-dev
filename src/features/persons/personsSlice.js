@@ -1,11 +1,21 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 const initialState = {
-  byId: {},
+  byId: {
+    '1': {
+      id: '1',
+      name: 'אלעד בירן כבודו',
+    },
+    '2': {
+      id: '2',
+      name: 'אז מי אני בכלל?'
+    }
+  },
   byDirectGroup: {}
 }
 
 const personsSlice = createSlice({
+  name: 'persons',
   initialState,
   reducers: {
     fetchByGroupIdSuccess(state, action) {
@@ -34,11 +44,29 @@ const personsSlice = createSlice({
 // reducer helpers
 const createLookup = personsArr => personsArr.map(p => ({ [p.id]: p }));
 
-//selectors
+// selectors
+const byId = (state) => state.persons.byId;
+
 const byGroupId = (state, id) => state.persons.byDirectGroup[id];
 
-export const selectByDirectGroup = createSelector()
+export const selectById = (state, id) => byId(state)[id];
 
+/**
+ * @param state
+ * @param groupId id of the group to select members' ids from
+ */
+export const selectIdsByGroupId = createSelector(byGroupId, 
+  byGroupIdMap => byGroupIdMap ? byGroupIdMap.items : []);
+
+/**
+ * @param state
+ * @param groupId id of the group to select members of
+ */
+export const selectPersonsByGroupId = createSelector(byId, byGroupId,
+  (byId, byDirectGroup) => byDirectGroup ? byDirectGroup.items.map(personId => byId[personId]) : []);
+
+export const selectIsLoadingByGroupId = createSelector(byGroupId, 
+  byGroupIdMap => !!byGroupIdMap && byGroupIdMap.isFetching);
 
 export const {
   /**
@@ -47,7 +75,7 @@ export const {
   fetchByGroupIdSuccess,
   /**
    * @param groupId the group id to fetch members of
-   * dispatced payload = { id: groupId }
+   * dispatched payload = { id: groupId }
    */
   fetchByGroupId
 } = personsSlice.actions;
@@ -57,3 +85,5 @@ export const fetchByGroupIdIfNeeded = groupId => (state, dispatch) => {
     dispatch(fetchByGroupId(groupId));
   }
 }
+
+export default personsSlice.reducer;
