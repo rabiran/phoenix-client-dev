@@ -9,7 +9,7 @@ const groupsSlice = createSlice({
       const { groups, upsert } = action.payload;
       let groupsToInsert = groups;
       if(!upsert) {
-        groupsToInsert = groups.filter(g => state.byId[g.id]);
+        groupsToInsert = groups.filter(g => !state.byId[g.id]);
       }
       if(groupsToInsert.length > 0) {
         const newChildrenById = createLookup(groups);
