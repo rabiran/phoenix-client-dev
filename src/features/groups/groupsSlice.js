@@ -33,9 +33,9 @@ const createLookup = groupArr => groupArr.map(g => ({ [g.id]: g }));
 
 // selectors
 const getGroups = (state) => state.groups.byId;
-const getRootGroupsIds = (state) => state.groups.rootGroupsIds;
+export const selectRootGroupsIds = (state) => state.groups.rootGroupsIds;
 export const selectRootGroups = createSelector(
-  [getGroups, getRootGroupsIds],
+  [getGroups, selectRootGroupsIds],
   (groupsByid, rootIds) => rootIds.map(id => groupsByid[id])
 );
 export const selectGroupByid = (state, id) => getGroups(state)[id];
