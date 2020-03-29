@@ -21,23 +21,23 @@ const styles = makeStyles({
 });
 
 export const PersonGridItem = props => {
-  const { name } = props;
+  const { label } = props;
   const classes = styles(props);
   return (
     <div className={classes.root}>
       <Avatar className={classes.avatar}></Avatar>    
-      <div className={classes.label}><Typography>{ name }</Typography></div>
+      <div className={classes.label}><Typography>{ label }</Typography></div>
     </div>
   );
 };
 
 PersonGridItem.propTypes = {
-  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => {
   const person = selectById(state, ownProps.personId) || {};
-  return { name: person.name };
+  return { label: person.name };
 };
 
 const ConnectedItem = connect(mapStateToProps)(PersonGridItem);
