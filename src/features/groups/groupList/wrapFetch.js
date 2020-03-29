@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTheme, withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import { isChildrenFetched, fetchSubtreeIfNeeded } from 'features/groups/groupsSlice';
+import { isChildrenFetched, fetchSubtreeIfNeeded, selectGroupByid } from 'features/groups/groupsSlice';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
 
 
 const Spinner = withStyles({
@@ -22,16 +23,14 @@ const wrapFetch = WrappedComponent => {
       onClick,
       onKeyDown,
       loadData,
-      group,
       childrenFetched,
-      ...rest
+      isLeaf,
+      ...passThrough
     } = props;
 
-    const passThrough = { group, ...rest };
-
     const handleClick = event => {
-      if(!group.isAleaf) {
-        loadData(group.id);
+      if(!isLeaf) {
+        loadData();
       }
       if (onClick) {
         onClick(event);
@@ -44,8 +43,8 @@ const wrapFetch = WrappedComponent => {
         case 'Enter':
         case ' ':
         case nextArrowKey:
-          if(!group.isAleaf) {
-            loadData(group.id); 
+          if(!isLeaf) {
+            loadData(); 
           }
           break;  
         default:
@@ -56,7 +55,7 @@ const wrapFetch = WrappedComponent => {
       }
     };
     // const renderDummy = (!group.children || group.children.length === 0) && !group.isAleaf;
-    const renderDummy = !group.isAleaf && !childrenFetched;
+    const renderDummy = !isLeaf && !childrenFetched;
     return (
       <WrappedComponent
         onClick={handleClick}
@@ -67,15 +66,28 @@ const wrapFetch = WrappedComponent => {
     );
   };
   Wrapped.displayName = `wrapFetch(${WrappedComponent.name})`;
+  Wrapped.propTypes = {
+    childrenFetched: PropTypes.bool,
+    isLeaf: PropTypes.bool,
+    loadData: PropTypes.func.isRequired,
+  }
   return Wrapped;
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  childrenFetched: isChildrenFetched(state, ownProps.group.id),
-});
+const mapStateToProps = (state, ownProps) => {
+  const id = ownProps.id;
+  const { isAleaf: isLeaf } = selectGroupByid(state, id);
+  const childrenFetched = isChildrenFetched(state, id);
+  return {
+    childrenFetched,
+    isLeaf,
+  };
+};
 
-const mapDispatchToProps = {
-  loadData: fetchSubtreeIfNeeded,
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    loadData: () => dispatch(fetchSubtreeIfNeeded(ownProps.id)),
+  };
 };
 
 const wrap = (wrappedComponent) => connect(mapStateToProps, mapDispatchToProps)(wrapFetch(wrappedComponent));
