@@ -1,5 +1,5 @@
-import { put, call, takeEvery, all, select } from 'redux-saga/effects';
-import { fetchChildrenRequest , fetchGroupsSuccess, selectGroupByid, subtreeLoaded, setRootGroupsIds } from './groupsSlice';
+import { put, call, takeEvery, all } from 'redux-saga/effects';
+import { fetchChildrenRequest , fetchGroupsSuccess, subtreeLoaded, setRootGroupsIds } from './groupsSlice';
 import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
 // import { fetchSubtree } from 'api/mockApi';
 
