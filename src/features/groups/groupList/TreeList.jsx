@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
-import { selectRootGroups, fetchChildrenRequest } from 'features/groups/groupsSlice';
+import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer'
 
 export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
@@ -85,7 +85,7 @@ export const styles = theme => ({
 
 const TreeList = (props) => {
   const { 
-    rootData,
+    rootIds,
     selected,
     onNodeSelected,
     expanded,
@@ -122,7 +122,7 @@ const TreeList = (props) => {
     }
   };
 
-  const defaultVisibility = rootData.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+  const defaultVisibility = rootIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
   return (
     <TreeListConetxt.Provider
@@ -142,10 +142,10 @@ const TreeList = (props) => {
         defaultCollapseIcon={<CollapseIcon/>}   
       >
         { 
-          rootData.map(item => 
+          rootIds.map(id => 
           <VisibilityOptimizer 
-            key={item.id} 
-            nodeId={item.id}
+            key={id} 
+            nodeId={id}
             defaultVisibility={defaultVisibility}
             render={props => (<RecursiveTreeItem {...props}/>)}
           />)
@@ -161,17 +161,9 @@ TreeList.propTypes = {
    */
   classes: PropTypes.object,
   /**
-   * array of root data items (top level items), each item may contain an array of children items 
-   * which will be displayed as a nested list.
-   * if a node's 'children' is empty and 'isAleaf' is false, a dummy children 
-   * is rendered, and the 'loadData' callback will be called upon the node's toggle.
+   * ids Of the root Groups
    */
-  rootData: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name:  PropTypes.string.isRequired,
-    children: PropTypes.array,
-    isAleaf: PropTypes.bool,
-  })),
+  rootIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   /**
    * The id of the selected item. (Controlled)
    */
@@ -208,34 +200,17 @@ TreeList.propTypes = {
    */
   onKeyDown: PropTypes.func,
   /**
-   * Callback fired when tree node need it's children data.
-   * shape: (id: string) => void
-   * this callback (probably) should trigger an API call to fetch the data.
-   * @param {string} id The node's id
-   */
-  loadData: PropTypes.func,
-  /**
    * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
    */
   dense: PropTypes.bool,
-  /**
-   * component to render when the nested items (of a parent item) has not 
-   * been loaded yet (but their ids are known)
-   */
-  dummyChildrenComponent: PropTypes.element,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  rootData: selectRootGroups(state),
+const mapStateToProps = state => ({
+  rootIds: selectRootGroupsIds(state),
 });
-
-// const mapDispatchToProps = {
-//   loadData: fetchChildrenRequest,
-// };
 
 const ConnectedTreeList = connect(
   mapStateToProps,
-  // mapDispatchToProps
 )(TreeList);
 
 export const StyledTreeList = withStyles(styles)(TreeList);

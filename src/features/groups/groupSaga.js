@@ -1,5 +1,5 @@
-import { put, call, takeEvery, all, select } from 'redux-saga/effects';
-import { fetchChildrenRequest , fetchGroupsSuccess, selectGroupByid, subtreeLoaded, setRootGroupsIds } from './groupsSlice';
+import { put, call, takeEvery, all } from 'redux-saga/effects';
+import { fetchChildrenRequest , fetchGroupsSuccess, subtreeLoaded, setRootGroupsIds } from './groupsSlice';
 import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
 // import { fetchSubtree } from 'api/mockApi';
 
@@ -18,15 +18,10 @@ export function* watchFetchChildrenRequest() {
  */
 function* fetchChildren(action) {
   const id = action.payload;
-  const state = yield select();
-  // const groups = yield call(fetchSubtree, id);
-  // fetch subtree and filter already existing groups
-  const groups = (yield call(fetchSubtree, id)).filter(g => !selectGroupByid(state, g.id));
+  const groups = yield call(fetchSubtree, id);
   // mark the root id as 'subtree loaded'
   yield put(subtreeLoaded({ id }));
-  if (groups.length !== 0) {
-    yield put(fetchGroupsSuccess({ groups }));
-  }
+  yield put(fetchGroupsSuccess({ groups, upsert: false }));
 }
 
 // function* fetchAllGroups() {
