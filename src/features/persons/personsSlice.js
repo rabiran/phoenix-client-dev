@@ -9,9 +9,35 @@ const initialState = {
     '2': {
       id: '2',
       name: 'אז מי אני בכלל?'
+    },
+    '3': {
+      id: '3',
+      name: 'בירה קורונה'
+    },
+    '4': {
+      id: '4',
+      name: 'נשר מאלט'
+    },
+    '5': {
+      id: '5',
+      name: 'עוגת מצות עם קוקוס'
+    },
+    '6': {
+      id: '6',
+      name: 'שוקולד מריר'
     }
   },
-  byDirectGroup: {}
+  byDirectGroup: {
+    '5e56858e4203fc40043591a5': {
+      items: ['1', '2']
+    },
+    '5e80998fe0673d70cf93cf10': {
+      items: ['3', '4']
+    },
+    '5e80c438e0673d70cf93cf11': {
+      items: ['5', '6']
+    }
+  }
 }
 
 const personsSlice = createSlice({
@@ -56,7 +82,7 @@ export const selectById = (state, id) => byId(state)[id];
  * @param groupId id of the group to select members' ids from
  */
 export const selectIdsByGroupId = createSelector(byGroupId, 
-  byGroupIdMap => byGroupIdMap ? byGroupIdMap.items : []);
+  byGroupIdMap => byGroupIdMap ? byGroupIdMap.items : null);
 
 /**
  * @param state
