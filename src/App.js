@@ -11,6 +11,7 @@ import TreeDemo from './components/TreeListDemo/TreeDemo';
 import Header from './components/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import GridDemo from './components/GridDemo/GridDemo';
+import MainPage from './components/MainPage/MainPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                   <Route path='/managepage' component={ManagePage} />
                   <Route path='/treeDemo' component={TreeDemo}/>
                   <Route path='/grid' component={GridDemo}/>
+                  <Route path='/main' component={MainPage}/>
               </Switch>
             </Router>
         </ThemeProvider>
