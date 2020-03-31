@@ -31,9 +31,13 @@ function* fetchChildren(action) {
 
 function* initRootGroup() {
   const rootId = yield call(getRootGroupId);
-  const rootGroup = yield call(fetchGroupById, rootId);
+  const { rootGroup, groups } = yield all({
+    rootGroup: call(fetchGroupById, rootId),
+    groups: call(fetchSubtree, rootId)
+  });
+  // const rootGroup = yield call(fetchGroupById, rootId);
   // fetch the root's children
-  const groups = yield call(fetchSubtree, rootId);
+  // const groups = yield call(fetchSubtree, rootId);
 
   /* Direct children as root groups */
   // yield put(fetchGroupsSuccess({ groups }))
