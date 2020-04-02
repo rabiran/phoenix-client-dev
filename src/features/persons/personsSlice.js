@@ -1,16 +1,21 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 
+// const initialState = {
+//   byId: {
+//     '1': {
+//       id: '1',
+//       name: 'אלעד בירן כבודו',
+//     },
+//     '2': {
+//       id: '2',
+//       name: 'אז מי אני בכלל?'
+//     }
+//   },
+//   byDirectGroup: {}
+// }
+
 const initialState = {
-  byId: {
-    '1': {
-      id: '1',
-      name: 'אלעד בירן כבודו',
-    },
-    '2': {
-      id: '2',
-      name: 'אז מי אני בכלל?'
-    }
-  },
+  byId: {},
   byDirectGroup: {}
 }
 
@@ -70,7 +75,7 @@ export const selectIsLoadingByGroupId = createSelector(byGroupId,
 
 export const {
   /**
-   * payload = { groupId, persons }
+   * payload = { groupId: string, persons: Person[] }
    */
   fetchByGroupIdSuccess,
   /**
@@ -80,8 +85,8 @@ export const {
   fetchByGroupId
 } = personsSlice.actions;
 
-export const fetchByGroupIdIfNeeded = groupId => (state, dispatch) => {
-  if(!byGroupId(state, groupId)) {
+export const fetchByGroupIdIfNeeded = groupId => (dispatch, getState) => {
+  if(!byGroupId(getState(), groupId)) {
     dispatch(fetchByGroupId(groupId));
   }
 }
