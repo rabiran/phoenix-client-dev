@@ -65,7 +65,12 @@ const fetchSubtree = async (parentId, depth = FETCH_DEPTH) => {
 const fetchGroupById = async id => {
   const res = (await instance.get(`/${id}`)).data
   return groupFromApiResponse(res);
-}; 
+};
+
+const fetchGroupMembers = async id => {
+  const { directMembers } = (await instance.get(`/${id}?populate=directMembers`)).data
+  return directMembers;
+}
 
 /**
  * stub for now
@@ -93,11 +98,13 @@ export {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
+  fetchGroupMembers
 };
 
 export default {
   fetchAll,
   getRootGroupId,
   fetchGroupById,
-  fetchSubtree
+  fetchSubtree,
+  fetchGroupMembers
 }

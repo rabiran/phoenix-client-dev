@@ -37,7 +37,7 @@ PersonGridItem.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const person = selectById(state, ownProps.personId) || {};
-  return { label: person.name };
+  return { label: person.fullName };
 };
 
 const ConnectedItem = connect(mapStateToProps)(PersonGridItem);

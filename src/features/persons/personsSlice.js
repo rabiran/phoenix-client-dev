@@ -1,43 +1,22 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 
+// const initialState = {
+//   byId: {
+//     '1': {
+//       id: '1',
+//       name: 'אלעד בירן כבודו',
+//     },
+//     '2': {
+//       id: '2',
+//       name: 'אז מי אני בכלל?'
+//     }
+//   },
+//   byDirectGroup: {}
+// }
+
 const initialState = {
-  byId: {
-    '1': {
-      id: '1',
-      name: 'אלעד בירן כבודו',
-    },
-    '2': {
-      id: '2',
-      name: 'אז מי אני בכלל?'
-    },
-    '3': {
-      id: '3',
-      name: 'בירה קורונה'
-    },
-    '4': {
-      id: '4',
-      name: 'נשר מאלט'
-    },
-    '5': {
-      id: '5',
-      name: 'עוגת מצות עם קוקוס'
-    },
-    '6': {
-      id: '6',
-      name: 'שוקולד מריר'
-    }
-  },
-  byDirectGroup: {
-    '5e56858e4203fc40043591a5': {
-      items: ['1', '2']
-    },
-    '5e80998fe0673d70cf93cf10': {
-      items: ['3', '4']
-    },
-    '5e80c438e0673d70cf93cf11': {
-      items: ['5', '6']
-    }
-  }
+  byId: {},
+  byDirectGroup: {}
 }
 
 const personsSlice = createSlice({
@@ -96,7 +75,7 @@ export const selectIsLoadingByGroupId = createSelector(byGroupId,
 
 export const {
   /**
-   * payload = { groupId, persons }
+   * payload = { groupId: string, persons: Person[] }
    */
   fetchByGroupIdSuccess,
   /**
@@ -106,8 +85,8 @@ export const {
   fetchByGroupId
 } = personsSlice.actions;
 
-export const fetchByGroupIdIfNeeded = groupId => (state, dispatch) => {
-  if(!byGroupId(state, groupId)) {
+export const fetchByGroupIdIfNeeded = groupId => (dispatch, getState) => {
+  if(!byGroupId(getState(), groupId)) {
     dispatch(fetchByGroupId(groupId));
   }
 }

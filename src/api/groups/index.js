@@ -10,3 +10,5 @@ export const {
   fetchSubtree,
   fetchGroupById,
 } = toExport;
+
+export default toExport;
