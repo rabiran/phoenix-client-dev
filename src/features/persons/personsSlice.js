@@ -70,8 +70,12 @@ export const selectIdsByGroupId = createSelector(byGroupId,
 export const selectPersonsByGroupId = createSelector(byId, byGroupId,
   (byId, byDirectGroup) => byDirectGroup ? byDirectGroup.items.map(personId => byId[personId]) : []);
 
+/**
+ * @param state
+ * @param groupId id of the group to get loading status for its members
+ */
 export const selectIsLoadingByGroupId = createSelector(byGroupId, 
-  byGroupIdMap => !!byGroupIdMap && byGroupIdMap.isFetching);
+  byGroupIdMap => !byGroupIdMap || byGroupIdMap.isFetching);
 
 export const {
   /**
