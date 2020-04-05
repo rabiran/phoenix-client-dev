@@ -6,11 +6,11 @@ import rootGroup from 'api/groups/rootGroup';
 
 const Demo = (props) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchByGroupIdIfNeeded(rootGroup.id));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchByGroupIdIfNeeded(rootGroup.id));
+  // }, [dispatch]);
   // const persons = [...Array(20).keys()].map(i => ({id: i, name: `אלעד בירן הרבירן`}));
-  const personIds = useSelector(state => selectIdsByGroupId(state, rootGroup.id));
+  const personIds = useSelector(state => selectIdsByGroupId(state, rootGroup.id)) || [];
   return (
     <PersonGrid personIds={personIds}></PersonGrid>
   );
