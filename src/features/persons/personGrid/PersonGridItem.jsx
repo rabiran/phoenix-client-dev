@@ -11,7 +11,7 @@ const styles = makeStyles({
   label: {
     textAlign: 'center', 
     wordWrap: 'break-word', 
-    maxWidth: '75px'
+    width: '75px'
   },
   avatar: {
     width: '70px', 
