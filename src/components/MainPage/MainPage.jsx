@@ -37,7 +37,6 @@ const styles = makeStyles(theme => ({
 }));
 
 const MainPage = props => {
-  const rootGroupsIds = useSelector(selectRootGroupsIds);
 
   const [expandedGroups, setExpandedGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
@@ -53,7 +52,8 @@ const MainPage = props => {
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
 
-  // initially select the first root group 
+  // initially select the first root group
+  const rootGroupsIds = useSelector(selectRootGroupsIds); 
   useEffect(() => {
     if(rootGroupsIds.length > 0) {
       setSelectedGroupId(rootGroupsIds[0]);
