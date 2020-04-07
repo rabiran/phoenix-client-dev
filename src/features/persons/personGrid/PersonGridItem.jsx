@@ -7,11 +7,13 @@ import { selectById } from '../personsSlice';
 import PropTypes from 'prop-types';
 
 const styles = makeStyles({
-  root: {},
+  root: {
+    width: '75px',
+  },
   label: {
     textAlign: 'center', 
     wordWrap: 'break-word', 
-    width: '75px'
+    // width: '75px'
   },
   avatar: {
     width: '70px', 

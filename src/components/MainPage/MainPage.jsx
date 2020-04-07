@@ -7,27 +7,7 @@ import { selectIdsByGroupId, selectIsLoadingByGroupId,
   fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
-import clsx from 'clsx';
-
-const scrollFixStyles = makeStyles({
-  scrollContainer: {
-    direction: 'rtl',
-    overflowY: 'auto',
-    maxHeight: 'inherit'
-  },
-  childrenContainer: {
-    direction: 'ltr',
-  }
-});
-const ScrollFix = ({ children, className }) => {
-  const { scrollContainer, childrenContainer } = scrollFixStyles();
-  return (
-    <div className={clsx(className, scrollContainer)}>
-      <div className={childrenContainer}>{children}</div>
-
-    </div>
-  );
-};
+import ScrollFix from 'utils/ScrollFix/ScrollFix';
 
 const styles = makeStyles(theme => ({
   root: {
@@ -36,13 +16,13 @@ const styles = makeStyles(theme => ({
   },
   sideBar: {
       // maxHeight: 'calc(100vh - 64px)',
-      maxHeight: '100%',
+      // maxHeight: 'calc(100% - 3px)',
       // direction: 'rtl',
       // maxHeight: '150px',
       // overflowY: 'auto',
       // maxWidth: '500px',
       // minWidth: '300px',
-      width: '20%',
+      width: '25%',
       boxShadow: '0px 0px 5px 0px rgba(125,120,125,0.8)',
       backgroundColor: theme.palette.background.default
       // backgroundColor: '#FAFCFB'
@@ -73,18 +53,18 @@ const MainPage = props => {
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
 
+  // initially select the first root group 
   useEffect(() => {
     if(rootGroupsIds.length > 0) {
-      setSelectedGroupId(rootGroupsIds[0])
+      setSelectedGroupId(rootGroupsIds[0]);
     }
   }, [rootGroupsIds]);
 
-  const personDisplayloading = useSelector(state => selectIsLoadingByGroupId(state, selectedGroupId));
+  const personDisplayLoading = useSelector(state => selectIsLoadingByGroupId(state, selectedGroupId));
   const selectedPersonIds = useSelector(state => selectIdsByGroupId(state, selectedGroupId)) || [];
 
   return (
     <Box display='flex' className={classes.root}>
-      {/* <div style={{overflowY: 'auto'}}> */}
       <div className={classes.sideBar}>
           <div>עץ ארגוני</div>
           <ScrollFix className={classes.listContainer}>
@@ -96,14 +76,12 @@ const MainPage = props => {
             />
           </ScrollFix>
       </div>
-      {/* </div> */}
       
       <div className={classes.personDisplay}>
-        { personDisplayloading ? 'loading ...' : <PersonGrid personIds={selectedPersonIds}/>}
+        { personDisplayLoading ? 'loading ...' : <PersonGrid personIds={selectedPersonIds}/>}
       </div>
     </Box>
-  )
-}
-
+  );
+};
 
 export default MainPage;
