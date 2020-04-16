@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
-import { useTheme } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import { selectGroupByid } from '../groupsSlice';
 import wrapFetch from './wrapFetch';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
-const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
 export const RecursiveTreeItem = (props) => {
   const {
@@ -23,15 +21,10 @@ export const RecursiveTreeItem = (props) => {
   } = props;
 
   const {
-    isSelected,
-    handleNodeClick,
-    handleNodeKeyDown,
     dense,
     classes,
   } = useContext(TreeListContext);
 
-  const theme = useTheme();
-  const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
   const defaultVisibility = nestedItemsIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
   // if children given - render them
@@ -44,44 +37,21 @@ export const RecursiveTreeItem = (props) => {
       defaultVisibility={defaultVisibility}
     />
   );
-  
-  const handleKeyDown = event => {
-    const key = event.key;
-    switch (key) {
-      case 'Enter':
-      case ' ':
-      case nextArrowKey:
-        handleNodeKeyDown(event, id, { id, label })
-        break;
-      default:
-        break;
-    }
-    if (onKeyDown) {
-      onKeyDown(event);
-    }
-  }
-
-  const handleClick = event => {
-    handleNodeClick(event, id, { id, label });
-    if (onClick) {
-      onClick(event);
-    }
-  };
 
   return (
     <TreeItem
       nodeId={id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemRow, {[classes.selected]: isSelected(id)}),
+        content: classes.itemRow,
         expanded: classes.expanded,
+        selected: classes.selected,
         label: clsx(classes.itemContent, {
           [classes.dense]: dense,
-          [classes.selected]: isSelected(id)
         })
       }}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
       label={label}
     >
       { renderChildren }  

@@ -35,30 +35,41 @@ export const styles = theme => ({
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
+    '&$selected > $itemRow, &$selected:focus > $itemRow': {
+      color: theme.palette.primary.contrastText,
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.action.selected,
+    },
+    '&$selected > $itemRow $itemContent, &:focus > $itemRow $itemContent': {
+      backgroundColor: 'transparent',
+    },
+    '&:focus > $itemRow': {
+      backgroundColor: theme.palette.action.hover,
+    }
     // '&$expanded': {
     //   backgroundColor: theme.palette.action.expanded,
     // },
     // '&$expanded > $itemRow': {
     //   fontWeight: 'bold',
     // },
-    '&:focus > $itemRow$selected': {
-      backgroundColor: theme.palette.action.selected,
-      color: theme.palette.primary.contrastText
-      // backgroundColor: theme.palette.primary
+    // '&:focus > $itemRow$selected': {
+    //   backgroundColor: theme.palette.action.selected,
+    //   color: theme.palette.primary.contrastText
+    //   // backgroundColor: theme.palette.primary
 
-    }
+    // }
   },
   /* styles applied to the 'treeItem' component's 'content' */
   itemRow: {
     '&:hover': {
       backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
-    '&$selected, &$selected:hover': {
-      backgroundColor: theme.palette.action.selected,
-      color: theme.palette.primary.contrastText,
-      fontWeight: 'bold'
-      // backgroundColor: theme.palette.primary
-    },
+    // '&$selected, &$selected:hover': {
+    //   // backgroundColor: theme.palette.action.selected,
+    //   color: theme.palette.primary.contrastText,
+    //   fontWeight: 'bold'
+    //   // backgroundColor: theme.palette.primary
+    // },
   },
   /* styles applied to the 'itemContent' component (inside itemRow) */
   itemContent: {
@@ -68,6 +79,9 @@ export const styles = theme => ({
     paddingTop: 10,
     paddingBottom: 10,
     fontWeight: 'inherit',
+    '&:hover': {
+      backgroundColor: 'transparent'
+    },
     '&:only-child': {
       paddingLeft: 10
     }
@@ -90,46 +104,16 @@ const TreeList = (props) => {
     onNodeSelected,
     expanded,
     onNodeToggle,
-    onKeyDown,
-    onClick,
     classes,
     dense,
   } = props;
 
-  const isSelected = useCallback(id => id === selected, [selected]);
-
-  // provided to list items via context
-  const handleNodeKeyDown = (event, id, item) => {
-    const key = event.key;
-    switch (key) {
-      case 'Enter':
-      case ' ':
-        onNodeSelected(event, id, item);
-        break;
-      default:
-        break;
-    }
-    if (onKeyDown) {
-      onKeyDown(event);
-    } 
-  };
-
-  // provided to list items via context
-  const handleNodeClick = (event, id, item) => {
-    onNodeSelected(event, id, item);
-    if (onClick) {
-      onClick(event);
-    }
-  };
-
+ 
   const defaultVisibility = rootIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
   return (
     <TreeListConetxt.Provider
       value={{
-        isSelected,
-        handleNodeClick,
-        handleNodeKeyDown,
         dense,
         classes,
       }}
@@ -138,6 +122,8 @@ const TreeList = (props) => {
         className={classes.root}
         expanded={expanded}
         onNodeToggle={onNodeToggle}
+        selected={selected}
+        onNodeSelect={onNodeSelected}
         defaultExpandIcon={<ExpandMoreIcon/>}
         defaultCollapseIcon={<CollapseIcon/>}   
       >
@@ -173,7 +159,6 @@ TreeList.propTypes = {
    * 
    * @param {object} event The event source of the callback
    * @param {string} id The id of the selected item
-   * @param {object} item The selected Item
    */
   onNodeSelected: PropTypes.func.isRequired,
   /**
