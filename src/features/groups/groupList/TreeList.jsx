@@ -20,11 +20,13 @@ export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
  * |  | + |    itemContent    | |   |
  * |  |/   -------------------  |   |
  *  ----------------------------    |
- *      { children items }          |
- *              :                   |
+ *     -----itemChildren----        |
+ *    |  { children items } |       |
+ *    |          :          |       |
+ *     ---------------------        |
  * ----------------------------------
  * itemRoot contains a `div` that contains itemrow and it's children
- * focus event occurs on the itemRoot, but styles should be applied to the itemRow
+ * focus & selected events occurs on the itemRoot, but styles should be applied to the itemRow
  */
 export const styles = theme => ({
   root: {
@@ -35,14 +37,17 @@ export const styles = theme => ({
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
+    // selected, selected and focus 
     '&$selected > $itemRow, &$selected:focus > $itemRow': {
       color: theme.palette.primary.contrastText,
       fontWeight: 'bold',
       backgroundColor: theme.palette.action.selected,
     },
+    // "disable" content's selected & focus (styles are already applied to "itemRow")
     '&$selected > $itemRow $itemContent, &:focus > $itemRow $itemContent': {
       backgroundColor: 'transparent',
     },
+    // focus (overrides itemRow hover due to larger specifity)
     '&:focus > $itemRow': {
       backgroundColor: theme.palette.action.hover,
     }
@@ -52,25 +57,15 @@ export const styles = theme => ({
     // '&$expanded > $itemRow': {
     //   fontWeight: 'bold',
     // },
-    // '&:focus > $itemRow$selected': {
-    //   backgroundColor: theme.palette.action.selected,
-    //   color: theme.palette.primary.contrastText
-    //   // backgroundColor: theme.palette.primary
-
-    // }
   },
   /* styles applied to the 'treeItem' component's 'content' */
   itemRow: {
     '&:hover': {
       backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
-    // '&$selected, &$selected:hover': {
-    //   // backgroundColor: theme.palette.action.selected,
-    //   color: theme.palette.primary.contrastText,
-    //   fontWeight: 'bold'
-    //   // backgroundColor: theme.palette.primary
-    // },
   },
+  /* styles applied to the 'role=group' component (itemRow direct child) */
+  itemChildren: {},
   /* styles applied to the 'itemContent' component (inside itemRow) */
   itemContent: {
     width: '100%',
@@ -91,7 +86,7 @@ export const styles = theme => ({
     paddingTop: 4,
     paddingBottom: 4,
   },
-  /* pseudo class applied to the itemRow and itemContent when selected */
+  /* pseudo class applied to the itemRoot when selected */
   selected: {},
   /* pseudo class applied to the itemRoot when expanded */
   expanded: {},

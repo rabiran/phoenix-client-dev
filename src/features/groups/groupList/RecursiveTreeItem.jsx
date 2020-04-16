@@ -44,6 +44,7 @@ export const RecursiveTreeItem = (props) => {
       classes= {{
         root: classes.itemRoot,
         content: classes.itemRow,
+        group: classes.itemChildren,
         expanded: classes.expanded,
         selected: classes.selected,
         label: clsx(classes.itemContent, {
