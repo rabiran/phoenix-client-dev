@@ -37,16 +37,4 @@ PersonGridItem.propTypes = {
   label: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const person = selectById(state, ownProps.personId) || {};
-  return { label: person.fullName };
-};
-
-const ConnectedItem = connect(mapStateToProps)(PersonGridItem);
-
-ConnectedItem.propTypes = {
-  personId: PropTypes.string.isRequired,
-};
-
-
-export default ConnectedItem;
+export default PersonGridItem;
