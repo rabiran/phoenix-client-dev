@@ -16,7 +16,7 @@ const styles = makeStyles({
 
 const PersonGrid = props => {
   const {
-    personIds
+    persons
   } = props;
 
   const classes = styles(props);
@@ -24,14 +24,14 @@ const PersonGrid = props => {
   return (
     <div className={classes.root}>
       <Grid spacing={1} container>
-      {personIds.map(id => (
-        <Grid key={id} item>
+      {persons.map(p => (
+        <Grid key={p.id} item>
           <PersonItem 
             classes={{
               label: classes.label,
               avatar: classes.avatar,
             }}
-            personId={id}
+            label={p.fullName}
           />
         </Grid>
       ))}
