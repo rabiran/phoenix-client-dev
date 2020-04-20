@@ -3,16 +3,18 @@ import GroupList from 'features/groups/groupList';
 import { makeStyles } from '@material-ui/styles';
 import PersonGrid from 'features/persons/personGrid';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectIdsByGroupId, selectIsLoadingByGroupId, 
+import { selectPersonsByGroupId, selectIsLoadingByGroupId, 
   fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import ScrollFix from 'utils/ScrollFix/ScrollFix';
+import PersonDisplay from './PersonDisplay/PersonDisplay';
 
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
-    height: 'calc(100vh - 64px)'
+    height: 'calc(100vh - 64px)',
+    display: 'flex',
   },
   sideBar: {
       // maxHeight: 'calc(100vh - 64px)',
@@ -43,9 +45,7 @@ const MainPage = props => {
   const classes = styles();
 
   const dispatch = useDispatch();
-  // const fetchPersons = useCallback(() => dispatch(fetchByGroupIdIfNeeded(selectedGroupId)), 
-  //   [dispatch, selectedGroupId]);
-
+  
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
   const handleSelection = (e, groupId, item) => {
     setSelectedGroupId(groupId);
@@ -60,11 +60,8 @@ const MainPage = props => {
     }
   }, [rootGroupsIds]);
 
-  const personDisplayLoading = useSelector(state => selectIsLoadingByGroupId(state, selectedGroupId));
-  const selectedPersonIds = useSelector(state => selectIdsByGroupId(state, selectedGroupId)) || [];
-
   return (
-    <Box display='flex' className={classes.root}>
+    <Box className={classes.root}>
       <div className={classes.sideBar}>
           <div>עץ ארגוני</div>
           <ScrollFix className={classes.listContainer}>
@@ -78,7 +75,7 @@ const MainPage = props => {
       </div>
       
       <div className={classes.personDisplay}>
-        { personDisplayLoading ? 'loading ...' : <PersonGrid personIds={selectedPersonIds}/>}
+        {selectedGroupId && <PersonDisplay directGroupId={selectedGroupId} />}
       </div>
     </Box>
   );
