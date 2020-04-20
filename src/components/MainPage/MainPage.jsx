@@ -53,7 +53,7 @@ const MainPage = props => {
   };
 
   // initially select the first root group
-  const rootGroupsIds = useSelector(selectRootGroupsIds); 
+  const rootGroupsIds = useSelector(selectRootGroupsIds);
   useEffect(() => {
     if(rootGroupsIds.length > 0) {
       setSelectedGroupId(rootGroupsIds[0]);
