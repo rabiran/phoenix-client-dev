@@ -39,7 +39,7 @@ const fetchAll = async () => {
  * @param {number} depth 
  */
 const fetchSubtree = async (parentId, depth = FETCH_DEPTH) => {
-  const children = (await instance.get(`/${parentId}/subgroups?maxDepth=${depth}`)).data;
+  const children = (await instance.get(`/${parentId}/children?maxDepth=${depth}`)).data;
   return children.map(groupFromApiResponse);
 };
 
