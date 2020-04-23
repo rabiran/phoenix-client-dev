@@ -30,7 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://kartoffel-master.eastus.cloudapp.azure.com:3002",
+  "proxy": "http://kartoffel-master.eastus.cloudapp.azure.com:3000",
   "eslintConfig": {
     "extends": "react-app"
   },
