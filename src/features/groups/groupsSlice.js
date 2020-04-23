@@ -6,9 +6,15 @@ const groupsSlice = createSlice({
   initialState: mockIntialState.groups,
   reducers: {
     fetchGroupsSuccess(state, action) {
-      const { groups } = action.payload;
-      const newChildrenById = createLookup(groups);
-      Object.assign(state.byId, ...newChildrenById);
+      const { groups, upsert } = action.payload;
+      let groupsToInsert = groups;
+      if(!upsert) {
+        groupsToInsert = groups.filter(g => !state.byId[g.id]);
+      }
+      if(groupsToInsert.length > 0) {
+        const newChildrenById = createLookup(groups);
+        Object.assign(state.byId, ...newChildrenById);  
+      }
     },
     fetchChildrenRequest(){},
     subtreeLoaded(state, action) {
@@ -27,9 +33,9 @@ const createLookup = groupArr => groupArr.map(g => ({ [g.id]: g }));
 
 // selectors
 const getGroups = (state) => state.groups.byId;
-const getRootGroupsIds = (state) => state.groups.rootGroupsIds;
+export const selectRootGroupsIds = (state) => state.groups.rootGroupsIds;
 export const selectRootGroups = createSelector(
-  [getGroups, getRootGroupsIds],
+  [getGroups, selectRootGroupsIds],
   (groupsByid, rootIds) => rootIds.map(id => groupsByid[id])
 );
 export const selectGroupByid = (state, id) => getGroups(state)[id];
@@ -80,9 +86,10 @@ export const {
    */
   fetchChildrenRequest, 
   /**
-   * payload = { parentId: string, children: [group] }
-   * @param payload.parentId the id of the parent group
-   * @param payload.children the fetched children group objects
+   * payload = `{ upsert: bool, groups: Group[] }`
+   * @param payload.upsert whether to update groups that are already in the state
+   * defaults to `false`
+   * @param payload.groups Array of the fetched group objects
    */
   fetchGroupsSuccess,
   /**

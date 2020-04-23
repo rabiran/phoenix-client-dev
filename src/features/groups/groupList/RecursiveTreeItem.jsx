@@ -3,40 +3,33 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
-import { useTheme } from '@material-ui/core/styles';
 import TreeListContext from './TreeListContext';
 import { selectGroupByid } from '../groupsSlice';
 import wrapFetch from './wrapFetch';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
-const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
 export const RecursiveTreeItem = (props) => {
   const {
-    group,
+    id,
+    label,
+    nestedItemsIds,
     onClick,
     onKeyDown,
     children,
   } = props;
 
   const {
-    isSelected,
-    handleNodeClick,
-    handleNodeKeyDown,
     dense,
     classes,
   } = useContext(TreeListContext);
 
-  const theme = useTheme();
-  const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
-  const nestedItems = group.children ? group.children : [];
-
-  const defaultVisibility = nestedItems.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+  const defaultVisibility = nestedItemsIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
   // if children given - render them
   const renderChildren = children ? children :
-  nestedItems.map(childId => 
+  nestedItemsIds.map(childId => 
     <VisibilityOptimizer
       key={childId}
       nodeId={childId}
@@ -44,46 +37,23 @@ export const RecursiveTreeItem = (props) => {
       defaultVisibility={defaultVisibility}
     />
   );
-  
-
-  const handleKeyDown = event => {
-    const key = event.key;
-    switch (key) {
-      case 'Enter':
-      case ' ':
-      case nextArrowKey:
-        handleNodeKeyDown(event, group.id, group)
-        break;
-      default:
-        break;
-    }
-    if (onKeyDown) {
-      onKeyDown(event);
-    }
-  }
-
-  const handleClick = event => {
-    handleNodeClick(event, group.id, group);
-    if (onClick) {
-      onClick(event);
-    }
-  };
 
   return (
     <TreeItem
-      nodeId={group.id}
+      nodeId={id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemRow, {[classes.selected]: isSelected(group.id)}),
+        content: classes.itemRow,
+        group: classes.itemChildren,
         expanded: classes.expanded,
+        selected: classes.selected,
         label: clsx(classes.itemContent, {
           [classes.dense]: dense,
-          [classes.selected]: isSelected(group.id)
         })
       }}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      label={group.name}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      label={label}
     >
       { renderChildren }  
     </TreeItem>
@@ -100,31 +70,34 @@ RecursiveTreeItem.propTypes = {
   /**
    * The id of the data item (required)
    */
-  nodeId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   /**
-   * the group data of this tree node
+   * The text to display
    */
-  group: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    children: PropTypes.array,
-    isAleaf: PropTypes.bool,
-  }).isRequired,
-
+  label: PropTypes.string.isRequired,
   /**
-   * override default behaviour: render `children` instead of 
-   * recursivley generate them from the given `group` prop
+   * The ids of the nested items
+   */
+  nestedItemsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  /**
+   * Override the default behaviour: render `children` instead of 
+   * recursivley render `RecursiveTreeItem` from the given `nestedItemsIds`
    */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  group: selectGroupByid(state, ownProps.nodeId),
-});
+const mapStateToProps = (state, ownProps) => {
+  const id = ownProps.nodeId;
+  const { children: nestedItemsIds, name: label } = selectGroupByid(state, id);
+  return {
+    id,
+    nestedItemsIds,
+    label,
+  };
+};
 
 const ConnectedTreeItem = connect(
   mapStateToProps,
@@ -134,6 +107,6 @@ ConnectedTreeItem.muiName = TreeItem.muiName;
 
 ConnectedTreeItem.propTypes = {
   nodeId: PropTypes.string.isRequired,
-} 
+}; 
 
 export default ConnectedTreeItem;
