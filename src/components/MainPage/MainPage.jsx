@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Divider from '@material-ui/core/Divider';
 import GroupList from 'features/groups/groupList';
 import { makeStyles } from '@material-ui/styles';
 import PersonGrid from 'features/persons/personGrid';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPersonsByGroupId, selectIsLoadingByGroupId, 
   fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
-import { selectRootGroupsIds } from 'features/groups/groupsSlice';
+import { selectRootGroupsIds, selectGroupByid } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import ScrollFix from 'utils/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
@@ -24,7 +25,7 @@ const styles = makeStyles(theme => ({
       // overflowY: 'auto',
       // maxWidth: '500px',
       // minWidth: '300px',
-      width: '25%',
+      width: '20%',
       boxShadow: '0px 0px 5px 0px rgba(125,120,125,0.8)',
       backgroundColor: theme.palette.background.default
       // backgroundColor: '#FAFCFB'
@@ -33,24 +34,18 @@ const styles = makeStyles(theme => ({
     maxHeight: 'calc(100% - 19px)',
   },
   personDisplay: {
-    margin: '20px',
+    padding: '20px',
+    width: '80%',
     // backgroundColor: '#E4EAEA'
   }
 }));
 
 const MainPage = props => {
-
+  const classes = styles();
   const [expandedGroups, setExpandedGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
-  const classes = styles();
-
+  const selectedGroup = useSelector(state => selectedGroupId ? selectGroupByid(state, selectedGroupId) : null);
   const dispatch = useDispatch();
-  
-  const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
-  const handleSelection = (e, groupId, item) => {
-    setSelectedGroupId(groupId);
-    dispatch(fetchByGroupIdIfNeeded(groupId));
-  };
 
   // initially select the first root group
   const rootGroupsIds = useSelector(selectRootGroupsIds);
@@ -60,7 +55,13 @@ const MainPage = props => {
     }
   }, [rootGroupsIds]);
 
-  return (
+  const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
+  const handleSelection = (e, groupId, item) => {
+    setSelectedGroupId(groupId);
+    dispatch(fetchByGroupIdIfNeeded(groupId));
+  };
+
+  return selectedGroupId ? (
     <Box className={classes.root}>
       <div className={classes.sideBar}>
           <div>עץ ארגוני</div>
@@ -75,10 +76,12 @@ const MainPage = props => {
       </div>
       
       <div className={classes.personDisplay}>
-        {selectedGroupId && <PersonDisplay directGroupId={selectedGroupId} />}
+        {<div>{selectedGroup.name}</div>}
+        <Divider/>
+        {<PersonDisplay directGroupId={selectedGroupId} />}
       </div>
     </Box>
-  );
+  ): 'loading...';
 };
 
 export default MainPage;

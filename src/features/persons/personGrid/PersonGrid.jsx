@@ -5,11 +5,7 @@ import PersonItem from './PersonGridItem';
 import PropTypes from 'prop-types'
 
 const styles = makeStyles({
-  root: {
-    overflowX: 'hidden',
-    minHeight: 500,
-    padding: 5
-  },
+  root: {},
   label: {},
   avatar: {},
 });
@@ -23,7 +19,10 @@ const PersonGrid = props => {
 
   return (
     <div className={classes.root}>
-      <Grid spacing={1} container>
+      <Grid 
+        spacing={1} 
+        container
+      >
       {persons.map(p => (
         <Grid key={p.id} item>
           <PersonItem 
