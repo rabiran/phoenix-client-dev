@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Divider from '@material-ui/core/Divider';
 import GroupList from 'features/groups/groupList';
 import { makeStyles } from '@material-ui/styles';
-import PersonGrid from 'features/persons/personGrid';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPersonsByGroupId, selectIsLoadingByGroupId, 
-  fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
+import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds, selectGroupByid } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import ScrollFix from 'utils/ScrollFix/ScrollFix';
@@ -34,7 +31,7 @@ const styles = makeStyles(theme => ({
     maxHeight: 'calc(100% - 19px)',
   },
   personDisplay: {
-    padding: '20px',
+    padding: '30px',
     width: '80%',
     // backgroundColor: '#E4EAEA'
   }
@@ -44,7 +41,6 @@ const MainPage = props => {
   const classes = styles();
   const [expandedGroups, setExpandedGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
-  const selectedGroup = useSelector(state => selectedGroupId ? selectGroupByid(state, selectedGroupId) : null);
   const dispatch = useDispatch();
 
   // initially select the first root group
@@ -76,9 +72,7 @@ const MainPage = props => {
       </div>
       
       <div className={classes.personDisplay}>
-        {<div>{selectedGroup.name}</div>}
-        <Divider/>
-        {<PersonDisplay directGroupId={selectedGroupId} />}
+        <PersonDisplay groupId={selectedGroupId} />
       </div>
     </Box>
   ): 'loading...';
