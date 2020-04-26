@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
-import Skeleton from '@material-ui/lab/Skeleton';
 import { useSelector, useDispatch } from 'react-redux';
+import Spinner from 'components/common/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId,
   fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
@@ -29,13 +29,14 @@ const PersonDisplay = props => {
   const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
+  const groupName = group ? group.name : '...';
 
   return (
     <div className={classes.root}>
-      <div>{group.name}</div>
+      <div>{groupName}</div>
       <Divider/>
       <div className={classes.content}>
-        { loading ? 'טוען...': <PersonGrid persons={persons}/>}
+        { loading ? <Spinner/> : <PersonGrid persons={persons}/>}
       </div>
     </div>
   );

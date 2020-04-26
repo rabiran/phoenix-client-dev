@@ -3,7 +3,7 @@ import GroupList from 'features/groups/groupList';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
-import { selectRootGroupsIds, selectGroupByid } from 'features/groups/groupsSlice';
+import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import ScrollFix from 'utils/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
@@ -57,7 +57,7 @@ const MainPage = props => {
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
 
-  return selectedGroupId ? (
+  return (
     <Box className={classes.root}>
       <div className={classes.sideBar}>
           <div>עץ ארגוני</div>
@@ -75,7 +75,8 @@ const MainPage = props => {
         <PersonDisplay groupId={selectedGroupId} />
       </div>
     </Box>
-  ): 'loading...';
+  )
+  
 };
 
 export default MainPage;
