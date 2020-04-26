@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import Spinner from 'components/common/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId,
@@ -17,7 +18,7 @@ const styles = makeStyles({
   },
   content: {
     paddingTop: '15px',
-  }
+  },
 });
 
 
@@ -33,7 +34,7 @@ const PersonDisplay = props => {
 
   return (
     <div className={classes.root}>
-      <div>{groupName}</div>
+      <Typography variant="h6">{groupName}</Typography>
       <Divider/>
       <div className={classes.content}>
         { loading ? <Spinner/> : <PersonGrid persons={persons}/>}
