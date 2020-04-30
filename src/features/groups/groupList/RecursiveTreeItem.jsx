@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { connect } from 'react-redux';
+import { useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
@@ -9,6 +10,7 @@ import wrapFetch from './wrapFetch';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
+const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
 export const RecursiveTreeItem = (props) => {
   const {
@@ -18,6 +20,10 @@ export const RecursiveTreeItem = (props) => {
     onClick,
     onKeyDown,
     children,
+    loadData,
+    isLeaf = !nestedItemsIds || nestedItemsIds.length === 0,
+    childrenFetched = true,
+    loadingComponent = <></>,
   } = props;
 
   const {
@@ -25,7 +31,37 @@ export const RecursiveTreeItem = (props) => {
     classes,
   } = useContext(TreeListContext);
 
+  const theme = useTheme();
+  const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
+
   const defaultVisibility = nestedItemsIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+
+  const handleClick = event => {
+    if (!isLeaf) {
+      loadData();
+    }
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  const handleKeyDown = event => {
+    const key = event.key;
+    switch (key) {
+      case 'Enter':
+      case ' ':
+      case nextArrowKey:
+        if (!isLeaf) {
+          loadData(); 
+        }
+        break;  
+      default:
+        break;
+    }
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+  };
 
   // if children given - render them
   const renderChildren = children ? children :
@@ -51,8 +87,8 @@ export const RecursiveTreeItem = (props) => {
           [classes.dense]: dense,
         })
       }}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
+      onClick={loadData ? handleClick : onClick}
+      onKeyDown={loadData ? onKeyDown : onKeyDown}
       label={label}
     >
       { renderChildren }  
