@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
-import Input from '@material-ui/core/Input';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Spinner from 'components/common/Loading/Spinner'
-import { selectPersonsByGroupId, selectIsLoadingByGroupId,
-  fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
+import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
 import PersonGrid from 'features/persons/personGrid';
 import PropTypes from 'prop-types';
@@ -47,56 +46,66 @@ const inputStyles= makeStyles(theme => ({
   focused: {}
 }));
 
-const labelContainerStyles = makeStyles({
+const headerStyles = makeStyles({
   root: {
+    marginBottom: '3px',
+  },
+  groupName: {
+    display: 'flex',
+    alignItems: 'baseline',
     width: '13%', 
     minWidth: '130px'
+  },
+  memberCount: {
+    marginLeft: '7px'
   }
 });
+
+const onlyLetters = new RegExp(/^[a-z\u0590-\u05fe]*$/i);
 
 const PersonDisplay = props => {
   const {
     groupId,
   } = props;
-
   
   // styles
   const classes = styles();
   const inputClasses = inputStyles();
-  const labelContainerClasses = labelContainerStyles();
+  const headerClasses = headerStyles();
   
   // 
-  const [filterTerm, setFilter] = useState('a');
-  useEffect(()=> {
-    console.log('efectttttttttt');
-    console.log('filter:', filterTerm);
-  });
-  const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
-
-  
-  const ff = persons.filter(p => p.fullName.startsWith(filterTerm));
+  const [filterTerm, setFilter] = useState('');
+  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+    .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
   const groupName = group ? group.name : '...';
 
-
-
-  
+  const filterInputChange = e => {
+    const val = e.target.value;
+    if (onlyLetters.test(val)) {
+      setFilter(val);
+    }
+  };
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={2} alignItems="flex-end" style={{marginBottom:'3px'}}> 
-        <Grid item className={labelContainerClasses.root}><Typography display="inline" variant="h4">{groupName}</Typography></Grid>
+      <Grid container spacing={2} alignItems="flex-end" className={headerClasses.root}> 
+        <Grid item className={headerClasses.groupName}>
+          <Typography display="inline" variant="h4">{groupName}</Typography>
+          <Typography className={headerClasses.memberCount} display="inline" variant="body1">({persons.length})</Typography>
+        </Grid>
         <Grid item>
           <OutlinedInput
-            onChange={e => setFilter(e.target.value)}
+            fullWidth
+            onChange={filterInputChange}
             value={filterTerm}
-            // classes={{
-            //   input: inputClasses.input,
-            //   root: inputClasses.root,
-            //   notchedOutline: inputClasses.notchedOutline,
-            //   focused: inputClasses.focused
-            // }}
+            placeholder='חפש אנשים בקבוצה'
+            endAdornment={
+              <InputAdornment>
+                <SearchIcon/>
+              </InputAdornment>
+            }
             classes={{...inputClasses}}
           />
         </Grid>
