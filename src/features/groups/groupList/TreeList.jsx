@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
-import { selectRootGroupsIds } from 'features/groups/groupsSlice';
+import { selectRootGroupsIds, fetchSubtreeIfNeeded } from 'features/groups/groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer'
 
 export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
@@ -31,9 +31,12 @@ export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
 export const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
-    '& > div > $itemRoot  > $itemRow': {
+    // '& > div > $itemRoot  > $itemRow': {
+    //   fontWeight: 'bold',
+    // },
+    '& > $itemRoot > $itemRow': {
       fontWeight: 'bold',
-    },
+    }
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
@@ -101,8 +104,17 @@ const TreeList = (props) => {
     onNodeToggle,
     classes,
     dense,
+    loadData,
   } = props;
 
+  const loadedMap = useRef({});
+
+  const handleLoad = id => {
+    if (!loadedMap.current[id]) {
+      loadedMap.current[id] = true;
+      loadData(id);
+    }
+  };
  
   const defaultVisibility = rootIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
@@ -111,6 +123,7 @@ const TreeList = (props) => {
       value={{
         dense,
         classes,
+        handleLoad,
       }}
     >
       <TreeView
@@ -130,6 +143,10 @@ const TreeList = (props) => {
             defaultVisibility={defaultVisibility}
             render={props => (<RecursiveTreeItem {...props}/>)}
           />)
+          // <RecursiveTreeItem 
+          //   key={id}
+          //   nodeId={id}
+          // />)
         }
       </TreeView>
     </TreeListConetxt.Provider>
@@ -189,8 +206,15 @@ const mapStateToProps = state => ({
   rootIds: selectRootGroupsIds(state),
 });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    loadData: id =>  dispatch(fetchSubtreeIfNeeded(id)),
+  };
+}
+
 const ConnectedTreeList = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(TreeList);
 
 export const StyledTreeList = withStyles(styles)(TreeList);
