@@ -31,12 +31,12 @@ export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
 export const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
-    // '& > div > $itemRoot  > $itemRow': {
-    //   fontWeight: 'bold',
-    // },
-    '& > $itemRoot > $itemRow': {
+    '& > div > $itemRoot  > $itemRow': {
       fontWeight: 'bold',
-    }
+    },
+    // '& > $itemRoot > $itemRow': {
+    //   fontWeight: 'bold',
+    // }
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
@@ -110,7 +110,7 @@ const TreeList = (props) => {
   const loadedMap = useRef({});
 
   const handleLoad = id => {
-    if (!loadedMap.current[id]) {
+    if (!loadedMap.current[id] && loadData) {
       loadedMap.current[id] = true;
       loadData(id);
     }
@@ -185,6 +185,13 @@ TreeList.propTypes = {
    */
   onNodeToggle: PropTypes.func,
   /**
+   * Callback fired once for every item that have children, it's 
+   * purpose is to load the children of the item.
+   * Its signature is: `(id: string) => void`, where `id`
+   * is the id of the item to load data for.
+   */
+  loadData: PropTypes.func,
+  /**
    * @ignore
    */
   onClick: PropTypes.func,
@@ -208,7 +215,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadData: id =>  dispatch(fetchSubtreeIfNeeded(id)),
+    loadData: id => dispatch(fetchSubtreeIfNeeded(id)),
   };
 }
 
