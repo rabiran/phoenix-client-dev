@@ -30,8 +30,8 @@ export const RecursiveTreeItem = (props) => {
 
   const theme = useTheme();
   const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
-
-  const defaultVisibility = (nestedItemsIds || []).length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+  const childrenIds = nestedItemsIds || [];
+  const defaultVisibility = childrenIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
   const handleClick = event => {
     if (!isLeaf) {
@@ -60,10 +60,10 @@ export const RecursiveTreeItem = (props) => {
     }
   };
 
-  // if children given - render them
-  const renderChildren = (!nestedItemsIds || nestedItemsIds.length === 0) && !isLeaf ? 
+  // if there are no chilren but not a leaf - render "loading"
+  const renderChildren = childrenIds.length === 0 && !isLeaf ? 
     loadingComponent :
-    (nestedItemsIds || []).map(childId => 
+    childrenIds.map(childId => 
       <VisibilityOptimizer
         key={childId}
         nodeId={childId}
@@ -89,7 +89,7 @@ export const RecursiveTreeItem = (props) => {
           [classes.dense]: dense,
         })
       }}
-      // TransitionProps={{timeout: theme.transitions.duration.shortest}}
+      // TransitionProps={{timeout: 600}}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       label={label}
@@ -117,24 +117,16 @@ RecursiveTreeItem.propTypes = {
   /**
    * The ids of the nested items
    */
-  nestedItemsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  nestedItemsIds: PropTypes.arrayOf(PropTypes.string),
   /**
-   * function called when the component needs more children.
-   * signature: `(id: string) => void`
-   */
-  loadData: PropTypes.func,
-  /**
-   * 
+   * Whether this item has children, when set to `false` but the `nestedItemsIds`
+   * is not set or empty - `loadingComponent` will be rendered as a single child
    */
   isLeaf: PropTypes.bool,
   /**
-   * Override the default behaviour: render `children` instead of 
-   * recursivley render `RecursiveTreeItem` from the given `nestedItemsIds`
+   * Element to render when no `nestedItemsIds` supplied (or empty) and `isLeaf` is set to `false`
    */
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  loadingComponent: PropTypes.element,
 };
 
 const mapStateToProps = (state, ownProps) => {
