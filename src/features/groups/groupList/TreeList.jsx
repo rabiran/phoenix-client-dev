@@ -34,9 +34,6 @@ export const styles = theme => ({
     '& > div > $itemRoot  > $itemRow': {
       fontWeight: 'bold',
     },
-    // '& > $itemRoot > $itemRow': {
-    //   fontWeight: 'bold',
-    // }
   },  
   /* styles applied to the 'treeItem' component's 'root' */
   itemRoot: {
@@ -143,10 +140,6 @@ const TreeList = (props) => {
             defaultVisibility={defaultVisibility}
             render={props => (<RecursiveTreeItem {...props}/>)}
           />)
-          // <RecursiveTreeItem 
-          //   key={id}
-          //   nodeId={id}
-          // />)
         }
       </TreeView>
     </TreeListConetxt.Provider>

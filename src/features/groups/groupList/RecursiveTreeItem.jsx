@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { connect } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
@@ -11,7 +11,7 @@ import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
 const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
-export const RecursiveTreeItem = (props) => {
+export const RecursiveTreeItem = memo((props) => {
   const {
     id,
     label,
@@ -70,10 +70,6 @@ export const RecursiveTreeItem = (props) => {
         render={props => (<ConnectedTreeItem {...props}/>)}
         defaultVisibility={defaultVisibility}
       />
-      // <ConnectedTreeItem 
-      //   key={childId}
-      //   nodeId={childId}
-      // />
   );
 
   return (
@@ -89,7 +85,6 @@ export const RecursiveTreeItem = (props) => {
           [classes.dense]: dense,
         })
       }}
-      // TransitionProps={{timeout: 600}}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       label={label}
@@ -97,7 +92,7 @@ export const RecursiveTreeItem = (props) => {
       { renderChildren }  
     </TreeItem>
   );
-}
+});
 
 RecursiveTreeItem.muiName = TreeItem.muiName;
 
