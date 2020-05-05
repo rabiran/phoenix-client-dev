@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
-import { selectRootGroupsIds } from 'features/groups/groupsSlice';
+import { selectRootGroupsIds, fetchSubtreeIfNeeded } from 'features/groups/groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer'
 
 export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
@@ -101,8 +101,17 @@ const TreeList = (props) => {
     onNodeToggle,
     classes,
     dense,
+    loadData,
   } = props;
 
+  const loadedMap = useRef({});
+
+  const handleLoad = id => {
+    if (!loadedMap.current[id] && loadData) {
+      loadedMap.current[id] = true;
+      loadData(id);
+    }
+  };
  
   const defaultVisibility = rootIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
@@ -111,6 +120,7 @@ const TreeList = (props) => {
       value={{
         dense,
         classes,
+        handleLoad,
       }}
     >
       <TreeView
@@ -168,6 +178,13 @@ TreeList.propTypes = {
    */
   onNodeToggle: PropTypes.func,
   /**
+   * Callback fired once for every item that have children, it's 
+   * purpose is to load the children of the item.
+   * Its signature is: `(id: string) => void`, where `id`
+   * is the id of the item to load data for.
+   */
+  loadData: PropTypes.func,
+  /**
    * @ignore
    */
   onClick: PropTypes.func,
@@ -189,8 +206,15 @@ const mapStateToProps = state => ({
   rootIds: selectRootGroupsIds(state),
 });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    loadData: id => dispatch(fetchSubtreeIfNeeded(id)),
+  };
+}
+
 const ConnectedTreeList = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(TreeList);
 
 export const StyledTreeList = withStyles(styles)(TreeList);
