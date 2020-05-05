@@ -1,41 +1,75 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { connect } from 'react-redux';
+import { useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid } from '../groupsSlice';
-import wrapFetch from './wrapFetch';
+import { selectGroupByid, isChildrenFetched } from '../groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
+const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
-export const RecursiveTreeItem = (props) => {
+export const RecursiveTreeItem = memo((props) => {
   const {
     id,
     label,
     nestedItemsIds,
     onClick,
     onKeyDown,
-    children,
+    isLeaf = !nestedItemsIds || nestedItemsIds.length === 0,
+    loadingComponent = <></>,
   } = props;
 
   const {
     dense,
     classes,
+    handleLoad,
   } = useContext(TreeListContext);
 
-  const defaultVisibility = nestedItemsIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
+  const theme = useTheme();
+  const nextArrowKey = theme.direction === 'rtl' ? LEFT_ARROW_KEY : RIGHT_ARROW_KEY;
+  const childrenIds = nestedItemsIds || [];
+  const defaultVisibility = childrenIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
 
-  // if children given - render them
-  const renderChildren = children ? children :
-  nestedItemsIds.map(childId => 
-    <VisibilityOptimizer
-      key={childId}
-      nodeId={childId}
-      render={props => (<ConnectedTreeItem {...props}/>)}
-      defaultVisibility={defaultVisibility}
-    />
+  const handleClick = event => {
+    if (!isLeaf) {
+      handleLoad(id);
+    }
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  const handleKeyDown = event => {
+    const key = event.key;
+    switch (key) {
+      case 'Enter':
+      case ' ':
+      case nextArrowKey:
+        if (!isLeaf) {
+          handleLoad(id); 
+        }
+        break;  
+      default:
+        break;
+    }
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+  };
+
+  // if there are no chilren but not a leaf - render "loading"
+  const renderChildren = childrenIds.length === 0 && !isLeaf ? 
+    loadingComponent :
+    childrenIds.map(childId => 
+      <VisibilityOptimizer
+        key={childId}
+        nodeId={childId}
+        render={props => (<ConnectedTreeItem {...props}/>)}
+        defaultVisibility={defaultVisibility}
+      />
   );
 
   return (
@@ -51,14 +85,14 @@ export const RecursiveTreeItem = (props) => {
           [classes.dense]: dense,
         })
       }}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       label={label}
     >
       { renderChildren }  
     </TreeItem>
   );
-}
+});
 
 RecursiveTreeItem.muiName = TreeItem.muiName;
 
@@ -78,30 +112,40 @@ RecursiveTreeItem.propTypes = {
   /**
    * The ids of the nested items
    */
-  nestedItemsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  nestedItemsIds: PropTypes.arrayOf(PropTypes.string),
   /**
-   * Override the default behaviour: render `children` instead of 
-   * recursivley render `RecursiveTreeItem` from the given `nestedItemsIds`
+   * Whether this item has children, when set to `false` but the `nestedItemsIds`
+   * is not set or empty - `loadingComponent` will be rendered as a single child
    */
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  isLeaf: PropTypes.bool,
+  /**
+   * Element to render when no `nestedItemsIds` supplied (or empty) and `isLeaf` is set to `false`
+   */
+  loadingComponent: PropTypes.element,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const id = ownProps.nodeId;
-  const { children: nestedItemsIds, name: label } = selectGroupByid(state, id);
+  const { children, name: label, isAleaf: isLeaf } = selectGroupByid(state, id);
+  const childrenFetched = isChildrenFetched(state, id);
+
+  let nestedItemsIds = null;
+  if(!isLeaf && childrenFetched) {
+    nestedItemsIds = children;
+  }
+
   return {
     id,
     nestedItemsIds,
     label,
+    isLeaf,
   };
 };
 
+
 const ConnectedTreeItem = connect(
   mapStateToProps,
-)(wrapFetch(RecursiveTreeItem));
+)(RecursiveTreeItem);
 
 ConnectedTreeItem.muiName = TreeItem.muiName;
 
