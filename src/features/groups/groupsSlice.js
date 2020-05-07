@@ -5,8 +5,8 @@ const groupsSlice = createSlice({
   name: 'groups',
   initialState: mockIntialState.groups,
   reducers: {
-    fetchGroupsSuccess(state, action) {
-      const { groups, upsert } = action.payload;
+    fetchChildrenSuccess(state, action) {
+      const { groups, upsert, parentId } = action.payload;
       let groupsToInsert = groups;
       if(!upsert) {
         groupsToInsert = groups.filter(g => !state.byId[g.id]);
@@ -15,12 +15,15 @@ const groupsSlice = createSlice({
         const newChildrenById = createLookup(groups);
         Object.assign(state.byId, ...newChildrenById);  
       }
+      if(parentId) {
+        state.subtreeLoaded[parentId] = true;
+      }
     },
     fetchChildrenRequest(){},
-    subtreeLoaded(state, action) {
-      const { id } = action.payload;
-      state.subtreeLoaded[id] = true;
-    },
+    // subtreeLoaded(state, action) {
+    //   const { id } = action.payload;
+    //   state.subtreeLoaded[id] = true;
+    // },
     setRootGroupsIds(state, action) {
       const { ids } =  action.payload;
       state.rootGroupsIds = ids;
@@ -82,23 +85,26 @@ export const isSubtreeLoaded = (state, id) => {
 // Actions
 export const { 
   /**
-   * @param id the id of the group to fetch children for.
+   * payload = `{ id: string }`
+   * @param payload.id the id of the group to fetch children for.
    */
   fetchChildrenRequest, 
   /**
-   * payload = `{ upsert: bool, groups: Group[] }`
+   * payload = `{ upsert: bool, groups: Group[], parentId }`
    * @param payload.upsert whether to update groups that are already in the state
    * defaults to `false`
    * @param payload.groups Array of the fetched group objects
+   * @param payload.parentId The id of the group that requested the fetch, 
+   * i.e `groups` lowest common ancestor (LCA)
    */
-  fetchGroupsSuccess,
+  fetchChildrenSuccess,
   /**
    * payload = {id: string}
    * @param payload.id
    */
-  subtreeLoaded,
+  // subtreeLoaded,
   /**
-   * payload = {ids: [string]}
+   * payload = `{ ids: string[] }`
    */
   setRootGroupsIds
 
@@ -106,7 +112,7 @@ export const {
 
 export const fetchSubtreeIfNeeded = id => (dispatch, getState) => {
   if (!isSubtreeLoaded(getState(), id)) {
-    return dispatch(fetchChildrenRequest(id));
+    return dispatch(fetchChildrenRequest({ id }));
   }
 }
 
