@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createIdMap } from 'utils/slices/helpers';
 import mockIntialState from 'api/mockInitialState';
 
 const groupsSlice = createSlice({
@@ -12,48 +13,27 @@ const groupsSlice = createSlice({
         groupsToInsert = groups.filter(g => !state.byId[g.id]);
       }
       if(groupsToInsert.length > 0) {
-        const newChildrenById = createLookup(groups);
-        Object.assign(state.byId, ...newChildrenById);  
+        const newChildrenById = createIdMap(groups);
+        Object.assign(state.byId, newChildrenById);  
       }
       if(parentId) {
         state.subtreeLoaded[parentId] = true;
+      } else {
+        state.rootGroupsIds = groupsToInsert.map(g => g.id);
       }
     },
     fetchChildrenRequest(){},
-    // subtreeLoaded(state, action) {
-    //   const { id } = action.payload;
-    //   state.subtreeLoaded[id] = true;
-    // },
-    setRootGroupsIds(state, action) {
-      const { ids } =  action.payload;
-      state.rootGroupsIds = ids;
-    }
   },
 });
 
-// reducer helpers
-const createLookup = groupArr => groupArr.map(g => ({ [g.id]: g }));
-
 // selectors
-const getGroups = (state) => state.groups.byId;
-export const selectRootGroupsIds = (state) => state.groups.rootGroupsIds;
+const getGroupMap = state => state.groups.byId;
+export const selectRootGroupsIds = state => state.groups.rootGroupsIds;
 export const selectRootGroups = createSelector(
-  [getGroups, selectRootGroupsIds],
+  [getGroupMap, selectRootGroupsIds],
   (groupsByid, rootIds) => rootIds.map(id => groupsByid[id])
 );
-export const selectGroupByid = (state, id) => getGroups(state)[id];
-
-export const isChildrenDepthExist = (state, id, depth) => {
-  if(depth === 0) {
-    return !!getGroups(state)[id]
-  }
-  const group = getGroups(state)[id];
-  if(group.children && group.children.length !== 0) {
-    return isChildrenDepthExist(state, group.children[0], depth - 1);
-  }
-  // depth is not 0 and group doesnt have children
-  return false;
-};
+export const selectGroupByid = (state, id) => getGroupMap(state)[id];
 
 /**
  * Returns whether children of a group exist in the state (I.e were fetched)
@@ -61,7 +41,7 @@ export const isChildrenDepthExist = (state, id, depth) => {
  * @param {string} id id of the parent group
  * @returns {boolean}
  */
-export const isChildrenFetched = (state, id) => {
+export const areChildrenFetched = (state, id) => {
   const parent = selectGroupByid(state, id);
   if (parent.isAleaf) return true;
   if (parent.children && parent.children.length !== 0) {
@@ -78,7 +58,7 @@ export const isChildrenFetched = (state, id) => {
  * @param {string} id id of the root group of the subtree to check
  * @returns {boolean}
  */
-export const isSubtreeLoaded = (state, id) => {
+const isSubtreeLoaded = (state, id) => {
   return !!state.groups.subtreeLoaded[id];
 };
 
@@ -95,21 +75,17 @@ export const {
    * defaults to `false`
    * @param payload.groups Array of the fetched group objects
    * @param payload.parentId The id of the group that requested the fetch, 
-   * i.e `groups` lowest common ancestor (LCA)
+   * i.e `groups` lowest common ancestor (LCA).
+   * if `parentId` not specified - `groups` will be treated as root groups.
    */
   fetchChildrenSuccess,
-  /**
-   * payload = {id: string}
-   * @param payload.id
-   */
-  // subtreeLoaded,
-  /**
-   * payload = `{ ids: string[] }`
-   */
-  setRootGroupsIds
-
 } = groupsSlice.actions;
 
+/**
+ * dispatch `fetchChildrenRequest` action for the given `id`, only 
+ * if it has not yet disptached with the same `id` before.
+ * @param {*} id 
+ */
 export const fetchSubtreeIfNeeded = id => (dispatch, getState) => {
   if (!isSubtreeLoaded(getState(), id)) {
     return dispatch(fetchChildrenRequest({ id }));

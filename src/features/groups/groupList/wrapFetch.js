@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme, withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import { isChildrenFetched, fetchSubtreeIfNeeded, selectGroupByid } from 'features/groups/groupsSlice';
+import { areChildrenFetched, fetchSubtreeIfNeeded, selectGroupByid } from 'features/groups/groupsSlice';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 
@@ -77,7 +77,7 @@ const wrapFetch = WrappedComponent => {
 const mapStateToProps = (state, ownProps) => {
   const id = ownProps.id;
   const { isAleaf: isLeaf } = selectGroupByid(state, id);
-  const childrenFetched = isChildrenFetched(state, id);
+  const childrenFetched = areChildrenFetched(state, id);
   return {
     childrenFetched,
     isLeaf,

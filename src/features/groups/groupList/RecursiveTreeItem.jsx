@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid, isChildrenFetched } from '../groupsSlice';
+import { selectGroupByid, areChildrenFetched } from '../groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
@@ -127,7 +127,7 @@ RecursiveTreeItem.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const id = ownProps.nodeId;
   const { children, name: label, isAleaf: isLeaf } = selectGroupByid(state, id);
-  const childrenFetched = isChildrenFetched(state, id);
+  const childrenFetched = areChildrenFetched(state, id);
 
   let nestedItemsIds = null;
   if(!isLeaf && childrenFetched) {

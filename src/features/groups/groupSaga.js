@@ -1,5 +1,5 @@
 import { put, call, takeEvery, all } from 'redux-saga/effects';
-import { fetchChildrenRequest , fetchChildrenSuccess, setRootGroupsIds } from './groupsSlice';
+import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
 import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
 
 /**
@@ -35,8 +35,6 @@ function* initRootGroup() {
   /* Group as single root */
   yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
   yield put(fetchChildrenSuccess({ groups, parentId: rootId }));
-  // yield put(subtreeLoaded({ id: rootId }))
-  yield put(setRootGroupsIds({ ids: [rootId] }));
 
 }
 
