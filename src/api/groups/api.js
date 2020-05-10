@@ -7,14 +7,6 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-/**
- * 
- * @param {string} rootIds 
- */
-// export const fetchGroupChildren = async (rootIds) => {
-//   return await fetchChildren(rootIds, 1);
-// }
-
 const fetchAll = async () => {
   return (await instance.get()).data.map(groupFromApiResponse);
 };
