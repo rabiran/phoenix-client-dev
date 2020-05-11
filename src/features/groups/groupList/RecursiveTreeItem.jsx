@@ -1,4 +1,4 @@
-import React, { useContext, memo } from 'react';
+import React, { useContext, forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
@@ -11,7 +11,7 @@ import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
 const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
-export const RecursiveTreeItem = memo((props) => {
+export const RecursiveTreeItem = forwardRef((props, ref) => {
   const {
     id,
     label,
@@ -74,6 +74,7 @@ export const RecursiveTreeItem = memo((props) => {
 
   return (
     <TreeItem
+      ref={ref}
       nodeId={id}
       classes= {{
         root: classes.itemRoot,
