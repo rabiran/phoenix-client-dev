@@ -129,17 +129,7 @@ const TreeList = (props) => {
         defaultExpandIcon={<ExpandMoreIcon/>}
         defaultCollapseIcon={<CollapseIcon/>}   
       >
-        { 
-          rootIds.map(id => 
-          // <VisibilityOptimizer 
-          //   key={id} 
-          //   nodeId={id}
-          //   defaultVisibility={false}
-          //   render={props => (<RecursiveTreeItem {...props}/>)}
-          // />
-          <RecursiveTreeItem key={id} nodeId={id} />
-          )
-        }
+        { rootIds.map(id => <RecursiveTreeItem key={id} nodeId={id} />) }
       </TreeView>
     </TreeListConetxt.Provider>
   );
