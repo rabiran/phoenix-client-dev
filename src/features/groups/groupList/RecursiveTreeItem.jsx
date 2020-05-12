@@ -1,17 +1,17 @@
-import React, { useContext, memo } from 'react';
+import React, { useContext, forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid, isChildrenFetched } from '../groupsSlice';
+import { selectGroupByid, areChildrenFetched } from '../groupsSlice';
 import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
 const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';
 
-export const RecursiveTreeItem = memo((props) => {
+export const RecursiveTreeItem = forwardRef((props, ref) => {
   const {
     id,
     label,
@@ -74,6 +74,7 @@ export const RecursiveTreeItem = memo((props) => {
 
   return (
     <TreeItem
+      ref={ref}
       nodeId={id}
       classes= {{
         root: classes.itemRoot,
@@ -127,7 +128,7 @@ RecursiveTreeItem.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const id = ownProps.nodeId;
   const { children, name: label, isAleaf: isLeaf } = selectGroupByid(state, id);
-  const childrenFetched = isChildrenFetched(state, id);
+  const childrenFetched = areChildrenFetched(state, id);
 
   let nestedItemsIds = null;
   if(!isLeaf && childrenFetched) {
