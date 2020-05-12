@@ -1,7 +1,6 @@
 import { put, call, takeEvery, all } from 'redux-saga/effects';
-import { fetchChildrenRequest , fetchGroupsSuccess, subtreeLoaded, setRootGroupsIds } from './groupsSlice';
+import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
 import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
-// import { fetchSubtree } from 'api/mockApi';
 
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
@@ -17,17 +16,10 @@ export function* watchFetchChildrenRequest() {
  * @param {*} action action of type `fetchChildrenRequest`
  */
 function* fetchChildren(action) {
-  const id = action.payload;
+  const { id } = action.payload;
   const groups = yield call(fetchSubtree, id);
-  // mark the root id as 'subtree loaded'
-  yield put(subtreeLoaded({ id }));
-  yield put(fetchGroupsSuccess({ groups, upsert: false }));
+  yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
 }
-
-// function* fetchAllGroups() {
-//   const groups = yield call(fetchAll);
-//   yield put(fetchGroupsSuccess({ groups }));
-// }
 
 function* initRootGroup() {
   const rootId = yield call(getRootGroupId);
@@ -35,19 +27,14 @@ function* initRootGroup() {
     rootGroup: call(fetchGroupById, rootId),
     groups: call(fetchSubtree, rootId)
   });
-  // const rootGroup = yield call(fetchGroupById, rootId);
-  // fetch the root's children
-  // const groups = yield call(fetchSubtree, rootId);
 
   /* Direct children as root groups */
   // yield put(fetchGroupsSuccess({ groups }))
   // yield put(setRootGroupsIds({ ids: rootGroup.children }));
 
   /* Group as single root */
-
-  yield put(fetchGroupsSuccess({ groups: [rootGroup, ...groups] }));
-  yield put(subtreeLoaded({ id: rootId }))
-  yield put(setRootGroupsIds({ ids: [rootId] }));
+  yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
+  yield put(fetchChildrenSuccess({ groups, parentId: rootId }));
 
 }
 
@@ -55,6 +42,5 @@ export default function* rootSaga() {
   yield all([
     initRootGroup(),
     watchFetchChildrenRequest(), 
-    // fetchAllGroups()
   ]);
 }

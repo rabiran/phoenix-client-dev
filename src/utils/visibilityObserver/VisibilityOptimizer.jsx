@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import Observer from '@researchgate/react-intersection-observer';
 
-const DummyDiv = (<div style={{color: 'transparent'}}>.</div>);
-
 const VisibilityOptimizer = (props) => {
   const {
     children,
     render,
     component,
     defaultVisibility,
+    invisibleStyles = {},
     ...passThrough
   } = props;
 
@@ -26,7 +25,7 @@ const VisibilityOptimizer = (props) => {
     <Observer onChange={handleObserverChange}>{
       visible ?
       <div>{ renderProp({ ...passThrough, visible }) }</div> :
-      DummyDiv
+      <div style={{ color: 'transparent', ...invisibleStyles }}>.</div>
     }</Observer> 
   );
 };

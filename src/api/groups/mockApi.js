@@ -1,12 +1,8 @@
+import rootGroup from './rootGroup';
+
 const timeout = 500;
 
 let nextId = 1;
-
-const rootGroup = {
-  id: '0',
-  name: 'root',
-  children: ['1'],
-};
 
 const resolveAfter = (data, timeoutMs = timeout) => new Promise((resolve, reject) => {
   setTimeout(() => resolve(data), timeoutMs);
@@ -24,6 +20,7 @@ const fetchSubtree = async (parentId) => {
   ]);
 };
 
+const fetchAll = () => resolveAfter([]);
 
 const getRootGroupId = () => {
  return resolveAfter(rootGroup.id);
@@ -37,10 +34,12 @@ export {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
+  fetchAll,
 };
 
 export default {
   getRootGroupId,
   fetchGroupById,
-  fetchSubtree
+  fetchSubtree,
+  fetchAll
 };
