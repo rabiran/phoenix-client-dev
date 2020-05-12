@@ -23,9 +23,9 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
   } = props;
 
   const {
-    dense,
     classes,
     handleLoad,
+    itemHeight,
   } = useContext(TreeListContext);
 
   const theme = useTheme();
@@ -67,6 +67,7 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
       <VisibilityOptimizer
         key={childId}
         nodeId={childId}
+        invisibleStyles={{ height: itemHeight }}
         render={props => (<ConnectedTreeItem {...props}/>)}
         defaultVisibility={defaultVisibility}
       />
@@ -78,9 +79,7 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
       nodeId={id}
       classes= {{
         root: classes.itemRoot,
-        content: clsx(classes.itemRow, {
-          [classes.dense]: dense,
-        }) ,
+        content: classes.itemRow,
         group: classes.itemChildren,
         expanded: classes.expanded,
         selected: classes.selected,

@@ -58,12 +58,12 @@ export const styles = theme => ({
     // },
   },
   /* styles applied to the 'treeItem' component's 'content' */
-  itemRow: {
-    height: '44px',
+  itemRow: ({itemHeight}) => ({
+    height: itemHeight || '44px',
     '&:hover': {
       backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
-  },
+  }),
   /* styles applied to the 'role=group' component (itemRow direct child) */
   itemChildren: {},
   /* styles applied to the 'itemContent' component (inside itemRow) */
@@ -81,10 +81,6 @@ export const styles = theme => ({
       paddingLeft: 10
     }
   },
-  /* styles applied to the 'itemRow' component if dense */
-  dense: {
-    height: '25px'
-  },
   /* pseudo class applied to the itemRoot when selected */
   selected: {},
   /* pseudo class applied to the itemRoot when expanded */
@@ -99,8 +95,8 @@ const TreeList = (props) => {
     expanded,
     onNodeToggle,
     classes,
-    dense,
     loadData,
+    itemHeight = '44px',
   } = props;
 
   const loadedMap = useRef({});
@@ -115,9 +111,9 @@ const TreeList = (props) => {
   return (
     <TreeListConetxt.Provider
       value={{
-        dense,
         classes,
         handleLoad,
+        itemHeight
       }}
     >
       <TreeView
