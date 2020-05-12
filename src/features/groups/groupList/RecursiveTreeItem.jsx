@@ -78,13 +78,13 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
       nodeId={id}
       classes= {{
         root: classes.itemRoot,
-        content: classes.itemRow,
+        content: clsx(classes.itemRow, {
+          [classes.dense]: dense,
+        }) ,
         group: classes.itemChildren,
         expanded: classes.expanded,
         selected: classes.selected,
-        label: clsx(classes.itemContent, {
-          [classes.dense]: dense,
-        })
+        label: classes.itemContent, 
       }}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
