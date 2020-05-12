@@ -1,7 +1,6 @@
 import React, { useContext, forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
@@ -23,9 +22,9 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
   } = props;
 
   const {
-    dense,
     classes,
     handleLoad,
+    itemHeight,
   } = useContext(TreeListContext);
 
   const theme = useTheme();
@@ -67,6 +66,7 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
       <VisibilityOptimizer
         key={childId}
         nodeId={childId}
+        invisibleStyles={{ height: itemHeight }}
         render={props => (<ConnectedTreeItem {...props}/>)}
         defaultVisibility={defaultVisibility}
       />
@@ -82,9 +82,7 @@ export const RecursiveTreeItem = forwardRef((props, ref) => {
         group: classes.itemChildren,
         expanded: classes.expanded,
         selected: classes.selected,
-        label: clsx(classes.itemContent, {
-          [classes.dense]: dense,
-        })
+        label: classes.itemContent, 
       }}
       onClick={handleClick}
       onKeyDown={handleKeyDown}

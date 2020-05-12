@@ -9,7 +9,6 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import TreeListConetxt from './TreeListContext';
 import RecursiveTreeItem  from './RecursiveTreeItem';
 import { selectRootGroupsIds, fetchSubtreeIfNeeded } from 'features/groups/groupsSlice';
-import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer'
 
 export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
 
@@ -25,13 +24,13 @@ export const DEFAULT_VISIBILITY_CHILDREN_THRESHOLD = 50;
  *    |          :          |       |
  *     ---------------------        |
  * ----------------------------------
- * itemRoot contains a `div` that contains itemrow and it's children
+ * non-top level itemRoot is contained in a `div` that contains itemrow and it's children
  * focus & selected events occurs on the itemRoot, but styles should be applied to the itemRow
  */
 export const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
-    '& > div > $itemRoot  > $itemRow': {
+    '& > $itemRoot  > $itemRow': {
       fontWeight: 'bold',
     },
   },  
@@ -59,11 +58,12 @@ export const styles = theme => ({
     // },
   },
   /* styles applied to the 'treeItem' component's 'content' */
-  itemRow: {
+  itemRow: ({itemHeight}) => ({
+    height: itemHeight || '44px',
     '&:hover': {
       backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
     },
-  },
+  }),
   /* styles applied to the 'role=group' component (itemRow direct child) */
   itemChildren: {},
   /* styles applied to the 'itemContent' component (inside itemRow) */
@@ -71,8 +71,8 @@ export const styles = theme => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-start',
-    paddingTop: 10,
-    paddingBottom: 10,
+    // paddingTop: 10,
+    // paddingBottom: 10,
     fontWeight: 'inherit',
     '&:hover': {
       backgroundColor: 'transparent'
@@ -80,11 +80,6 @@ export const styles = theme => ({
     '&:only-child': {
       paddingLeft: 10
     }
-  },
-  /* styles applied to the 'itemContent' component if dense */
-  dense: {
-    paddingTop: 4,
-    paddingBottom: 4,
   },
   /* pseudo class applied to the itemRoot when selected */
   selected: {},
@@ -100,8 +95,8 @@ const TreeList = (props) => {
     expanded,
     onNodeToggle,
     classes,
-    dense,
     loadData,
+    itemHeight = '44px',
   } = props;
 
   const loadedMap = useRef({});
@@ -113,14 +108,12 @@ const TreeList = (props) => {
     }
   };
  
-  const defaultVisibility = rootIds.length < DEFAULT_VISIBILITY_CHILDREN_THRESHOLD;
-
   return (
     <TreeListConetxt.Provider
       value={{
-        dense,
         classes,
         handleLoad,
+        itemHeight
       }}
     >
       <TreeView
@@ -132,15 +125,7 @@ const TreeList = (props) => {
         defaultExpandIcon={<ExpandMoreIcon/>}
         defaultCollapseIcon={<CollapseIcon/>}   
       >
-        { 
-          rootIds.map(id => 
-          <VisibilityOptimizer 
-            key={id} 
-            nodeId={id}
-            defaultVisibility={defaultVisibility}
-            render={props => (<RecursiveTreeItem {...props}/>)}
-          />)
-        }
+        { rootIds.map(id => <RecursiveTreeItem key={id} nodeId={id} />) }
       </TreeView>
     </TreeListConetxt.Provider>
   );
