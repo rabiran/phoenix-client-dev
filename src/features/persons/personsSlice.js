@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createIdMap } from 'utils/slice.helpers';
 
 const initialState = {
   byId: {},
@@ -10,8 +11,8 @@ const personsSlice = createSlice({
   reducers: {
     fetchByGroupIdSuccess(state, action) {
       const { groupId, persons } = action.payload;
-      const newPersonsByIdArr = createLookup(persons);
-      Object.assign(state.byId, ...newPersonsByIdArr);
+      const newPersonsIdMap = createIdMap(persons);
+      Object.assign(state.byId, newPersonsIdMap);
       state.byDirectGroup[groupId] = {
         isFetching: false,
         items: persons.map(p => p.id),
@@ -30,9 +31,6 @@ const personsSlice = createSlice({
 
   }
 });
-
-// reducer helpers
-const createLookup = personsArr => personsArr.map(p => ({ [p.id]: p }));
 
 //selectors
 const byGroupId = (state, id) => state.persons.byDirectGroup[id];
