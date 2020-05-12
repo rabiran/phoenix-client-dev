@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { createIdMap } from 'utils/slices/helpers';
+import { createIdMap } from 'utils/slice.helpers';
 import mockIntialState from 'api/mockInitialState';
 
 const groupsSlice = createSlice({

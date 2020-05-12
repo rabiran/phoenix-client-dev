@@ -35,25 +35,6 @@ const fetchSubtree = async (parentId, depth = FETCH_DEPTH) => {
   return children.map(groupFromApiResponse);
 };
 
-/**
- * 
- * @param {string | object} parentId parent group id or object
- * @param {number} depth 
- */
-// const fetchChildren = async (parentId, depth = 1) => {
-//   const parent = await fetchGroupById(parentId);
-//   // base case: return the group itself
-//   if (depth === 0 || parent.isAleaf) {
-//     // remove 'children' array (useful for redux state)
-//     return [removeChildren(parent)];
-//   }
-//   // fetch children recursively, flatten results
-//   const offspring =  _.flatten(await Promise.all(parent.children.map(id => fetchChildren(id, depth - 1))));
-  
-//   // return the parent with it's offspring
-//   return [parent].concat(offspring);
-// }
-
 const fetchGroupById = async id => {
   const res = (await instance.get(`/${id}`)).data
   return groupFromApiResponse(res);
