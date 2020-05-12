@@ -1,7 +1,6 @@
 import React, { useContext, forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { useTheme } from '@material-ui/styles';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
