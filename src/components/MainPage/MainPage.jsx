@@ -32,7 +32,8 @@ const styles = makeStyles(theme => ({
   },
   personDisplay: {
     padding: '30px',
-    width: '80%',
+    width: '60%',
+    // height: '500px'
     // backgroundColor: '#E4EAEA'
   }
 }));

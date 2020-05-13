@@ -9,10 +9,13 @@ const Demo = (props) => {
   // useEffect(() => {
   //   dispatch(fetchByGroupIdIfNeeded(rootGroup.id));
   // }, [dispatch]);
-  // const persons = [...Array(20).keys()].map(i => ({id: i, name: `אלעד בירן הרבירן`}));
-  const persons = useSelector(state => selectPersonsByGroupId(state, rootGroup.id));
+  const persons = [...Array(2000).keys()].map(i => ({id: i, fullName: `אלעד בירן הרבירן${i}`}));
+  // const persons = useSelector(state => selectPersonsByGroupId(state, rootGroup.id));
   return (
-    <PersonGrid persons={persons}></PersonGrid>
+    <PersonGrid 
+      style={{width: '700px', height:'650px', overflowY: 'auto'}} 
+      persons={persons}>
+    </PersonGrid>
   );
 };
 

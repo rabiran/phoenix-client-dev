@@ -22,7 +22,7 @@ const styles = makeStyles({
   },
 });
 
-export const PersonGridItem = props => {
+export const PersonGridItem = React.memo (props => {
   const { label } = props;
   const classes = styles(props);
   return (
@@ -31,7 +31,7 @@ export const PersonGridItem = props => {
       <div className={classes.label}><Typography>{ label }</Typography></div>
     </div>
   );
-};
+});
 
 PersonGridItem.propTypes = {
   label: PropTypes.string.isRequired,
