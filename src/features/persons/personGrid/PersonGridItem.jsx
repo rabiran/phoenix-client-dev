@@ -8,7 +8,10 @@ import PropTypes from 'prop-types';
 
 const styles = makeStyles({
   root: {
-    width: '75px',
+    width: '100px',
+    // width: '75px',
+    // maxHeight: '150px',
+    overflow: 'hidden'
   },
   label: {
     textAlign: 'center', 
@@ -16,22 +19,28 @@ const styles = makeStyles({
     // width: '75px'
   },
   avatar: {
-    width: '70px', 
-    height: '70px', 
+    width: '90px', 
+    height: '90px',
+    // width: '70px', 
+    // height: '70px', 
     margin: '0 auto' // equal margin in left & right - avatar in center
   },
 });
 
-export const PersonGridItem = React.memo (props => {
-  const { label } = props;
+export const PersonGridItem = props => {
+  const { 
+    label,
+    width,
+    height
+  } = props;
   const classes = styles(props);
   return (
-    <div className={classes.root}>
+    <div style={{ width, height }} className={classes.root}>
       <Avatar className={classes.avatar}></Avatar>    
       <div className={classes.label}><Typography>{ label }</Typography></div>
     </div>
   );
-});
+}
 
 PersonGridItem.propTypes = {
   label: PropTypes.string.isRequired,

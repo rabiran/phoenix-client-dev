@@ -31,8 +31,8 @@ const styles = makeStyles(theme => ({
     maxHeight: 'calc(100% - 19px)',
   },
   personDisplay: {
-    padding: '30px',
-    width: '60%',
+    padding: '20px 60px',
+    width: '70%',
     // height: '500px'
     // backgroundColor: '#E4EAEA'
   }

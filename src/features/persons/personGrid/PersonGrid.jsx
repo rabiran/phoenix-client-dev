@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles, styled } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import PersonItem from './PersonGridItem';
 import PropTypes from 'prop-types';
 import { VirtuosoGrid } from 'react-virtuoso';
+import ReactResizeDetector from 'react-resize-detector';
+
+const renderVirtualThreshold = 100;
 
 const styles = makeStyles({
   root: {},
@@ -14,107 +17,83 @@ const styles = makeStyles({
 const PersonGrid = props => {
   const {
     persons,
-    style,
-    className
+    className,
+    spacing = 3
   } = props;
 
   const classes = styles(props);
 
-  const ListContainer = styled('div')({
-    display: 'flex',
-    flexWrap: 'wrap',
-  });
+  const renderItem = person => (
+    <PersonItem
+      classes={{
+        label: classes.label,
+        avatar: classes.avatar
+      }}
+      label={person.fullName}
+    />
+  );
 
-  const ItemContainer = styled('div')({
-    padding: '0.5rem',
-    width: '100px',
-    background: '#f5f5f5',
-    display: 'flex',
-    flex: 'none',
-    alignContent: 'stretch', 
-
-    // '@media (max-width: 1024px)': {
-    //   width: '33%',
-    // },
-
-    // '@media (max-width: 768px)': {
-    //   width: '50%',
-    // },
-
-    // '@media (max-width: 480px)': {
-    //   width: '100%',
-    // }
-  })
-  
-  const ItemWrapper = styled('div')({
-    flex: 1,
-    textAlign: 'center',
-    fontSize: '80%',
-    padding: '2rem',
-    boxShadow: '0 5px 6px -6px #777',
-    background: 'white',
-  });
- 
-  // const renderContainer = ({ ref, style = {} }) =>
-
-
-  return persons.length > 0 ? (
+  const renderVirtualGrid = ({ width, height }) => (
     <VirtuosoGrid
       className={className}
-      style={{...style, overflowX: 'hidden'}}
+      style={{ height, width, overflowX: 'hidden' }}
       totalCount={persons.length}
-      ListContainer={({listRef, children, className, style}) => (
-        <Grid className={className} ref={listRef} spacing={5} container style={{ ...style, marginBottom: 0 }}>
+      overscan={spacing * 120} // heuristic
+      ListContainer={({ listRef, children, className, style }) => (
+        <Grid
+          container
+          className={className}
+          style={{...style, marginBottom: 0 }}
+          spacing={spacing}
+          ref={listRef}
+        >
           {children}
         </Grid>
       )}
-      // ListContainer={ListContainer}
       ItemContainer={props => (
-        <Grid item {...props} style={{margin: 0}}/>     
+        <Grid item {...props} style={{ margin: 0 }}/>     
       )}
-      // ItemContainer={ItemContainer}
       item={index => {
         const person = persons[index];
-        return person ? (
-          <PersonItem
-          classes={{
-            label: classes.label,
-            avatar: classes.avatar,
-          }}
-          label={person.fullName}
-        />) : null;
+        return person ? renderItem(person) : null;
       }}
-      // item={index => <ItemWrapper>Item {index}</ItemWrapper>}
-      overscan={200}
-      // computeItemKey={index => `${persons[index].id}tttttt`}
-      // scrollingStateChange={scrolling => setIsScrolling(scrolling)}
     />
-  ) : null;
+  );
+
+  const renderNormalGrid = ({ width, height }) => (
+    <div style={{ width, height, overflowY: 'auto', overflowX: 'hidden'}}>
+      <Grid
+        container
+        className={className}
+        spacing={spacing}
+        style={{
+          marginBottom: 0,
+          marginTop: 0,
+        }}
+      >
+        {
+          persons.map(p => (
+            <Grid item key={p.id}>
+              { renderItem(p) }
+            </Grid>
+          ))
+        }
+      </Grid>
+    </div>
+  );
 
   return (
-    // <div style={style} className={classes.root}>
-      <Grid className={className}
-        spacing={5} 
-        container
-      >
-      {persons.map(p => (
-        <Grid key={p.id} item>
-          <PersonItem 
-            classes={{
-              label: classes.label,
-              avatar: classes.avatar,
-            }}
-            label={p.fullName}
-          />
-        </Grid>
-      ))}
-    </Grid>
-    // </div>
+    <ReactResizeDetector handleWidth handleHeight>
+      {({width, height}) => 
+        persons.length < renderVirtualThreshold 
+        ? renderNormalGrid({ width, height })
+        : renderVirtualGrid({ width, height })}
+    </ReactResizeDetector>
   );
-};
+}
 
 PersonGrid.propTypes = {
-  personIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  persons: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default PersonGrid;  

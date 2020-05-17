@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +14,10 @@ import PersonGrid from 'features/persons/personGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
+import faker from 'faker/locale/en';
+const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
+const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
+
 const styles = makeStyles({
   root: {
     overflow: 'hidden',
@@ -21,15 +25,14 @@ const styles = makeStyles({
     // padding: '15px'
   },
   content: {
-    paddingTop: '15px',
-    height:'500px',
-    overflowY: 'auto',
-    overflowX: 'hidden',
+    height:'85%',
+    // overflowY: 'auto',
+    // overflowX: 'hidden',
     // width: '90%'
   },
 });
 
-const inputStyles= makeStyles(theme => ({
+const inputStyles = makeStyles(theme => ({
   root: {
     backgroundColor: 'white',
     borderRadius: '15px',
@@ -58,7 +61,7 @@ const headerStyles = makeStyles({
   groupName: {
     display: 'flex',
     alignItems: 'baseline',
-    width: '13%', 
+    // width: '13%', 
     minWidth: '130px'
   },
   memberCount: {
@@ -66,7 +69,13 @@ const headerStyles = makeStyles({
   }
 });
 
-const onlyLetters = new RegExp(/^[a-z\u0590-\u05fe]*$/i);
+const onlyLetters = new RegExp(/^[a-z\u0590-\u05fe\s`']*$/i);
+
+const inputValidate = val => {
+  return onlyLetters.test(val) 
+    && !/^[\s'`]+$/.test(val) 
+    && !/[\s'`]{2,}/.test(val);
+}
 
 const PersonDisplay = props => {
   const {
@@ -75,79 +84,67 @@ const PersonDisplay = props => {
   
   // styles
   const classes = styles();
-  const inputClasses = inputStyles();
-  const headerClasses = headerStyles();
-  
+  const headerClasses = headerStyles();  
   // 
   const [filterTerm, setFilter] = useState('');
+  const setFilterDebounced = useRef(_.debounce(setFilter));
   // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = [...Array(10000).keys()].map(i => ({id: i, fullName: `אלעד בירן הרבירן${i}`}))
+  const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
   const groupName = group ? group.name : '...';
 
-  const setFilterD = _.debounce(v => setFilter(v))
+  const filterInputChange = useCallback(value => {
+    setFilterDebounced.current(value);
+  }, [setFilterDebounced]) 
 
-  const filterInputChange =  e => {
-    const val = e.target.value;
-    // if (onlyLetters.test(val)) {
-    //   setFilter(val);
-    // }
-    setFilterD(val);
-  };
-
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={2} alignItems="flex-end" className={headerClasses.root}> 
-        <Grid item className={headerClasses.groupName}>
-          <Typography display="inline" variant="h4">{groupName}</Typography>
-          <Typography className={headerClasses.memberCount} display="inline" variant="body1">({persons.length})</Typography>
-        </Grid>
-        <Grid item>
-          <OutlinedInput
-            fullWidth
-            onChange={filterInputChange}
-            // value={filterTerm}
-            placeholder='חפש אנשים בקבוצה'
-            endAdornment={
-              <InputAdornment>
-                <SearchIcon/>
-              </InputAdornment>
-            }
-            classes={{...inputClasses}}
-          />
-          {/* <DFilter
-            onChange={filterInputChange}
-          /> */}
-        </Grid>
+  return (<>
+    <Grid container spacing={2} alignItems="flex-end" justify='space-between' className={headerClasses.root}> 
+      <Grid item className={headerClasses.groupName}>
+        <Typography display="inline" variant="h4">{groupName}</Typography>
+        <Typography className={headerClasses.memberCount} display="inline" variant="body1">({persons.length})</Typography>
       </Grid>
-      <Divider/>
-      {/* <div className={classes.content}> */}
-        { loading ? <Spinner/> : <PersonGrid className={classes.content} persons={persons}/>}
-      {/* </div> */}
-    </div>
-  );
+      <Grid item>
+        <SearchInput
+          onValueChange={filterInputChange}
+          resetOn={groupId}
+        />
+      </Grid>
+    </Grid>
+    <Divider/>
+    <div className={classes.content}>{
+      loading ? 
+      <Spinner/> : 
+      <PersonGrid persons={persons}/>
+    }</div>
+    </>);
 };
 
 PersonDisplay.propTypes = {
   groupId: PropTypes.string.isRequired,
 }
 
-const DFilter = ({onChange: onFilterChange}) => {
+const SearchInput = ({ onValueChange, resetOn }) => {
   const [value, setValue] = useState('');
-  const debouncedCallback = _.debounce(onFilterChange, 200);
-  const realOnChange = e => {
-    setValue(e.target.value);
-    debouncedCallback(e.target.value);
+  const onChange = e => {
+    const val = e.target.value;
+    if (inputValidate(val)){
+      setValue(val);
+      onValueChange(val);
+    }
   }
-
-  const inputClasses = inputStyles();
+  useEffect(() => {
+    setValue('');
+    onValueChange('')
+  }, [resetOn, onValueChange])
+  
+  const classes = inputStyles();
 
   return (
     <OutlinedInput
       fullWidth
-      onChange={realOnChange}
+      onChange={onChange}
       value={value}
       placeholder='חפש אנשים בקבוצה'
       endAdornment={
@@ -155,9 +152,9 @@ const DFilter = ({onChange: onFilterChange}) => {
           <SearchIcon/>
         </InputAdornment>
       }
-      classes={{...inputClasses}}
+      classes={{...classes}}
   />
-  )
+  );
 }
 
 export default PersonDisplay;
