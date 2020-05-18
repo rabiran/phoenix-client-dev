@@ -18,19 +18,21 @@ const PersonGrid = props => {
   const {
     persons,
     className,
-    spacing = 3
+    spacing = 3,
+    GridItemProps,
   } = props;
 
   const classes = styles(props);
 
   const renderItem = person => (
     <PersonItem
+      avatarSize={100}
       classes={{
         label: classes.label,
         avatar: classes.avatar
       }}
       label={person.fullName}
-    />
+      {...GridItemProps}/>
   );
 
   const renderVirtualGrid = ({ width, height }) => (
@@ -38,15 +40,14 @@ const PersonGrid = props => {
       className={className}
       style={{ height, width, overflowX: 'hidden' }}
       totalCount={persons.length}
-      overscan={spacing * 120} // heuristic
+      overscan={spacing * 120} // heuristic (better: (gridItem.height + spacing)*(width / (gridItem.width + spacing)))
       ListContainer={({ listRef, children, className, style }) => (
         <Grid
           container
           className={className}
           style={{...style, marginBottom: 0 }}
           spacing={spacing}
-          ref={listRef}
-        >
+          ref={listRef}>
           {children}
         </Grid>
       )}
@@ -60,6 +61,9 @@ const PersonGrid = props => {
     />
   );
 
+  const renderGridItems = () => persons.map(p => 
+    (<Grid item key={p.id}>{ renderItem(p) }</Grid>));
+
   const renderNormalGrid = ({ width, height }) => (
     <div style={{ width, height, overflowY: 'auto', overflowX: 'hidden'}}>
       <Grid
@@ -69,15 +73,8 @@ const PersonGrid = props => {
         style={{
           marginBottom: 0,
           marginTop: 0,
-        }}
-      >
-        {
-          persons.map(p => (
-            <Grid item key={p.id}>
-              { renderItem(p) }
-            </Grid>
-          ))
-        }
+        }}>
+        { renderGridItems() }
       </Grid>
     </div>
   );

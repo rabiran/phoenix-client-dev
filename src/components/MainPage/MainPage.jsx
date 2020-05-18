@@ -32,7 +32,7 @@ const styles = makeStyles(theme => ({
   },
   personDisplay: {
     padding: '20px 60px',
-    width: '70%',
+    width: '60%',
     // height: '500px'
     // backgroundColor: '#E4EAEA'
   }

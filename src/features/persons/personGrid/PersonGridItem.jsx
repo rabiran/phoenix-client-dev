@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 const styles = makeStyles({
   root: {
     width: '100px',
+    // padding: '0 10px',
     // width: '75px',
     // maxHeight: '150px',
     overflow: 'hidden'
@@ -18,13 +19,13 @@ const styles = makeStyles({
     wordWrap: 'break-word', 
     // width: '75px'
   },
-  avatar: {
-    width: '90px', 
-    height: '90px',
+  avatar: ({avatarSize = 90}) => ({
+    width: avatarSize, 
+    height: avatarSize,
     // width: '70px', 
     // height: '70px', 
     margin: '0 auto' // equal margin in left & right - avatar in center
-  },
+  }),
 });
 
 export const PersonGridItem = props => {

@@ -23,12 +23,13 @@ const styles = makeStyles({
     overflow: 'hidden',
     // minHeight: '500px',
     // padding: '15px'
+    width: '80%'
   },
   content: {
-    height:'85%',
+    height:'75%',
     // overflowY: 'auto',
     // overflowX: 'hidden',
-    // width: '90%'
+    // width: '80%'
   },
 });
 
