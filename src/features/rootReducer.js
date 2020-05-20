@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import groupsReducer from './features/groups/groupsSlice';
+import groupsReducer from './groups/groupsSlice';
 
 export default combineReducers({
   groups: groupsReducer,

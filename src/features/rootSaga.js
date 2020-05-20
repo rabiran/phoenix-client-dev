@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import groupsRoot from './features/groups/groupSaga';
+import groupsRoot from './groups/groupSaga';
 
 export default function* rootSaga() {
   yield all([

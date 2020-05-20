@@ -150,7 +150,7 @@ TreeList.propTypes = {
    * @param {object} event The event source of the callback
    * @param {string} id The id of the selected item
    */
-  onNodeSelected: PropTypes.func.isRequired,
+  onNodeSelected: PropTypes.func,
   /**
    * Expanded items ids. (Controlled)
    */
