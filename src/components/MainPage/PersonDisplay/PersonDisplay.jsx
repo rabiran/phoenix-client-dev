@@ -16,7 +16,7 @@ import _ from 'lodash';
 
 import faker from 'faker/locale/en';
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
-const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
+const fakePersons2 =  [...Array(10000).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
 const styles = makeStyles({
   root: {
@@ -90,7 +90,7 @@ const PersonDisplay = props => {
   const [filterTerm, setFilter] = useState('');
   const setFilterDebounced = useRef(_.debounce(setFilter));
   // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = fakePersons
+  const persons = fakePersons2
     .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
@@ -117,7 +117,7 @@ const PersonDisplay = props => {
     <div className={classes.content}>{
       loading ? 
       <Spinner/> : 
-      <PersonGrid persons={persons}/>
+      <PersonGrid persons={persons} itemWidth={130}/>
     }</div>
     </>);
 };

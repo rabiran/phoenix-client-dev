@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, useTheme } from '@material-ui/styles';
 import PersonItem from './PersonGridItem';
 import PropTypes from 'prop-types';
 import { VirtuosoGrid } from 'react-virtuoso';
 import ReactResizeDetector from 'react-resize-detector';
 
 const renderVirtualThreshold = 100;
+const AVATAR_MARGIN = 5;
+
 
 const styles = makeStyles({
   root: {},
@@ -18,20 +20,22 @@ const PersonGrid = props => {
   const {
     persons,
     className,
-    spacing = 3,
+    spacing,
+    itemWidth,
     GridItemProps,
   } = props;
-
+  const theme = useTheme();
   const classes = styles(props);
 
   const renderItem = person => (
     <PersonItem
-      avatarSize={100}
       classes={{
         label: classes.label,
         avatar: classes.avatar
       }}
       label={person.fullName}
+      width={itemWidth}
+      avatarSize={itemWidth - (AVATAR_MARGIN * 2)}
       {...GridItemProps}/>
   );
 
@@ -87,10 +91,23 @@ const PersonGrid = props => {
         : renderVirtualGrid({ width, height })}
     </ReactResizeDetector>
   );
-}
+};
+
+PersonGrid.defaultProps = {
+  spacing: 5,
+  itemWith: 100
+};
 
 PersonGrid.propTypes = {
   persons: PropTypes.arrayOf(PropTypes.object).isRequired,
-}
+  itemWidth: PropTypes.number,
+  spacing: PropTypes.number,
+  GridItemProps: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number,
+    avatarSize: PropTypes.number,
+    classes: PropTypes.object,
+  })
+};
 
-export default PersonGrid;  
+export default PersonGrid;
