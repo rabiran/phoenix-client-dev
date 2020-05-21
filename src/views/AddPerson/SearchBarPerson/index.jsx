@@ -2,7 +2,7 @@ import React from "react";
 import _ from 'lodash';
 import { Link, InputLabel, InputBase } from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
-import StyledButton from '../../withStylesComponents/StyleButton';
+import StyledButton from '../../../components/shared/styleComponent/StyleButton';
 
 export default ({onClickSearch, person}) => {
   const [personalNumber, setPersonalNumber] = React.useState(() => (!_.isEmpty(person) ? person.personalNumber : ""));

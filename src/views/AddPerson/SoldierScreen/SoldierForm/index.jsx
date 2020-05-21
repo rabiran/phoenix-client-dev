@@ -3,7 +3,7 @@ import _ from "lodash";
 import PersonalInfo from "../../PersonalInfo";
 import TeamAndJob from "../../TeamAndJob";
 import styles from "./soldierForm.style";
-import StyledButton from "../../../withStylesComponents/StyleButton";
+import StyledButton from "../../../../components/shared/styleComponent/StyleButton";
 import { useFormHandled } from "../../../../helper/customHooks";
 import { PersonValidate } from "../../../../helper/personalValidation";
 

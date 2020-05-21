@@ -3,7 +3,7 @@ import _ from 'lodash';
 import SearchBarPerson from "../SearchBarPerson";
 import SoldierForm from './SoldierForm';
 import styles from "./soldierScreen.style";
-import Avatar from "../../Avatar/index";
+import Avatar from "../../../components/shared/Avatar/index";
 // import faker from "faker";
 
 export default ({person, onClickSearch}) => {
