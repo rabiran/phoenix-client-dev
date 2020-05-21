@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import TreeList from '../../components/groups/groupTree/TreeList';
+import GroupTree from '../../components/groups/groupTree';
 
 export default function TreeDemo() {
   const [expanded, setExpanded] = useState([]);
@@ -13,7 +13,7 @@ export default function TreeDemo() {
 
   return (
     <div style={{maxHeight: 'calc(100vh - 64px)', overflowY: 'scroll', maxWidth:'500px'}}>
-      <TreeList 
+      <GroupTree 
         selected={selected}
         onNodeSelected={handleSelection}
         expanded={expanded}
