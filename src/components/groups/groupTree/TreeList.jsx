@@ -169,22 +169,6 @@ TreeList.propTypes = {
    * is the id of the item to load data for.
    */
   loadData: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onClick: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onFocus: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onKeyDown: PropTypes.func,
-  /**
-   * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
-   */
-  dense: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
