@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import groupsReducer from './features/groups/groupsSlice';
-import personsReducer from './features/persons/personsSlice';
+import personsReducer from './persons/personsSlice';
+import groupsReducer from './groups/groupsSlice';
 
 export default combineReducers({
   groups: groupsReducer,

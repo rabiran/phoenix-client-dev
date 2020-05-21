@@ -150,7 +150,7 @@ TreeList.propTypes = {
    * @param {object} event The event source of the callback
    * @param {string} id The id of the selected item
    */
-  onNodeSelected: PropTypes.func.isRequired,
+  onNodeSelected: PropTypes.func,
   /**
    * Expanded items ids. (Controlled)
    */
@@ -169,22 +169,6 @@ TreeList.propTypes = {
    * is the id of the item to load data for.
    */
   loadData: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onClick: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onFocus: PropTypes.func,
-  /**
-   * @ignore
-   */
-  onKeyDown: PropTypes.func,
-  /**
-   * If `true`, compact vertical padding designed for keyboard and mouse input will be used.
-   */
-  dense: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

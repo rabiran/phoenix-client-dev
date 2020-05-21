@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import { selectById } from '../personsSlice';
+import { selectById } from '../../../features/persons/personsSlice';
 import PropTypes from 'prop-types';
 
 const styles = makeStyles({

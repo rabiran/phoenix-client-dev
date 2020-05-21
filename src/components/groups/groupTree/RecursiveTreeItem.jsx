@@ -4,8 +4,8 @@ import { useTheme } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid, areChildrenFetched } from '../groupsSlice';
-import VisibilityOptimizer from 'utils/visibilityObserver/VisibilityOptimizer';
+import { selectGroupByid, areChildrenFetched } from '../../../features/groups/groupsSlice';
+import VisibilityOptimizer from 'components/shared/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
 const LEFT_ARROW_KEY = 'ArrowLeft', RIGHT_ARROW_KEY = 'ArrowRight';

@@ -1,17 +1,17 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './features/store';
 import './App.css';
 import { theme } from './theme.js';
 import { ThemeProvider } from '@material-ui/core/styles';
-import RTL from './components/RTL';
-import ManagePage from './components/ManagePage/ManagePage';
-import LandingPage from './components/LandingPage/LandingPage';
-import TreeDemo from './components/TreeListDemo/TreeDemo';
-import Header from './components/Header';
+import RTL from './components/common/RTL';
+import ManagePage from './views/ManagePage/ManagePage';
+import LandingPage from './views/LandingPage/LandingPage';
+import TreeDemo from './views/TreeListDemo/TreeDemo';
+import Header from './components/common/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import GridDemo from './components/GridDemo/GridDemo';
-import MainPage from './components/MainPage/MainPage';
+import GridDemo from './views/GridDemo/GridDemo';
+import MainPage from './views/MainPage/MainPage';
 
 function App() {
   return (

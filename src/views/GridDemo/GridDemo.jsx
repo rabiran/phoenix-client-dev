@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import PersonGrid from 'features/persons/personGrid/PersonGrid';
+import PersonGrid from 'components/persons/personGrid/PersonGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchByGroupIdIfNeeded, selectPersonsByGroupId } from 'features/persons/personsSlice';
 import rootGroup from 'api/groups/rootGroup';

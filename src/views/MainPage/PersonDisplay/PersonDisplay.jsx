@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import Spinner from 'components/common/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
-import PersonGrid from 'features/persons/personGrid';
+import PersonGrid from 'components/persons/personGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 

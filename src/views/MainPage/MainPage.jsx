@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import GroupList from 'features/groups/groupList';
+import GroupList from 'components/groups/groupTree';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
-import ScrollFix from 'utils/ScrollFix/ScrollFix';
+import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
 
 const styles = makeStyles(theme => ({

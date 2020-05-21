@@ -1,12 +1,10 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { createIdMap } from 'utils/slice.helpers';
-import mockIntialState from 'api/mockInitialState';
-
 
 const initialState = {
-  rootGroupsIds: [],  
+  byId: {},
+  rootGroupsIds: [],
   subtreeLoaded: {},
-  byId: {}
 };
 
 const groupsSlice = createSlice({
