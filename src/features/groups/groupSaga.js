@@ -1,6 +1,7 @@
 import { put, call, takeEvery, all } from 'redux-saga/effects';
 import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
-import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
+import { fetchGroupById, fetchSubtree, getRootGroupId } from 'api/groups';
+import { safe } from 'utils/saga.helpers';
 
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
@@ -17,25 +18,22 @@ export function* watchFetchChildrenRequest() {
  */
 function* fetchChildren(action) {
   const { id } = action.payload;
-  const groups = yield call(fetchSubtree, id);
-  yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
+  const { result: groups, error } = yield safe(call(fetchSubtree, id));
+  if(!error) {
+    yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
+  }
+  
 }
 
 function* initRootGroup() {
+  // get root id (in the real app it will come from the authenticated user)
   const rootId = yield call(getRootGroupId);
-  const { rootGroup, groups } = yield all({
-    rootGroup: call(fetchGroupById, rootId),
-    groups: call(fetchSubtree, rootId)
-  });
-
-  /* Direct children as root groups */
-  // yield put(fetchGroupsSuccess({ groups }))
-  // yield put(setRootGroupsIds({ ids: rootGroup.children }));
-
-  /* Group as single root */
+  // request the root children
+  yield put(fetchChildrenRequest({ id: rootId }));
+  // request the root group itslef
+  const { result: rootGroup } = yield safe(call(fetchGroupById, rootId));
+  // root group fetched - put success action 
   yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
-  yield put(fetchChildrenSuccess({ groups, parentId: rootId }));
-
 }
 
 export default function* rootSaga() {
