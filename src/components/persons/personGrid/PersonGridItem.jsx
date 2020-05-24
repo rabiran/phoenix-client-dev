@@ -37,9 +37,15 @@ export const PersonGridItem = ({
 }
 
 PersonGridItem.propTypes = {
+  /**
+   * Text to render below the avatar
+   */
   label: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
+  /**
+   * Avatar width & height (in pixels)
+   */
   avatarSize: PropTypes.number
 }
 

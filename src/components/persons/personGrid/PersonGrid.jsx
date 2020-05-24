@@ -24,7 +24,7 @@ const PersonGrid = ({
   itemRenderer,
 }) => {
   const classes = styles();
-
+  
   const renderItem = itemRenderer || (person => (
     <PersonItem
       classes={{
@@ -107,7 +107,7 @@ PersonGrid.propTypes = {
    */
   spacing: PropTypes.number,
   /**
-   * Addtional props to pass to the `PersonGridItem` component
+   * Additional props to pass to the `PersonGridItem` component
    */
   GridItemProps: PropTypes.shape({
     width: PropTypes.number,
@@ -116,7 +116,7 @@ PersonGrid.propTypes = {
     classes: PropTypes.object,
   }),
   /**
-   * Custom item renderer, to render items other than the default `PersonGridItem` 
+   * Custom item renderer, to render items other than the default `PersonGridItem`.
    * function signature: `personObject => ReactElement`
    */
   itemRenderer: PropTypes.func
