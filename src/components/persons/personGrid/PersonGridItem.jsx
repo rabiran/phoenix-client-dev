@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 
-
 const styles = makeStyles({
   root: ({ width, height }) => ({
     width,
@@ -22,11 +21,13 @@ const styles = makeStyles({
   }),
 });
 
-export const PersonGridItem = props => {
-  const { 
-    label,
-  } = props;
-  const classes = styles(props);
+export const PersonGridItem = ({
+  label,
+  height,
+  width,
+  avatarSize
+}) => {
+  const classes = styles({ height, width, avatarSize });
   return (
     <div className={classes.root}>
       <Avatar className={classes.avatar}></Avatar>    
