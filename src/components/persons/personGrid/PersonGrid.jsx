@@ -15,18 +15,17 @@ const styles = makeStyles({
   avatar: {},
 });
 
-const PersonGrid = props => {
-  const {
-    persons,
-    className,
-    spacing,
-    itemWidth,
-    GridItemProps,
-  } = props;
-  const theme = useTheme();
-  const classes = styles(props);
+const PersonGrid = ({
+  persons,
+  className,
+  spacing,
+  itemWidth,
+  GridItemProps,
+  itemRenderer,
+}) => {
+  const classes = styles();
 
-  const renderItem = person => (
+  const renderItem = itemRenderer || (person => (
     <PersonItem
       classes={{
         label: classes.label,
@@ -36,7 +35,7 @@ const PersonGrid = props => {
       width={itemWidth}
       avatarSize={itemWidth - (AVATAR_MARGIN * 2)}
       {...GridItemProps}/>
-  );
+  ));
 
   const renderVirtualGrid = ({ width, height }) => (
     <VirtuosoGrid
@@ -106,7 +105,12 @@ PersonGrid.propTypes = {
     height: PropTypes.number,
     avatarSize: PropTypes.number,
     classes: PropTypes.object,
-  })
+  }),
+  /**
+   * custom item renderer, to render items other than the default `PersonGridItem` 
+   * function signature: `personObject => ReactElement`
+   */
+  itemRenderer: PropTypes.func
 };
 
 export default PersonGrid;
