@@ -1,24 +1,10 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { createIdMap } from 'utils/slice.helpers';
 
-// const initialState = {
-//   byId: {
-//     '1': {
-//       id: '1',
-//       name: 'אלעד בירן כבודו',
-//     },
-//     '2': {
-//       id: '2',
-//       name: 'אז מי אני בכלל?'
-//     }
-//   },
-//   byDirectGroup: {}
-// }
-
 const initialState = {
   byId: {},
   byDirectGroup: {}
-}
+};
 
 const personsSlice = createSlice({
   name: 'persons',
@@ -50,7 +36,6 @@ const personsSlice = createSlice({
 // selectors
 const byId = (state) => state.persons.byId;
 
-//selectors
 const byGroupId = (state, id) => state.persons.byDirectGroup[id];
 
 export const selectById = (state, id) => byId(state)[id];
