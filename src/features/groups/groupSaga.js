@@ -31,9 +31,11 @@ function* initRootGroup() {
   // request the root children
   yield put(fetchChildrenRequest({ id: rootId }));
   // request the root group itslef
-  const { result: rootGroup } = yield safe(call(fetchGroupById, rootId));
-  // root group fetched - put success action 
-  yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
+  const { result: rootGroup, error } = yield safe(call(fetchGroupById, rootId));
+  if(!error) {
+    // root group fetched - put success action 
+    yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
+  }
 }
 
 export default function* rootSaga() {
