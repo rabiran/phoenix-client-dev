@@ -117,7 +117,7 @@ const PersonDisplay = props => {
     <div className={classes.content}>{
       loading ? 
       <Spinner/> : 
-      <PersonGrid persons={persons} itemWidth={130}/>
+      <PersonGrid persons={persons} itemWidth={120}/>
     }</div>
     </>);
 };

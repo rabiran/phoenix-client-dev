@@ -98,8 +98,17 @@ PersonGrid.defaultProps = {
 
 PersonGrid.propTypes = {
   persons: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /**
+   * Width (in pixels) of each gridItem
+   */
   itemWidth: PropTypes.number,
+  /**
+   * Spacing units between grid items
+   */
   spacing: PropTypes.number,
+  /**
+   * Addtional props to pass to the `PersonGridItem` component
+   */
   GridItemProps: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
@@ -107,7 +116,7 @@ PersonGrid.propTypes = {
     classes: PropTypes.object,
   }),
   /**
-   * custom item renderer, to render items other than the default `PersonGridItem` 
+   * Custom item renderer, to render items other than the default `PersonGridItem` 
    * function signature: `personObject => ReactElement`
    */
   itemRenderer: PropTypes.func
