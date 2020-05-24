@@ -78,11 +78,7 @@ const inputValidate = val => {
     && !/[\s'`]{2,}/.test(val);
 }
 
-const PersonDisplay = props => {
-  const {
-    groupId,
-  } = props;
-  
+const PersonDisplay = ({ groupId }) => {
   // styles
   const classes = styles();
   const headerClasses = headerStyles();  
