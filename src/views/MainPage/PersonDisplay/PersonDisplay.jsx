@@ -85,8 +85,8 @@ const PersonDisplay = ({ groupId }) => {
   // 
   const [filterTerm, setFilter] = useState('');
   const setFilterDebounced = useRef(_.debounce(setFilter));
-  // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = fakePersons2
+  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+  // const persons = fakePersons2
     .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
