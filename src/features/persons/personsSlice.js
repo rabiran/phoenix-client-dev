@@ -16,6 +16,7 @@ const personsSlice = createSlice({
       Object.assign(state.byId, newPersonsIdMap);
       state.byDirectGroup[groupId] = {
         isFetching: false,
+        error: false,
         items: persons.map(p => p.id),
       };
     },
@@ -24,11 +25,27 @@ const personsSlice = createSlice({
         const { id: groupId } = action.payload;
         state.byDirectGroup[groupId] = {
           isFetching: true, // OR just assume that if the object doesnt exist - it is loading
+          error: false,
           items: [],
         }
       },
       prepare: groupId => ({ payload: { id: groupId }})
     },
+    fetchByGroupIdError: {
+      reducer: (state, action) => {
+        const { groupId } = action.meta;
+        state.byDirectGroup[groupId] = {
+          isFetching: false,
+          error: true,
+          items: [],
+        }
+      },
+      prepare: (groupId, errorPayload) => ({ 
+        payload: errorPayload ,
+        meta: { groupId },
+        error: true 
+      })
+    }
 
   }
 });
@@ -61,6 +78,10 @@ export const selectPersonsByGroupId = createSelector(byId, byGroupId,
 export const selectIsLoadingByGroupId = createSelector(byGroupId, 
   byGroupIdMap => !byGroupIdMap || byGroupIdMap.isFetching);
 
+export const selectIsErrorByGroupId = createSelector(byGroupId, 
+  byGroupIdMap => byGroupIdMap && byGroupIdMap.error);
+
+
 export const {
   /**
    * payload = { groupId: string, persons: Person[] }
@@ -70,11 +91,16 @@ export const {
    * @param groupId the group id to fetch members of
    * dispatched payload = { id: groupId }
    */
-  fetchByGroupId
+  fetchByGroupId,
+  /**
+   * @param groupId the id of the group which fetch requset failed.
+   */
+  fetchByGroupIdError
 } = personsSlice.actions;
 
 export const fetchByGroupIdIfNeeded = groupId => (dispatch, getState) => {
-  if(!byGroupId(getState(), groupId)) {
+  const state = getState();
+  if(!byGroupId(getState(), groupId) || selectIsErrorByGroupId(state, groupId)) {
     dispatch(fetchByGroupId(groupId));
   }
 }
