@@ -1,11 +1,11 @@
-import { createSlice, createAction } from '@reduxjs/toolkit'
+import { createAction } from '@reduxjs/toolkit'
 
 export const SLICE_NANE = 'errors';
 
 const initialState = {
   error: null,
   isOpen: false
-}
+};
 
 // actions
 export const hideError = createAction(`${SLICE_NANE}/hideError`);
@@ -23,7 +23,7 @@ export default function errorReducer(state = initialState, action) {
   if (error) {
     return { error: payload, isOpen: true };
   } else if (action.type === hideError.type) {
-    return { error: null, isOpen: false };
+    return { ...state, isOpen: false };
   }
   return state;
 }
