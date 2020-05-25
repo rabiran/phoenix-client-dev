@@ -2,7 +2,7 @@ import { put, call, takeEvery, all } from 'redux-saga/effects';
 import { fetchByGroupId as fetchByGroupIdAction, fetchByGroupIdSuccess, fetchByGroupIdError } from './personsSlice';
 import { fetchByGroupId } from 'api/persons';
 import { getRootGroupId } from 'api/groups';
-import { safe } from 'utils/saga.helpers';
+import { safeCall, safe } from 'utils/saga.helpers';
 
 function* watchFetchByGroupId() {
   yield takeEvery(fetchByGroupIdAction.type, fetchByGroupIdSaga);
@@ -10,7 +10,8 @@ function* watchFetchByGroupId() {
 
 function* fetchByGroupIdSaga(action) {
   const { id } = action.payload;
-  const { result: persons, error } = yield safe(call(fetchByGroupId, id));
+  // const { result: persons, error } = yield safe(call(fetchByGroupId, id));
+  const { result: persons, error } = yield safeCall(fetchByGroupId, id);
   if(!error) {
     yield put(fetchByGroupIdSuccess({ persons, groupId: id }));
   } else {
