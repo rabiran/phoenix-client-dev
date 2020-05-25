@@ -3,6 +3,8 @@ import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
 import { fetchGroupById, fetchSubtree, getRootGroupId } from 'api/groups';
 import { safe } from 'utils/saga.helpers';
 
+import { setError } from 'features/errorSlice';
+
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
  * takes only the latest action, and cancels still running `fetchChildren` sagas.
@@ -21,6 +23,8 @@ function* fetchChildren(action) {
   const { result: groups, error } = yield safe(call(fetchSubtree, id));
   if(!error) {
     yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
+  } else {
+    yield put(setError({message: 'yohohhhhohoo'}));
   }
   
 }
