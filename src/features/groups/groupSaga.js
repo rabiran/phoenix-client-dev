@@ -24,7 +24,7 @@ function* fetchChildren(action) {
   if(!error) {
     yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
   } else {
-    yield put(setError({message: 'yohohhhhohoo'}));
+    yield put(setError(error));
   }
   
 }
