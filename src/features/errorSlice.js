@@ -9,6 +9,7 @@ const initialState = {
 
 // actions
 export const hideError = createAction(`${SLICE_NANE}/hideError`);
+export const clearError = createAction(`${SLICE_NANE}/clearError`);
 export const setError = createAction(`${SLICE_NANE}/setError`, payload => ({
   payload,
   error: true,
@@ -24,6 +25,8 @@ export default function errorReducer(state = initialState, action) {
     return { error: payload, isOpen: true };
   } else if (action.type === hideError.type) {
     return { ...state, isOpen: false };
+  } else if (action.type === clearError.type) {
+    return { ...state, error: null };
   }
   return state;
 }
