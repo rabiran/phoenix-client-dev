@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,7 +8,7 @@ import { selectIsOpen, hideError, selectErrorObj, clearError } from 'features/er
 
 const DEFAULT_TEXT = 'ארעה שגיאה'
 
-const Notifier = props => {
+const Notifier = ({ autoHideDuration }) => {
   const dispatch = useDispatch();
   const open = useSelector(selectIsOpen);
   const error = useSelector(selectErrorObj);
@@ -18,8 +18,8 @@ const Notifier = props => {
 
   return (
     <Snackbar 
-      open={open && error} 
-      autoHideDuration={4000} 
+      open={open} 
+      autoHideDuration={autoHideDuration} 
       onClose={handleClose}
       onExited={handleExited}>
       <Alert 
@@ -36,5 +36,9 @@ const Notifier = props => {
     </Snackbar>
   )
 };
+
+Notifier.defaultProps = {
+  autoHideDuration: 4000
+}
 
 export default Notifier;

@@ -2,7 +2,6 @@ import { put, call, takeEvery, all } from 'redux-saga/effects';
 import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
 import { fetchGroupById, fetchSubtree, getRootGroupId } from 'api/groups';
 import { safe } from 'utils/saga.helpers';
-
 import { setError } from 'features/errorSlice';
 
 /**
