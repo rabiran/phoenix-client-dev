@@ -8,6 +8,6 @@ export function* safe(effect) {
 	}
 }
 
-export function* safeCall(...args) {
-  return yield safe(call(...args))
+export function* safeCall(fn, ...args) {
+  return yield safe(call(fn, ...args))
 }
