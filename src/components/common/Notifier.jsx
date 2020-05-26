@@ -5,6 +5,7 @@ import Alert from '@material-ui/lab/Alert';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { selectIsOpen, hideError, selectErrorObj, clearError } from 'features/errorSlice';
+import PropTypes from 'prop-types';
 
 const DEFAULT_TEXT = 'ארעה שגיאה'
 
@@ -40,5 +41,9 @@ const Notifier = ({ autoHideDuration }) => {
 Notifier.defaultProps = {
   autoHideDuration: 4000
 }
+
+Notifier.propTypes = {
+  autoHideDuration: PropTypes.number,
+};
 
 export default Notifier;
