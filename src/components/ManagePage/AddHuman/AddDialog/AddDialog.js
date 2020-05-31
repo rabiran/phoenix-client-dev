@@ -67,7 +67,7 @@ export default function AddDialog(props) {
     const [hierarchy, setHierarchy] = React.useState();
 
     function getCtrlkValue(value) { //get value from ctrlk component
-        console.log(value);
+        setHierarchy();
         if (value){
             // setPerson({ ...value, ...{ hierarchy: "earth/google/something/group3", id: 1 } });
             let hiera = value.hierarchy.join('/');

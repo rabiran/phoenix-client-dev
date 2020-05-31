@@ -1,142 +1,183 @@
-
 import React from 'react';
+import MaterialTable from 'material-table';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-import Title from '../../Stuff/Title';
+import { forwardRef } from 'react';
+
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
+
 
 const useStyles = makeStyles({
-    content: {
-        margin: '0 auto',
-        width: '75%',
-        textAlign: 'center',
-        marginTop: '50px',
-    },
-    paper: {
-        position: 'relative',
-        background: 'whitesmoke',
-        padding: '10px'
-    },
-    tableHeader:{
-        display: "flex",
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    searchArea: {
-        position: 'absolute',
-        bottom: '0',
-        paddingBottom: '10px'
-    }
+  content: {
+    margin: '0 auto',
+    width: '75%',
+    textAlign: 'center',
+    marginTop: '50px',
+  },
 });
 
-// '&>Div':{
-//     marginRight: '30px'
-// }
+/**
+ * Gets data, delete method and table type, renders table
+ * @param {Array} props.data
+ * @param {function} props.onDelete(index)
+ * @param {String} props.type
+ */
+export default function ManageTable2(props) {
+  const classes = useStyles();
+  
+  let columns = [
+    { title: 'שם מלא', field: 'name' },
+    { title: 'מספר אישי', field: 'number' },
+    { title: 'יחידה', field: 'unit' },
+    { title: 'דרגה', field: 'rank' },
+    { title: 'מנהל את', field: 'manages' },
+  ]
+  return (
+    <div className={classes.content}>
+      <MaterialTable
+        icons={tableIcons}
+        title={"טבלת "+props.type}
+        columns={columns}
+        data={props.data}
+        editable={{
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              resolve()
+              props.onDelete(oldData)
+            })
+        }}
+        options = {{ pageSizeOptions: [3,5,10] }}
+        localization={{
+          pagination: {
+              labelDisplayedRows: '{from}-{to} מתוך {count}',
+              labelRowsSelect: "אנשים",
+              labelRowsPerPage: "אנשים בעמוד:",
+              firstAriaLabel: "עמוד ראשון",
+              firstTooltip: "עמוד ראשון",
+              previousAriaLabel: "עמוד קודם",
+              previousTooltip: "עמוד קודם",
+              nextAriaLabel: "עמוד הבא",
+              nextTooltip: "עמוד הבא",
+              lastAriaLabel: "עמוד אחרון",
+              lastTooltip: "עמוד אחרון",
 
-function createData(name, number, unit, something, manages) {
-    return { name, number, unit, something, manages };
+          },
+          toolbar: {
+              nRowsSelected: '{0} אנשים נבחרו',
+              searchTooltip: "חפש",
+              searchPlaceholder: "חפש"
+          },
+          header: {
+              actions: 'פעולות'
+          },
+          body: {
+              emptyDataSourceMessage: 'אין פה אף אחד!',
+              filterRow: {
+                  filterTooltip: 'Filter'
+              },
+              deleteTooltip: "מחק",
+              editRow: {
+                deleteText: "למחוק בן אדם זה מתפקיד זה?",
+                cancelTooltip: "לא",
+                saveTooltip: "כן"
+              }
+          }
+      }}
+      />
+    </div>
+  );
 }
 
-let rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+//props.data.indexOf(oldData)
+
+// onRowAdd: newData =>
+//             new Promise(resolve => {
+//                 setTimeout(() => {
+//                 resolve();
+//                 setState(prevState => {
+//                     const data = [...prevState.data];
+//                     data.push(newData);
+//                     return { ...prevState, data };
+//                 });
+//                 }, 600);
+//             }),
 
 
-const rowsOptions = [3,5,10];
+// onRowUpdate: (newData, oldData) =>
+// new Promise(resolve => {
+//     setTimeout(() => {
+//     resolve();
+//     if (oldData) {
+//         setState(prevState => {
+//         const data = [...prevState.data];
+//         data[data.indexOf(oldData)] = newData;
+//         return { ...prevState, data };
+//         });
+//     }
+//     }, 600);
+// }),
 
-export default function ManageTable() {
-    const classes = useStyles();
-    const [data, setData] = React.useState([]);
-    const [rowsPerPage, setRowsPerPage] = React.useState(rowsOptions[1]);
-    const [page, setPage] = React.useState(0);
 
-    async function getData(){
-        for(let i=0; i<5; i++){
-            rows.push(createData('Gingerbread', 356, 16.0, 49, 3.9));
-        }
-        setData(rows);
-        console.log(rows);
-    }
+// columns: [
+//     { title: 'Name', field: 'name' },
+//     { title: 'Surname', field: 'surname' },
+//     { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+//     {
+//       title: 'Birth Place',
+//       field: 'birthCity',
+//       lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
+//     },
+//   ],
+//   data: [
+//     { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+//     {
+//       name: 'Zerya Betül',
+//       surname: 'Baran',
+//       birthYear: 2017,
+//       birthCity: 34,
+//     },
+//   ],
 
-    React.useEffect(()=>{
-         getData();
-    },[])
-
-    const handleChangePage = (event, newPage) => {
-        console.log(data.length);
-        setPage(newPage);
-    };
-    
-    const handleChangeRowsPerPage = event => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    function tableSearch(e){
-        let value = e.target.value;
-        console.log(value);
-    }
-
-    return (
-        <div className={classes.content}>
-            <Paper className={classes.paper}>
-            
-                <Title title="Manage"/>
-              <TableContainer>
-                <Table className={classes.table} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>name</TableCell>
-                      <TableCell align="right">number</TableCell>
-                      <TableCell align="right">unit</TableCell>
-                      <TableCell align="right">something</TableCell>
-                      <TableCell align="right">manages</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data,ind) => (
-                      <TableRow key={data.name + String(ind)}>
-                        <TableCell component="th" scope="row">
-                          {data.name}
-                        </TableCell>
-                        <TableCell align="right">{data.number}</TableCell>
-                        <TableCell align="right">{data.unit}</TableCell>
-                        <TableCell align="right">{data.something}</TableCell>
-                        <TableCell align="right">{data.manages}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={rowsOptions}
-                component="div"
-                count={data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-            <div className={classes.searchArea}>
-                <TextField id="standard-basic" label="find" style={{width: '50%'}} onChange={tableSearch}/>
-            </div>
-            </Paper>
-        </div>
-    );
-}
-
-/* <div className={classes.tableHeader}> 
-                <Title title="Manage"/>
-                <TextField id="standard-basic" label="find" />
-            </div> */
+// new Promise(resolve => {
+//     setTimeout(() => {
+//     resolve();
+//     setState(prevState => {
+//         const data = [...prevState.data];
+//         data.splice(data.indexOf(oldData), 1);
+//         return { ...prevState, data };
+//     });
+//     }, 600);
+// }),
