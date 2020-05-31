@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { createIdMap } from 'utils/slice.helpers';
+import { SHOW_ERROR_FLAG } from 'features/errorSlice';
 
 const initialState = {
   byId: {},
@@ -42,7 +43,10 @@ const personsSlice = createSlice({
       },
       prepare: (groupId, errorPayload) => ({ 
         payload: errorPayload ,
-        meta: { groupId },
+        meta: { 
+          groupId,
+          [SHOW_ERROR_FLAG]: true,
+        },
         error: true 
       })
     }
