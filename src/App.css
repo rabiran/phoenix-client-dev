@@ -1,6 +1,6 @@
-body, html {
+/* body, html {
   overflow: auto;
-}
+} */
 
 .header-root {
   flex-grow: 1;

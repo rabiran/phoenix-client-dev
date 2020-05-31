@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import _ from "lodash";
+import TreeList from "../../../components/groups/groupTree";
 import {
   TextField,
   InputAdornment,
@@ -8,13 +10,37 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Typography,
-  Divider
+  Divider,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
+import {
+  selectRootGroupsIds,
+  selectGroupByid,
+} from "features/groups/groupsSlice";
 
-export default ({ formInputs, onChangeHandle, personDetails }) => {
+const TeamAndJob = ({
+  formInputs,
+  onChangeHandle,
+  personDetails,
+  rootIds,
+}) => {
+  const [treeExpanded, setTreeExpanded] = useState(rootIds);
+  const [treeSelected, setTreeSelected] = useState(null);
+  const [expentionExtended, setExpentionExtended] = useState(false);
+  const handleExpandedChange = (e, nodes) => setTreeExpanded(nodes);
+  const handleSelection = (e, node) => {
+    setTreeSelected(node);
+  };
+  useEffect(() => {
+    setTreeExpanded(rootIds);
+  }, [rootIds]);
+
+  useEffect(() => {
+    setExpentionExtended(false);
+  }, [personDetails]);
   const classes = styles();
+
   let disabled = _.isEmpty(personDetails);
   return (
     <div className={classes.teamAndJobContainer}>
@@ -23,17 +49,21 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
         <ExpansionPanel
+          onChange={(e, exp) => {
+            setExpentionExtended(exp);
+          }}
+          expanded={expentionExtended}
           disabled={disabled}
           classes={{
             root: classes.expansionPanelRoot,
             rounded: classes.expansionPanelRounded,
-            expanded: classes.expansionPanelExpanded
+            expanded: classes.expansionPanelExpanded,
           }}
         >
           <ExpansionPanelSummary
             classes={{
               root: classes.expansionPanelSummaryRoot,
-              expanded: classes.expansionPanelSummaryExpanded
+              expanded: classes.expansionPanelSummaryExpanded,
             }}
             expandIcon={<ExpandMore />}
             aria-controls="panel1-content"
@@ -43,7 +73,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails
             classes={{
-              root: classes.expendDetails
+              root: classes.expendDetails,
             }}
           >
             <div className={classes.treeGroupsTitle}>
@@ -53,7 +83,15 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               </Link>
             </div>
             <Divider />
-            <div className={classes.treeGroups}></div>
+            <div className={classes.treeGroups}>
+              <TreeList
+                itemHeight={26}
+                selected={treeSelected}
+                onNodeSelected={handleSelection}
+                expanded={treeExpanded}
+                onNodeToggle={handleExpandedChange}
+              />
+            </div>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
@@ -67,7 +105,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">תפקיד:</InputAdornment>
-            )
+            ),
           }}
         />
         <TextField
@@ -79,10 +117,16 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">תיאור:</InputAdornment>
-            )
+            ),
           }}
         />
       </div>
     </div>
   );
 };
+
+const mapStateToProps = (state) => ({
+    rootIds: selectRootGroupsIds(state)    
+});
+
+export default connect(mapStateToProps)(TeamAndJob);

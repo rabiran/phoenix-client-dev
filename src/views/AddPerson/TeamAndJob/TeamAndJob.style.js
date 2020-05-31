@@ -18,6 +18,7 @@ export default makeStyles(theme => {
             zIndex: '1',
         },
         expansionPanelRoot: {
+            backgroundColor: theme.palette.background.default,
             width: '48%',
             maxWidth: '540px',
             margin: '10px 0',
@@ -49,7 +50,8 @@ export default makeStyles(theme => {
             top: '4px',
         },
         treeGroups: {
-            height: '100px',
+            maxHeight: '200px',
+            overflow: 'auto',
         },
         root: {
             backgroundColor: 'white',
