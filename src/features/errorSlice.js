@@ -1,13 +1,12 @@
 import { createAction } from '@reduxjs/toolkit'
 
 export const SLICE_NANE = 'errors';
+export const SHOW_ERROR_FLAG = 'showError';
 
 const initialState = {
   error: null,
   isOpen: false
 };
-
-export const SHOW_ERROR_FLAG = 'showError';
 
 // actions
 export const hideError = createAction(`${SLICE_NANE}/hideError`);
