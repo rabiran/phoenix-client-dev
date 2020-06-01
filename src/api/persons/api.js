@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { fetchGroupMembers } from '../groups/api'
+import { addResponseInterceptors } from '../axiosHelpers';
+
 const BASE_URL = 'api/persons';
 
 const instance = axios.create({
   baseURL: BASE_URL,
 });
+
+addResponseInterceptors(instance);
 
 const fetchById = async id => {
   const res = (await instance.get(`/${id}`)).data;

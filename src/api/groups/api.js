@@ -1,11 +1,15 @@
 import axios from 'axios';
 import rootGroup from './rootGroup';
+import { addResponseInterceptors } from '../axiosHelpers';
+
 export const FETCH_DEPTH = 2;
 const BASE_URL = 'api/organizationGroups';
 
-const instance = axios.create({
+const instance =  axios.create({
   baseURL: BASE_URL,
 });
+
+addResponseInterceptors(instance);
 
 const fetchAll = async () => {
   return (await instance.get()).data.map(groupFromApiResponse);
