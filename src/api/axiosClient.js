@@ -14,14 +14,3 @@ const errorInterceptor = error => {
 axoisClient.interceptors.response.use(null, errorInterceptor);
 
 export default axoisClient;
-
-
-export function addResponseInterceptors(axiosInstance) {
-  axiosInstance.interceptors.response.use(
-    null,
-    errorInterceptor
-  );
-  return axiosInstance;
-}
-
-
