@@ -1,17 +1,10 @@
-import axios from 'axios';
 import { fetchGroupMembers } from '../groups/api'
-import { addResponseInterceptors } from '../axiosHelpers';
+import axoisClient from '../axiosClient';
 
-const BASE_URL = 'api/persons';
-
-const instance = axios.create({
-  baseURL: BASE_URL,
-});
-
-addResponseInterceptors(instance);
+const BASE_URL = '/persons';
 
 const fetchById = async id => {
-  const res = (await instance.get(`/${id}`)).data;
+  const res = (await axoisClient.get(`${BASE_URL}/${id}`)).data;
   return personFromApiResponse(res);
 }
 
