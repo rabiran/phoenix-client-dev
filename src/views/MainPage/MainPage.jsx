@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import Grid from '@material-ui/core/Grid';
+
 
 const listHeaderHeight = 70;
 const styles = makeStyles(theme => ({
@@ -36,9 +38,9 @@ const styles = makeStyles(theme => ({
   },
   listHeader: {
     height: listHeaderHeight,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    // display: 'flex',
+    // justifyContent: 'center',
+    // alignItems: 'center'
   },
   personDisplay: {
     padding: '20px 60px',
@@ -72,10 +74,14 @@ const MainPage = props => {
     <Box className={classes.root}>
       <div className={classes.sideBar}>
           {/* <div>עץ ארגוני</div> */}
-          <div className={classes.listHeader}>
+          <Grid container className={classes.listHeader} alignContent='center' justify='center' spacing={1}>
+            <Grid item><AccountTreeOutlinedIcon fontSize='large'/></Grid>
+            <Grid item><Typography variant="h4">עץ ארגוני</Typography></Grid>
+          </Grid>
+          {/* <div className={classes.listHeader}>
             <AccountTreeOutlinedIcon fontSize='large'/>
             <Typography variant="h4">עץ ארגוני</Typography>
-          </div>
+          </div> */}
           <ScrollFix className={classes.listContainer}>
             <GroupList 
               selected={selectedGroupId}
