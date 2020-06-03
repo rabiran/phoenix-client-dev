@@ -10,6 +10,8 @@ import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+
 
 
 const listHeaderHeight = 70;
@@ -38,9 +40,9 @@ const styles = makeStyles(theme => ({
   },
   listHeader: {
     height: listHeaderHeight,
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center'
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   personDisplay: {
     padding: '20px 60px',
@@ -82,6 +84,7 @@ const MainPage = props => {
             <AccountTreeOutlinedIcon fontSize='large'/>
             <Typography variant="h4">עץ ארגוני</Typography>
           </div> */}
+          <Divider/>
           <ScrollFix className={classes.listContainer}>
             <GroupList 
               selected={selectedGroupId}
