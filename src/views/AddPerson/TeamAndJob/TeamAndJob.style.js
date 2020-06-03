@@ -11,8 +11,13 @@ export default makeStyles(theme => {
                 height: '37px',
                 borderBottom: '3px solid rgb(252, 252, 252)'
             },
+            '&$expansionPanelSummaryFocused': {
+                backgroundColor: theme.palette.background.default,
+                borderRadius: '17px',
+            },
         },
         expansionPanelSummaryExpanded: {},
+        expansionPanelSummaryFocused: {},
         expansionPanelContainer: {
             height: '90px',
             zIndex: '1',

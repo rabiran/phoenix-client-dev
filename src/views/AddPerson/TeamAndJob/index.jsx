@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import _ from "lodash";
 import TreeList from "../../../components/groups/groupTree";
 import {
@@ -11,6 +11,7 @@ import {
   ExpansionPanelDetails,
   Typography,
   Divider,
+  ClickAwayListener,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
@@ -19,26 +20,33 @@ import {
   selectGroupByid,
 } from "features/groups/groupsSlice";
 
-const TeamAndJob = ({
-  formInputs,
-  onChangeHandle,
-  personDetails,
-  rootIds,
-}) => {
+export default ({ formInputs, onChangeHandle, personDetails }) => {
+  const rootIds = useSelector((state) => state.groups.rootGroupsIds);
   const [treeExpanded, setTreeExpanded] = useState(rootIds);
   const [treeSelected, setTreeSelected] = useState(null);
+  const groupById = useSelector((state) => state.groups.byId[treeSelected]);
   const [expentionExtended, setExpentionExtended] = useState(false);
+  const [hierarchyDisplay, setHierarchyDisplay] = useState("בחר צוות");
   const handleExpandedChange = (e, nodes) => setTreeExpanded(nodes);
   const handleSelection = (e, node) => {
+    const event = { target: { name: "directGroup", value: node } };
+    onChangeHandle(event);
     setTreeSelected(node);
   };
   useEffect(() => {
     setTreeExpanded(rootIds);
   }, [rootIds]);
-
   useEffect(() => {
     setExpentionExtended(false);
   }, [personDetails]);
+  useEffect(() => {
+    let hierarchyDisplay = groupById
+      ? groupById.hierarchy.concat(groupById.name).join(" / ")
+      : !_.isEmpty(personDetails)
+      ? personDetails.hierarchy.join(" / ")
+      : "בחר צוות";
+    setHierarchyDisplay(hierarchyDisplay);
+  }, [groupById, personDetails]);
   const classes = styles();
 
   let disabled = _.isEmpty(personDetails);
@@ -48,52 +56,55 @@ const TeamAndJob = ({
         <span>
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
-        <ExpansionPanel
-          onChange={(e, exp) => {
-            setExpentionExtended(exp);
-          }}
-          expanded={expentionExtended}
-          disabled={disabled}
-          classes={{
-            root: classes.expansionPanelRoot,
-            rounded: classes.expansionPanelRounded,
-            expanded: classes.expansionPanelExpanded,
-          }}
-        >
-          <ExpansionPanelSummary
-            classes={{
-              root: classes.expansionPanelSummaryRoot,
-              expanded: classes.expansionPanelSummaryExpanded,
+        <ClickAwayListener onClickAway={() => setExpentionExtended(false)}>
+          <ExpansionPanel
+            onChange={(e, exp) => {
+              setExpentionExtended(exp);
             }}
-            expandIcon={<ExpandMore />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-          >
-            <Typography>בחר צוות</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails
+            expanded={expentionExtended}
+            disabled={disabled}
             classes={{
-              root: classes.expendDetails,
+              root: classes.expansionPanelRoot,
+              rounded: classes.expansionPanelRounded,
+              expanded: classes.expansionPanelExpanded,
             }}
           >
-            <div className={classes.treeGroupsTitle}>
-              <span>בחר מחלקה אליה מגיע החייל</span>
-              <Link color="inherit" underline="none">
-                + הוסף מחלקה
-              </Link>
-            </div>
-            <Divider />
-            <div className={classes.treeGroups}>
-              <TreeList
-                itemHeight={26}
-                selected={treeSelected}
-                onNodeSelected={handleSelection}
-                expanded={treeExpanded}
-                onNodeToggle={handleExpandedChange}
-              />
-            </div>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+            <ExpansionPanelSummary
+              classes={{
+                root: classes.expansionPanelSummaryRoot,
+                expanded: classes.expansionPanelSummaryExpanded,
+                focused: classes.expansionPanelSummaryFocused,
+              }}
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography>{hierarchyDisplay}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails
+              classes={{
+                root: classes.expendDetails,
+              }}
+            >
+              <div className={classes.treeGroupsTitle}>
+                <span>בחר מחלקה אליה מגיע החייל</span>
+                <Link color="inherit" underline="none">
+                  + הוסף מחלקה
+                </Link>
+              </div>
+              <Divider />
+              <div className={classes.treeGroups}>
+                <TreeList
+                  itemHeight={26}
+                  selected={treeSelected}
+                  onNodeSelected={handleSelection}
+                  expanded={treeExpanded}
+                  onNodeToggle={handleExpandedChange}
+                />
+              </div>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </ClickAwayListener>
       </div>
       <div className={classes.descriptionContainer}>
         <TextField
@@ -124,9 +135,3 @@ const TeamAndJob = ({
     </div>
   );
 };
-
-const mapStateToProps = (state) => ({
-    rootIds: selectRootGroupsIds(state)    
-});
-
-export default connect(mapStateToProps)(TeamAndJob);

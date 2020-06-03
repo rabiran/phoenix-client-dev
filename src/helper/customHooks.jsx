@@ -10,7 +10,7 @@ export const useFormHandled = callback => {
     }
   };
   const handleInputChange = event => {
-    event.persist();
+    if (event.persist) event.persist();
     let name = event.target.name;
     let value = event.target.value;
     if (!inputs[name].validations) {

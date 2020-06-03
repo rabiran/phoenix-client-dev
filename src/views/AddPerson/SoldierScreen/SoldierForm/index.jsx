@@ -89,6 +89,9 @@ export default ({ soldier }) => {
             message: "יש למלא דרגה תקינה"
           }
         ]
+      },      
+      directGroup: {
+        value: "",
       },
       phone: {
         value: "",
