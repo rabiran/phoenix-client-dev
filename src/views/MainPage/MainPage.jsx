@@ -5,14 +5,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 
+const listHeaderHeight = 70;
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
     height: 'calc(100vh - 64px)',
     display: 'flex',
+    overflowY: 'hidden',
   },
   sideBar: {
       // maxHeight: 'calc(100vh - 64px)',
@@ -28,7 +32,13 @@ const styles = makeStyles(theme => ({
       // backgroundColor: '#FAFCFB'
   },
   listContainer: {
-    maxHeight: 'calc(100% - 19px)',
+    maxHeight: `calc(100% - ${listHeaderHeight}px)`,
+  },
+  listHeader: {
+    height: listHeaderHeight,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   personDisplay: {
     padding: '20px 60px',
@@ -61,14 +71,17 @@ const MainPage = props => {
   return (
     <Box className={classes.root}>
       <div className={classes.sideBar}>
-          <div>עץ ארגוני</div>
+          {/* <div>עץ ארגוני</div> */}
+          <div className={classes.listHeader}>
+            <AccountTreeOutlinedIcon fontSize='large'/>
+            <Typography variant="h4">עץ ארגוני</Typography>
+          </div>
           <ScrollFix className={classes.listContainer}>
             <GroupList 
               selected={selectedGroupId}
               onNodeSelected={handleSelection}
               onNodeToggle={handleExpandedChange}
-              expanded={expandedGroups}
-            />
+              expanded={expandedGroups}/>
           </ScrollFix>
       </div>
       

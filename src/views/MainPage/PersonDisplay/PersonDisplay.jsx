@@ -130,11 +130,11 @@ const SearchInput = ({ onValueChange, resetOn }) => {
       setValue(val);
       onValueChange(val);
     }
-  }
+  };
   useEffect(() => {
     setValue('');
     onValueChange('')
-  }, [resetOn, onValueChange])
+  }, [resetOn, onValueChange]);
   
   const classes = inputStyles();
 
@@ -149,8 +149,7 @@ const SearchInput = ({ onValueChange, resetOn }) => {
           <SearchIcon/>
         </InputAdornment>
       }
-      classes={{...classes}}
-  />
+      classes={{...classes}}/>
   );
 }
 
