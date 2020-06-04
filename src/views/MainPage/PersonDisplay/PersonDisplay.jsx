@@ -16,7 +16,7 @@ import _ from 'lodash';
 
 import faker from 'faker/locale/en';
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
-const fakePersons2 =  [...Array(10000).keys()].map(i => ({id: i, fullName: `elad${i}`}));
+const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
 const styles = makeStyles({
   root: {
@@ -86,7 +86,7 @@ const PersonDisplay = ({ groupId }) => {
   const [filterTerm, setFilter] = useState('');
   const setFilterDebounced = useRef(_.debounce(setFilter));
   // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = fakePersons2
+  const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));

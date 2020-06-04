@@ -14,7 +14,7 @@ import Divider from '@material-ui/core/Divider';
 
 
 
-const listHeaderHeight = 70;
+const listHeaderHeight = 90;
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
@@ -37,12 +37,13 @@ const styles = makeStyles(theme => ({
   },
   listContainer: {
     maxHeight: `calc(100% - ${listHeaderHeight}px)`,
+    // overflowY: 'auto',
   },
   listHeader: {
     height: listHeaderHeight,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   personDisplay: {
     padding: '20px 60px',
@@ -75,23 +76,17 @@ const MainPage = props => {
   return (
     <Box className={classes.root}>
       <div className={classes.sideBar}>
-          {/* <div>עץ ארגוני</div> */}
-          <Grid container className={classes.listHeader} alignContent='center' justify='center' spacing={1}>
-            <Grid item><AccountTreeOutlinedIcon fontSize='large'/></Grid>
-            <Grid item><Typography variant="h4">עץ ארגוני</Typography></Grid>
-          </Grid>
-          {/* <div className={classes.listHeader}>
-            <AccountTreeOutlinedIcon fontSize='large'/>
-            <Typography variant="h4">עץ ארגוני</Typography>
-          </div> */}
-          <Divider/>
-          <ScrollFix className={classes.listContainer}>
-            <GroupList 
-              selected={selectedGroupId}
-              onNodeSelected={handleSelection}
-              onNodeToggle={handleExpandedChange}
-              expanded={expandedGroups}/>
-          </ScrollFix>
+        <ListHeader/>
+        <Divider/>
+        <ScrollFix className={classes.listContainer}>
+        {/* <div className={classes.listContainer}> */}
+          <GroupList 
+            selected={selectedGroupId}
+            onNodeSelected={handleSelection}
+            onNodeToggle={handleExpandedChange}
+            expanded={expandedGroups}/>
+        </ScrollFix>
+        {/* </div> */}
       </div>
       
       <div className={classes.personDisplay}>
@@ -99,7 +94,24 @@ const MainPage = props => {
       </div>
     </Box>
   )
-  
+};
+
+const ListHeader = () => {
+  const classes = styles();
+  return (
+  <Grid 
+    container 
+    className={classes.listHeader} 
+    alignContent='center' 
+    justify='center' 
+    spacing={2}>
+    <Grid item>
+      <AccountTreeOutlinedIcon fontSize='large'/>
+    </Grid>
+    <Grid item>
+      <Typography variant="h4">עץ אירגוני</Typography>
+    </Grid>
+  </Grid>);
 };
 
 export default MainPage;
