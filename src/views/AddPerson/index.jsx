@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { styles, tabItemStyles } from "./addPerson.style";
@@ -11,15 +12,20 @@ import Box from "@material-ui/core/Box";
 export default function AddPerson() {
   const tabStyles = tabItemStyles();
   const classes = styles();
-  const [value, setValue] = React.useState(0);
-  const [currPerson, setCurrPerson] = React.useState({});
+  const [value, setValue] = useState(0);
+  const [currPerson, setCurrPerson] = useState({});
+  // const persons = useSelector((state) => state.persons.byIds);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const handleSearch = inputText => {
-    setCurrPerson(
-      persons.find(person => person.personalNumber === inputText) || {}
-    );
+  const handleSearch = (inputText) => {
+    if (inputText) {
+      setCurrPerson(
+        persons.find((person) => person.personalNumber === inputText) || {}
+      );
+    } else {
+      setCurrPerson({});
+    }
   };
 
   return (
@@ -65,5 +71,5 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
