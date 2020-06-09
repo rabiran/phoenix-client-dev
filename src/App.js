@@ -9,7 +9,7 @@ import ManagePage from './views/ManagePage/ManagePage';
 import LandingPage from './views/LandingPage/LandingPage';
 import TreeDemo from './views/TreeListDemo/TreeDemo';
 import Header from './components/common/Header';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import GridDemo from './views/GridDemo/GridDemo';
 import MainPage from './views/MainPage/MainPage';
 
@@ -21,11 +21,12 @@ function App() {
             <Header/>
             <Router>
               <Switch>
-                  <Route exact path='/' component={LandingPage} />
+                  {/* <Route exact path='/' component={LandingPage} /> */}
                   <Route path='/managepage' component={ManagePage} />
                   <Route path='/treeDemo' component={TreeDemo}/>
                   <Route path='/grid' component={GridDemo}/>
                   <Route path='/main' component={MainPage}/>
+                  <Redirect to='main'/>
               </Switch>
             </Router>
         </ThemeProvider>
