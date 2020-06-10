@@ -23,21 +23,12 @@ const styles = makeStyles(theme => ({
     overflowY: 'hidden',
   },
   sideBar: {
-      // maxHeight: 'calc(100vh - 64px)',
-      // maxHeight: 'calc(100% - 3px)',
-      // direction: 'rtl',
-      // maxHeight: '150px',
-      // overflowY: 'auto',
-      // maxWidth: '500px',
-      // minWidth: '300px',
       width: '20%',
       boxShadow: '0px 0px 5px 0px rgba(125,120,125,0.8)',
       backgroundColor: theme.palette.background.default
-      // backgroundColor: '#FAFCFB'
   },
   listContainer: {
     maxHeight: `calc(100% - ${listHeaderHeight}px)`,
-    // overflowY: 'auto',
   },
   listHeader: {
     height: listHeaderHeight,
@@ -46,10 +37,8 @@ const styles = makeStyles(theme => ({
     alignItems: 'center',
   },
   personDisplay: {
-    padding: '20px 60px',
+    margin: '20px auto',
     width: '60%',
-    // height: '500px'
-    // backgroundColor: '#E4EAEA'
   }
 }));
 
@@ -68,7 +57,7 @@ const MainPage = props => {
   }, [rootGroupsIds]);
 
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
-  const handleSelection = (e, groupId, item) => {
+  const handleSelection = (e, groupId) => {
     setSelectedGroupId(groupId);
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
