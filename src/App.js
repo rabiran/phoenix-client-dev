@@ -16,8 +16,8 @@ function App() {
     <Provider store={store}>
       <RTL>
         <ThemeProvider theme={theme}>
-            <Header/>
             <Router>
+              <Header/>
               <Switch>
                   <Route exact path='/' component={LandingPage} />
                   <Route path='/managepage' component={ManagePage} />
