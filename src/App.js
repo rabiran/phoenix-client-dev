@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './features/store';
 import './App.css';
-import { theme } from './theme.js';
+import { theme, darkTheme } from './theme.js';
 import { ThemeProvider } from '@material-ui/core/styles';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
@@ -15,7 +15,7 @@ function App() {
   return (
     <Provider store={store}>
       <RTL>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={darkTheme}>
             <Router>
               <Header/>
               <Switch>
