@@ -2,8 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './features/store';
 import './App.css';
-import { theme, darkTheme } from './theme.js';
-import { ThemeProvider } from '@material-ui/core/styles';
+import ThemeSwitch from 'features/contexts/ThemeSwitch';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
 import LandingPage from './views/LandingPage/LandingPage';
@@ -15,16 +14,16 @@ function App() {
   return (
     <Provider store={store}>
       <RTL>
-        <ThemeProvider theme={darkTheme}>
-            <Router>
-              <Header/>
-              <Switch>
-                  <Route exact path='/' component={LandingPage} />
-                  <Route path='/managepage' component={ManagePage} />
-                  <Route path='/treeDemo' component={TreeDemo}/>
-              </Switch>
-            </Router>
-        </ThemeProvider>
+        <ThemeSwitch>
+              <Router>
+                <Header/>
+                <Switch>
+                    <Route exact path='/' component={LandingPage} />
+                    <Route path='/managepage' component={ManagePage} />
+                    <Route path='/treeDemo' component={TreeDemo}/>
+                </Switch>
+              </Router>
+        </ThemeSwitch>
       </RTL>  
     </Provider>
   );

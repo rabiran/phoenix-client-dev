@@ -13,6 +13,7 @@ import Hotel from '@material-ui/icons/Hotel';
 import Brightness3 from '@material-ui/icons/Brightness3';
 import  { useHistory } from 'react-router-dom';
 import ItemMenu from 'components/shared/menu/ItemMenu';
+import useTheme from 'features/contexts/UseTheme';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -23,11 +24,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  const themeProvider = useTheme();
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const currentUrl = history.location.pathname;
-  
+
   const menuItems = [{title: 'דף הבית', url: '/', icon: <Home fontSize="small" />, current: currentUrl === '/'}, 
                      {title: 'עמוד ניהול', url: '/managePage', icon: <SupervisorAccount fontSize="small" />, current: currentUrl === '/managePage'},
                      {title: 'עץ', url: '/treeDemo', icon: <Hotel fontSize="small" />, current: currentUrl === '/treeDemo'},
@@ -44,6 +46,7 @@ export default function Header() {
   const redirect = (url) => {
     history.push(url);
     handleClose();
+    themeProvider.themeSwitch();
   }
 
   return (
