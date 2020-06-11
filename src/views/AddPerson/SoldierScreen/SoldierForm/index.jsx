@@ -1,4 +1,5 @@
 import React, { useRef, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import PersonalInfo from "../../PersonalInfo";
 import TeamAndJob from "../../TeamAndJob";
@@ -6,15 +7,36 @@ import styles from "./soldierForm.style";
 import StyledButton from "../../../../components/shared/styleComponent/StyleButton";
 import { useFormHandled } from "../../../../helper/customHooks";
 import { PersonValidate } from "../../../../helper/personalValidation";
+import { updateSoldierLoading} from "../../../../features/apiComponents/addSoldierTab/addSoldierTabSlice";
+import MessageDialog from "../../../../components/shared/dialog/messageDialog";
+import {  
+  Backdrop,
+  CircularProgress,  
+} from "@material-ui/core";
 
 export default ({ soldier }) => {
+  const fieldToUpdate = [
+    "firstName",
+    "lastName",
+    "rank",
+    "job",
+    "mail",
+    "phone",
+    "mobilePhone",
+    "address",
+  ];
   const classes = styles();
+  const { loadingUpdate, successUpdate, errorUpdate } = useSelector(
+    (state) => state.component.addSoldierTab
+  );
+  const dispatch = useDispatch();
   const {
     inputs,
+    isValidForm,
     handleInputChange,
-    // handleSubmit,
+    handleSubmit,
     initializeInputs,
-    updateInputs
+    updateInputs,
   } = useFormHandled();
   const initialRef = useRef(null);
   if (initialRef.current === null) {
@@ -27,15 +49,15 @@ export default ({ soldier }) => {
           {
             func: PersonValidate.namePart,
             message: "שם מורכב מאותיות בלבד",
-            avoidWrite: true
+            avoidWrite: true,
           },
           {
             func: PersonValidate.leastTwoLetters,
             message: "שם מורכב מלפחות 2 אותיות",
-            avoidWrite: false
-          }
+            avoidWrite: false,
+          },
         ],
-        isValid: true
+        isValid: true,
       },
       lastName: {
         required: true,
@@ -45,15 +67,15 @@ export default ({ soldier }) => {
           {
             func: PersonValidate.namePart,
             message: "שם מורכב מאותיות בלבד",
-            avoidWrite: true
+            avoidWrite: true,
           },
           {
             func: PersonValidate.leastTwoLetters,
             message: "שם מורכב מלפחות 2 אותיות",
-            avoidWrite: false
-          }
+            avoidWrite: false,
+          },
         ],
-        isValid: true
+        isValid: true,
       },
       identityCard: {
         required: true,
@@ -64,19 +86,19 @@ export default ({ soldier }) => {
           {
             func: PersonValidate.maxNineDigit,
             message: "מס' ת.ז צריך להיות בין חמש לתשע ספרות",
-            avoidWrite: true
+            avoidWrite: true,
           },
           {
             func: PersonValidate.minFiveDigit,
             message: "מס' ת.ז צריך להיות בין חמש לתשע ספרות",
-            avoidWrite: false
+            avoidWrite: false,
           },
           {
             func: PersonValidate.identityCard,
             message: "מס' הת.ז אינו תקין",
-            avoidWrite: false
-          }
-        ]
+            avoidWrite: false,
+          },
+        ],
       },
       rank: {
         required: true,
@@ -86,10 +108,10 @@ export default ({ soldier }) => {
         validations: [
           {
             func: PersonValidate.rank,
-            message: "יש למלא דרגה תקינה"
-          }
-        ]
-      },      
+            message: "יש למלא דרגה תקינה",
+          },
+        ],
+      },
       directGroup: {
         value: "",
       },
@@ -100,9 +122,9 @@ export default ({ soldier }) => {
         validations: [
           {
             func: PersonValidate.phone,
-            message: "מס' טלפון לא חוקי"
-          }
-        ]
+            message: "מס' טלפון לא חוקי",
+          },
+        ],
       },
       mobilePhone: {
         value: "",
@@ -111,26 +133,26 @@ export default ({ soldier }) => {
         validations: [
           {
             func: PersonValidate.mobilePhone,
-            message: "מס' נייד לא חוקי"
-          }
-        ]
+            message: "מס' נייד לא חוקי",
+          },
+        ],
       },
-      email: {
+      mail: {
         value: "",
         errorMessage: "",
         isValid: true,
         validations: [
           {
             func: PersonValidate.email,
-            message: 'כתובת דוא"ל לא חוקית'
-          }
-        ]
+            message: 'כתובת דוא"ל לא חוקית',
+          },
+        ],
       },
       address: {
-        value: ""
+        value: "",
       },
       city: {
-        value: ""
+        value: "",
       },
       zipCode: {
         value: "",
@@ -139,14 +161,14 @@ export default ({ soldier }) => {
         validations: [
           {
             func: PersonValidate.zipCode,
-            message: "מיקוד צריך להכיל 7 ספרות"
+            message: "מיקוד צריך להכיל 7 ספרות",
           },
           {
             func: PersonValidate.maxSeven,
             message: "מיקוד צריך להכיל 7 ספרות",
-            avoidWrite: true
-          }
-        ]
+            avoidWrite: true,
+          },
+        ],
       },
       homeNumber: {
         value: "",
@@ -156,19 +178,19 @@ export default ({ soldier }) => {
           {
             func: PersonValidate.homeNumber,
             message: "",
-            avoidWrite: true
-          }
-        ]
+            avoidWrite: true,
+          },
+        ],
       },
       withClearance: {
-        value: "No classification"
+        value: "No classification",
       },
       job: {
-        value: ""
+        value: "",
       },
       description: {
-        value: ""
-      }
+        value: "",
+      },
     });
     initialRef.current = "Done";
   }
@@ -178,42 +200,42 @@ export default ({ soldier }) => {
       firstName: {
         value: soldier.firstName || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       lastName: {
         value: soldier.lastName || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       identityCard: {
         value: soldier.identityCard || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       rank: {
         value: soldier.rank || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       phone: {
         value: soldier.phone ? soldier.phone[0] : "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       mobilePhone: {
         value: soldier.mobilePhone ? soldier.mobilePhone[0] : "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
-      email: {
+      mail: {
         value: soldier.mail || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       address: {
         value: soldier.address || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       withClearance: {
         value: !soldier.clearance
@@ -222,12 +244,12 @@ export default ({ soldier }) => {
           ? "No classification"
           : "There is a classification",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       job: {
         value: soldier.job || "",
         errorMessage: "",
-        isValid: true
+        isValid: true,
       },
       zipCode: {
         value: "",
@@ -250,26 +272,64 @@ export default ({ soldier }) => {
         isValid: true,
       },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [soldier]);
 
+  const updateSoldier = (e) => {
+    const fullPersonChange = handleSubmit();
+    const updatePerson = _.pick(fullPersonChange, fieldToUpdate);
+    const directGroup = fullPersonChange.directGroup
+      ? fullPersonChange.directGroup
+      : null;
+    updatePerson.mobilePhone = updatePerson.mobilePhone
+      ? [updatePerson.mobilePhone]
+      : [];
+    updatePerson.phone = updatePerson.phone ? [updatePerson.phone] : [];
+    dispatch(
+      updateSoldierLoading({
+        personId: soldier.id,
+        personUpdate: updatePerson,
+        directGroup,
+      })
+    );
+  };
+
   return (
-    <form>
-      <PersonalInfo
-        formInputs={inputs}
-        onChangeHandle={handleInputChange}
-        personDetails={soldier}
-      />
-      <TeamAndJob
-        formInputs={inputs}
-        onChangeHandle={handleInputChange}
-        personDetails={soldier}
-      />
-      <div className={classes.submitContainer}>
-        <StyledButton disabled={_.isEmpty(soldier)}>
-          העבר לאישור קב"ט
-        </StyledButton>
-      </div>
-    </form>
+    <> 
+      <MessageDialog fullName={soldier.fullName} successUpdate={successUpdate}/>
+      <Backdrop className={classes.backdrop} open={loadingUpdate}>
+        <CircularProgress color="primary" />
+      </Backdrop>
+      <form method={"post"}>        
+        <PersonalInfo
+          formInputs={inputs}
+          onChangeHandle={handleInputChange}
+          personDetails={soldier}
+        />
+        <TeamAndJob
+          formInputs={inputs}
+          onChangeHandle={handleInputChange}
+          personDetails={soldier}
+        />
+        <div className={classes.submitContainer}>
+          <StyledButton
+            onClick={updateSoldier}
+            disabled={_.isEmpty(soldier) || !isValidForm}
+          >
+            שמור שינויים
+          </StyledButton>
+          {/* <span>
+          <Typography
+            color={"secondary"}
+            variant={"subtitle2"}
+            classes={{              
+              subtitle2: classes.errorMessageSubtitle2,
+            }}
+          >
+            {"אירעה שגיאה במהלך שמירת השינויים"}
+          </Typography>
+        </span> */}
+        </div>
+      </form>
+    </>
   );
 };

@@ -1,5 +1,4 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { createIdMap } from 'utils/slice.helpers';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   byId: {},
@@ -9,10 +8,10 @@ const personsSlice = createSlice({
   name: 'persons',
   initialState,
   reducers: {
-    fetchPersons(state, action) {
-      const person = action.payload;
-      state.byId[person.id] = person
-    },          
+    setPersons(state, action) {
+      const person = action.payload.person;
+      state.byId[person.id] = person;
+    },
   },
 });
 
@@ -52,7 +51,7 @@ export const getPersons = state => state.persons.byId;
 }; */
 
 // Actions
-export const personAction = personsSlice.actions;
+export const { setPersons } = personsSlice.actions;
 
 /* *
  * dispatch `fetchChildrenRequest` action for the given `id`, only 

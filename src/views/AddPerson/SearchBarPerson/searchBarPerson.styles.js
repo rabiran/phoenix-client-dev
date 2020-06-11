@@ -2,13 +2,21 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles(theme => {
     return {
+        errorMessageRoot: {
+            position:'relative',
+            top:'15px',
+            marginLeft: '13px',
+        },
+        errorMessageSubtitle2: {
+            fontWeight: "bold",
+        },
         updateLink:{
             cursor: 'pointer',
         },
         root: {
             backgroundColor: 'white',
             borderRadius: '100px',
-            marginTop: '8px',
+            marginTop: '11px',
             width: '337px',
             paddingLeft: '12px',
             marginRight: '10px',
@@ -30,7 +38,7 @@ export default makeStyles(theme => {
         },
         containerSearch: {
             display: 'flex',
-            alignItems: 'baseline'
+            alignItems: 'stretch'
         },
         SearchInput: {
             display: 'flex',

@@ -31,12 +31,13 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">שם פרטי:</InputAdornment>
             )
           }}
         />
-        <TextField
+        <TextField          
           classes={{ root: classes.rootFormControl }}
           disabled={disabled}
           onChange={onChangeHandle}
@@ -47,6 +48,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
             !formInputs.lastName.isValid ? formInputs.lastName.errorMessage : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">שם משפחה:</InputAdornment>
             )
@@ -54,7 +56,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
         />
         <TextField
           classes={{ root: classes.rootFormControl }}
-          disabled={disabled}
+          disabled
           onChange={onChangeHandle}
           name="identityCard"
           error={!formInputs.identityCard.isValid}
@@ -65,6 +67,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">תעודת זהות:</InputAdornment>
             )
@@ -81,6 +84,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
             !formInputs.rank.isValid ? formInputs.rank.errorMessage : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">דרגה:</InputAdornment>
             )
@@ -102,6 +106,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
             !formInputs.phone.isValid ? formInputs.phone.errorMessage : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">טלפון:</InputAdornment>
             )
@@ -120,6 +125,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">נייד:</InputAdornment>
             )
@@ -129,13 +135,14 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           classes={{ root: classes.rootFormControl }}
           disabled={disabled}
           onChange={onChangeHandle}
-          name="email"
-          error={!formInputs.email.isValid}
-          value={formInputs.email.value}
+          name="mail"
+          error={!formInputs.mail.isValid}
+          value={formInputs.mail.value}
           helperText={
-            !formInputs.email.isValid ? formInputs.email.errorMessage : ""
+            !formInputs.mail.isValid ? formInputs.mail.errorMessage : ""
           }
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">דוא"ל:</InputAdornment>
             )
@@ -151,6 +158,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           name="address"
           value={formInputs.address.value}
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">כתובת:</InputAdornment>
             )
@@ -163,6 +171,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           name="city"
           value={formInputs.city.value}
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">ישוב:</InputAdornment>
             )
@@ -180,6 +189,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               !formInputs.zipCode.isValid ? formInputs.zipCode.errorMessage : ""
             }
             InputProps={{
+              classes: {input: classes.input},
               startAdornment: (
                 <InputAdornment position="start">מיקוד:</InputAdornment>
               )
@@ -192,6 +202,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
             name="homeNumber"
             value={formInputs.homeNumber.value}
             InputProps={{
+              classes: {input: classes.input},
               startAdornment: (
                 <InputAdornment position="start">מס' בית:</InputAdornment>
               )

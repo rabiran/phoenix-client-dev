@@ -7,6 +7,9 @@ import teal from '@material-ui/core/colors/teal';
 export const theme = responsiveFontSizes(createMuiTheme({
     direction: 'rtl',
     palette: {
+      link: {
+        dialog: '#e65c00'
+      },
       background: {
         default: 'white',
       },

@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "lodash";
-import { Link, InputLabel, InputBase } from "@material-ui/core";
+import {
+  Link,
+  InputLabel,
+  InputBase,
+  CircularProgress,
+  Typography,
+} from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
 import StyledButton from "../../../components/shared/styleComponent/StyleButton";
 
-export default ({ onClickSearch, person }) => {
-  const [personalNumber, setPersonalNumber] = React.useState(
+export default ({ onClickSearch, person, loading, error, errorMessage }) => {
+  const [personalNumber, setPersonalNumber] = useState(
     !_.isEmpty(person) ? person.personalNumber : ""
   );
-  const [errorLabel, setErrorLabel] = React.useState("");
+  const [errorLabel, setErrorLabel] = useState("");
   const classes = styles();
   const handleSearch = (prsnlNmbr) => {
     onClickSearch(prsnlNmbr);
@@ -25,7 +31,7 @@ export default ({ onClickSearch, person }) => {
   };
 
   const handleKeyUp = (event) => {
-    if (event.key === "Enter" && errorLabel == "") {
+    if (event.key === "Enter" && errorLabel === "") {
       handleSearch(personalNumber);
     }
   };
@@ -51,6 +57,21 @@ export default ({ onClickSearch, person }) => {
         >
           חפש
         </StyledButton>
+        {loading && <CircularProgress />}
+        {!_.isEmpty(error) && !loading && (
+          <span>
+            <Typography
+              color={"secondary"}
+              variant={"subtitle2"}
+              classes={{
+                root: classes.errorMessageRoot,
+                subtitle2: classes.errorMessageSubtitle2,
+              }}
+            >
+              {errorMessage}
+            </Typography>
+          </span>
+        )}
       </div>
     );
   } else {

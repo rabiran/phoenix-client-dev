@@ -7,9 +7,14 @@ export default makeStyles(theme => {
             marginTop: '4px',
             height: '40px',
         },
-        prsnlinfSubContainer: {           
+        input: {
+            "&:-webkit-autofill": {
+                WebkitBoxShadow: '0 0 0 1000px rgb(199, 216, 216) inset'
+            }
+        },
+        prsnlinfSubContainer: {
             display: 'flex',
-            flexDirection: 'column',            
+            flexDirection: 'column',
             minWidth: '169px',
             maxWidth: '290px',
             margin: '0px 15px',
@@ -32,7 +37,7 @@ export default makeStyles(theme => {
                 transformOrigin: '0% 0%',
                 transform: 'rotate(45deg)',
                 zIndex: 1,
-              },
+            },
         },
         prsnlinfAddressContainer: {
             display: 'flex',
@@ -41,11 +46,11 @@ export default makeStyles(theme => {
         divider: {
             borderLeft: '1px dashed grey',
             margin: '0 10px',
-            height:'192px',
+            height: '192px',
         },
-        prsnlinfsabatContainer : {              
+        prsnlinfsabatContainer: {
             minWidth: '246px',
-            maxWidth: '246px',       
+            maxWidth: '246px',
         },
     }
 });

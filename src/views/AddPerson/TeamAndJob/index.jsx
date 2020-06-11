@@ -15,10 +15,6 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
-import {
-  selectRootGroupsIds,
-  selectGroupByid,
-} from "features/groups/groupsSlice";
 
 export default ({ formInputs, onChangeHandle, personDetails }) => {
   const rootIds = useSelector((state) => state.groups.rootGroupsIds);
@@ -38,13 +34,16 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
   }, [rootIds]);
   useEffect(() => {
     setExpentionExtended(false);
+    setTreeSelected(null);
   }, [personDetails]);
   useEffect(() => {
-    let hierarchyDisplay = groupById
+    let hierarchyDisplay = _.isEmpty(personDetails)
+      ? "בחר צוות"
+      : groupById
       ? groupById.hierarchy.concat(groupById.name).join(" / ")
       : !_.isEmpty(personDetails)
       ? personDetails.hierarchy.join(" / ")
-      : "בחר צוות";
+      : null
     setHierarchyDisplay(hierarchyDisplay);
   }, [groupById, personDetails]);
   const classes = styles();
