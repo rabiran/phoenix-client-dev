@@ -30,14 +30,13 @@ const headerStyles = makeStyles({
   root: {
     marginBottom: '3px',
   },
-  groupName: {
+  groupTitle: {
     display: 'flex',
     alignItems: 'baseline',
-    // width: '13%', 
-    minWidth: '130px'
+    minWidth: '130px',
   },
   memberCount: {
-    marginLeft: '7px'
+    marginLeft: '7px',
   }
 });
 
@@ -64,15 +63,20 @@ const PersonDisplay = ({ groupId }) => {
     .filter(p => p.fullName.startsWith(filterTerm));
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const group = useSelector(state => selectGroupByid(state, groupId));
-  // const groupName = group ? group.name : '...';
-  const groupName = group ? group.hierarchy.concat([group.name]).join('/') : '...';
+  const groupName = group ? group.name : '...';
+  const hierarchy = group ? group.hierarchy : [];
 
   return (<>
-    <Grid container spacing={2} alignItems="flex-end" justify='space-between' className={headerClasses.root}> 
-      <Grid item className={headerClasses.groupName}>
-        {/* { group ? group.hierarchy.map()} */}
-        <Typography display="inline" variant="h4">{groupName}</Typography>
-        <Typography className={headerClasses.memberCount} display="inline" variant="body1">({persons.length})</Typography>
+    <Grid container spacing={2} alignItems='flex-end' justify='space-between' className={headerClasses.root}> 
+      <Grid item className={headerClasses.groupTitle}>
+        <Typography 
+          color='textSecondary' 
+          variant='h6' 
+          component='p'>
+          {`${hierarchy.join(' / ')}${hierarchy.length !== 0 ?  ' / ' : ''}` }
+        </Typography>
+        <Typography variant='h6' component='p'>{groupName}</Typography>
+        <Typography className={headerClasses.memberCount} variant="body2">({persons.length})</Typography>
       </Grid>
       <Grid item>
         <SearchInput
