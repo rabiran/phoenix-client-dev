@@ -90,7 +90,7 @@ const ListHeader = () => {
   return (
   <Grid 
     container 
-    className={classes.listHeader} 
+    className={classes.listHeader}
     alignContent='center' 
     justify='center' 
     spacing={2}>

@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useSelector } from 'react-redux';
-import Spinner from 'components/common/Loading/Spinner'
+import Spinner from 'components/shared/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
 import PersonGrid from 'components/persons/personGrid';
