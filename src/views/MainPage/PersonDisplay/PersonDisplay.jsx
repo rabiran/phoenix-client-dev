@@ -61,17 +61,25 @@ const PersonDisplay = ({ groupId }) => {
   // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
   const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
+  const group = useSelector(state => selectGroupByid(state, groupId)) || {};
+  // group name and hierarchy
+  const {
+    name: groupName = '...',
+    hierarchy = []
+  } = group;
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
-  const group = useSelector(state => selectGroupByid(state, groupId));
-  const groupName = group ? group.name : '...';
-  const hierarchy = group ? group.hierarchy : [];
 
   return (<>
-    <Grid container spacing={2} alignItems='flex-end' justify='space-between' className={headerClasses.root}> 
+    <Grid 
+      container
+      spacing={2}
+      alignItems='flex-end'
+      justify='space-between'
+      className={headerClasses.root}> 
       <Grid item className={headerClasses.groupTitle}>
-        <Typography 
-          color='textSecondary' 
-          variant='h6' 
+        <Typography
+          color='textSecondary'
+          variant='h6'
           component='p'>
           {`${hierarchy.join(' / ')}${hierarchy.length !== 0 ?  ' / ' : ''}` }
         </Typography>
@@ -83,8 +91,7 @@ const PersonDisplay = ({ groupId }) => {
           onValueChange={filterInputChange}
           resetOn={groupId}
           validator={inputValidate}
-          placeholder='חפש אנשים בקבוצה'
-        />
+          placeholder='חפש אנשים בקבוצה' />
       </Grid>
     </Grid>
     <Divider/>
