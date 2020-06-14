@@ -3,10 +3,9 @@ import React from 'react';
 import { lightTheme, darkTheme } from 'theme.js';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import ThemeContext from './ThemeContext';
-import { GlobalStyles } from "./GlobalStyles.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-export default function ThemeSwitch(props) {
+export default function ThemeProvider(props) {
     const [isDark, setIsDark] = React.useState(false);
 
     const themeSwitch = () => {

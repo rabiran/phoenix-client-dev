@@ -20,7 +20,7 @@ export default function ItemMenu(props) {
     const items = [];
 
     for(const item of props.items) {
-        items.push(<MenuItem key={item.title} onClick={()=> props.onClickMethod(item.url)} >
+        items.push(<MenuItem key={item.title} onClick={()=> item.onClickMethod(item.param)} >
                         <ListItemIcon className={item.current ? classes.focused : null}>
                             {item.icon}
                         </ListItemIcon>

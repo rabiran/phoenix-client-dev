@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './features/store';
 import './App.css';
-import ThemeSwitch from 'features/contexts/ThemeSwitch';
+import ThemeProvider from 'features/contexts/Theme/ThemeProvider';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
 import LandingPage from './views/LandingPage/LandingPage';
@@ -14,7 +14,7 @@ function App() {
   return (
     <Provider store={store}>
       <RTL>
-        <ThemeSwitch>
+        <ThemeProvider>
               <Router>
                 <Header/>
                 <Switch>
@@ -23,7 +23,7 @@ function App() {
                     <Route path='/treeDemo' component={TreeDemo}/>
                 </Switch>
               </Router>
-        </ThemeSwitch>
+        </ThemeProvider>
       </RTL>  
     </Provider>
   );

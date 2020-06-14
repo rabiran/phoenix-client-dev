@@ -13,7 +13,7 @@ import Hotel from '@material-ui/icons/Hotel';
 import Brightness3 from '@material-ui/icons/Brightness3';
 import  { useHistory } from 'react-router-dom';
 import ItemMenu from 'components/shared/menu/ItemMenu';
-import useTheme from 'features/contexts/UseTheme';
+import useTheme from 'features/contexts/Theme/UseTheme';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -30,10 +30,10 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const currentUrl = history.location.pathname;
 
-  const menuItems = [{title: 'דף הבית', url: '/', icon: <Home fontSize="small" />, current: currentUrl === '/'}, 
-                     {title: 'עמוד ניהול', url: '/managePage', icon: <SupervisorAccount fontSize="small" />, current: currentUrl === '/managePage'},
-                     {title: 'עץ', url: '/treeDemo', icon: <Hotel fontSize="small" />, current: currentUrl === '/treeDemo'},
-                     {title: 'החלף רקע', url: '/treeDemo', icon: <Brightness3 fontSize="small" />, current: false}]
+  const menuItems = [{title: 'דף הבית', param: '/', icon: <Home fontSize="small" />, current: currentUrl === '/', onClickMethod: (e) => redirect(e)}, 
+                     {title: 'עמוד ניהול', param: '/managePage', icon: <SupervisorAccount fontSize="small" />, current: currentUrl === '/managePage', onClickMethod: (e) => redirect(e)},
+                     {title: 'עץ', param: '/treeDemo', icon: <Hotel fontSize="small" />, current: currentUrl === '/treeDemo', onClickMethod: (e) => redirect(e)},
+                     {title: 'החלף רקע', param: '', icon: <Brightness3 fontSize="small" />, current: false, onClickMethod: (e) => changeTheme(e)}]
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,6 +45,10 @@ export default function Header() {
 
   const redirect = (url) => {
     history.push(url);
+    handleClose();
+  }
+  
+  const changeTheme = () => {
     handleClose();
     themeProvider.themeSwitch();
   }
