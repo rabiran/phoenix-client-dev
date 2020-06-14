@@ -7,7 +7,7 @@ import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
 import LandingPage from './views/LandingPage/LandingPage';
 import TreeDemo from './views/TreeListDemo/TreeDemo';
-import Header from './components/common/Header';
+import Header from './components/common/Header/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
