@@ -39,35 +39,36 @@ export default function HeaderMenu(props) {
             id="header-menu"
             anchorEl={props.anchorEl}
             keepMounted
-            // anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            // transformOrigin={{ vertical: "top", horizontal: "center" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            // transformOrigin={{ vertical: "bottom", horizontal: "right" }}
             open={Boolean(props.anchorEl)}
             onClose={props.handleClose}
+            getContentAnchorEl={null}
         >
             {/* {items} */}
             <MenuItem onClick={()=> props.redirect('/')} >
-                <ListItemIcon className={current ? classes.focused : null}>
+                <ListItemIcon className={current === '/' ? classes.focused : null}>
                     <Home />
                 </ListItemIcon>
-                <ListItemText primary='דף הבית' className={current ? classes.focused : null}/>
+                <ListItemText primary='דף הבית' className={current === '/' ? classes.focused : null}/>
             </MenuItem>
             <MenuItem onClick={()=> props.redirect('/managePage')} >
-                <ListItemIcon className={current ? classes.focused : null}>
+                <ListItemIcon className={current === '/managePage'  ? classes.focused : null}>
                     <SupervisorAccount />
                 </ListItemIcon>
-                <ListItemText primary='עמוד ניהול' className={current ? classes.focused : null}/>
+                <ListItemText primary='עמוד ניהול' className={current === '/managePage' ? classes.focused : null}/>
             </MenuItem>
             <MenuItem onClick={()=> props.redirect('/treeDemo')} >
-                <ListItemIcon className={current ? classes.focused : null}>
+                <ListItemIcon className={current === '/treeDemo' ? classes.focused : null}>
                     <Hotel />
                 </ListItemIcon>
-                <ListItemText primary='עץ' className={current ? classes.focused : null}/>
+                <ListItemText primary='עץ' className={current === '/treeDemo'  ? classes.focused : null}/>
             </MenuItem>
             <MenuItem onClick={()=> props.changeTheme()} >
-                <ListItemIcon className={current ? classes.focused : null}>
+                <ListItemIcon>
                     <Brightness3 />
                 </ListItemIcon>
-                <ListItemText primary='החלף רקע' className={current ? classes.focused : null}/>
+                <ListItemText primary='החלף רקע' />
             </MenuItem>
         </Menu>
     );

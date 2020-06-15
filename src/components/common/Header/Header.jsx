@@ -10,12 +10,18 @@ import Navigation from '@material-ui/icons/Navigation';
 import  { useHistory } from 'react-router-dom';
 import HeaderMenu from 'components/common/Header/HeaderMenu';
 import useTheme from 'features/contexts/Theme/UseTheme';
+import Avatar from '@material-ui/core/Avatar';
+import Logo from "assets/logo.png";
 
 const useStyles = makeStyles((theme) => ({
-
   Spacing: {
       marginRight: theme.spacing(2),
   },
+  logo: {
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  }
 
 }));
 
@@ -63,7 +69,7 @@ export default function Header() {
           <Typography variant="h6" className='header-title' >
             עוף החול נייטרו
           </Typography>
-          
+          <Avatar variant='square' src={Logo} onClick= {() => redirect('/')} className={classes.logo}/>
         </Toolbar>
       </AppBar>
     </div>
