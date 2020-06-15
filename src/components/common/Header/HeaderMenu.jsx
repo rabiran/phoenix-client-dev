@@ -4,35 +4,29 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-// import InboxIcon from '@material-ui/icons/MoveToInbox';
-// import DraftsIcon from '@material-ui/icons/Drafts';
-// import SendIcon from '@material-ui/icons/Send';
 import Home from '@material-ui/icons/Home';
 import SupervisorAccount from '@material-ui/icons/SupervisorAccount';
 import Hotel from '@material-ui/icons/Hotel';
 import Brightness3 from '@material-ui/icons/Brightness3';
 
-//theme.palette.primary.main
 const useStyles = makeStyles((theme) => ({
     focused: {
         color: theme.palette.primary.main,
     },
 }));
 
+/**
+ * 
+ * @param handleClose close menu method 
+ * @param anchorEl  opens menu and sets position for menu
+ * @param redirect method that redirects page
+ * @param changeTheme method that changes theme
+ * @param currentUrl currentUrl, used to color currentpage on menu.
+ */
 export default function HeaderMenu(props) {
     const classes = useStyles();
 
     let current = props.currentUrl
-    // const items = [];
-
-    // for(const item of props.items) {
-    //     items.push(<MenuItem key={item.title} onClick={()=> item.onClickMethod(item.param)} >
-    //                     <ListItemIcon className={item.current ? classes.focused : null}>
-    //                         {item.icon}
-    //                     </ListItemIcon>
-    //                     <ListItemText primary={item.title} className={item.current ? classes.focused : null}/>
-    //                </MenuItem>)
-    // }
 
     return (
         <Menu
@@ -40,12 +34,10 @@ export default function HeaderMenu(props) {
             anchorEl={props.anchorEl}
             keepMounted
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            // transformOrigin={{ vertical: "bottom", horizontal: "right" }}
             open={Boolean(props.anchorEl)}
             onClose={props.handleClose}
             getContentAnchorEl={null}
         >
-            {/* {items} */}
             <MenuItem onClick={()=> props.redirect('/')} >
                 <ListItemIcon className={current === '/' ? classes.focused : null}>
                     <Home />

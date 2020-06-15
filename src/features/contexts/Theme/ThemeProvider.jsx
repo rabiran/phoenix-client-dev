@@ -16,10 +16,8 @@ export default function ThemeProvider(props) {
         themeSwitch: themeSwitch
     }
 
-
     return (
         <ThemeContext.Provider value={contextValue}>
-            
             <MuiThemeProvider theme={isDark ? darkTheme : lightTheme}>
                 <CssBaseline />
                 {props.children}
