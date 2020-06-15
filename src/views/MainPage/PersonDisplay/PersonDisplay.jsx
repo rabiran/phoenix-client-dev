@@ -22,7 +22,7 @@ const styles = makeStyles({
     // width: '80%'
   },
   content: {
-    height:'75%',
+    height:'100%',
   },
 });
 
@@ -58,8 +58,8 @@ const PersonDisplay = ({ groupId }) => {
   const filterInputChange = useCallback(value => {
     setFilterDebounced.current(value);
   }, [setFilterDebounced]) 
-  // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = fakePersons
+  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+  // const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   // group name and hierarchy

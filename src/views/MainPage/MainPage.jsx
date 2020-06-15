@@ -11,6 +11,8 @@ import PersonDisplay from './PersonDisplay/PersonDisplay';
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
+import TreeIcon from 'components/shared/icons/Tree';
+ 
 
 
 
@@ -95,7 +97,9 @@ const ListHeader = () => {
     justify='center' 
     spacing={2}>
     <Grid item>
-      <AccountTreeOutlinedIcon fontSize='large'/>
+     <TreeIcon fontSize='large' />
+    {/* <img src="sitemap-solid.svg" alt="" width="35px" style={{marginTop: "7px"}}/> */}
+      {/* <AccountTreeOutlinedIcon fontSize='large'/> */}
     </Grid>
     <Grid item>
       <Typography variant="h4">עץ אירגוני</Typography>
