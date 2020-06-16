@@ -99,13 +99,8 @@ const TreeList = (props) => {
     itemHeight = '44px',
   } = props;
 
-  const loadedMap = useRef({});
-
   const handleLoad = id => {
-    if (!loadedMap.current[id] && loadData) {
-      loadedMap.current[id] = true;
-      loadData(id);
-    }
+    loadData(id);
   };
  
   return (
