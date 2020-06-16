@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
@@ -13,60 +10,33 @@ import { selectGroupByid } from 'features/groups/groupsSlice';
 import PersonGrid from 'components/persons/personGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import SearchInput from './SearchInput';
 
 import faker from 'faker/locale/en';
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
-const fakePersons2 =  [...Array(10000).keys()].map(i => ({id: i, fullName: `elad${i}`}));
+const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
 const styles = makeStyles({
   root: {
     overflow: 'hidden',
-    // minHeight: '500px',
-    // padding: '15px'
-    width: '80%'
-  },
-  content: {
-    height:'75%',
-    // overflowY: 'auto',
-    // overflowX: 'hidden',
     // width: '80%'
   },
+  content: {
+    height:'100%',
+  },
 });
-
-const inputStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: 'white',
-    borderRadius: '15px',
-    '&$focused $notchedOutline, &:hover$focused $notchedOutline': {
-      borderWidth: '1px',
-      borderColor: theme.palette.primary.main,
-    },
-    '&:hover $notchedOutline': {
-      borderColor: '#e0e0e0',
-    }
-  },
-  input: {
-    padding: '9px',
-  },
-  notchedOutline: {
-    borderColor: '#e0e0e0',
-    // borderColor: 'red',
-  },
-  focused: {}
-}));
 
 const headerStyles = makeStyles({
   root: {
     marginBottom: '3px',
   },
-  groupName: {
+  groupTitle: {
     display: 'flex',
     alignItems: 'baseline',
-    // width: '13%', 
-    minWidth: '130px'
+    minWidth: '130px',
   },
   memberCount: {
-    marginLeft: '7px'
+    marginLeft: '7px',
   }
 });
 
@@ -82,31 +52,46 @@ const PersonDisplay = ({ groupId }) => {
   // styles
   const classes = styles();
   const headerClasses = headerStyles();  
-  // 
+  // debounce the filterTerm update
   const [filterTerm, setFilter] = useState('');
   const setFilterDebounced = useRef(_.debounce(setFilter));
-  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  // const persons = fakePersons2
-    .filter(p => p.fullName.startsWith(filterTerm));
-  const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
-  const group = useSelector(state => selectGroupByid(state, groupId));
-  const groupName = group ? group.name : '...';
-
   const filterInputChange = useCallback(value => {
     setFilterDebounced.current(value);
   }, [setFilterDebounced]) 
+  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+  // const persons = fakePersons
+    .filter(p => p.fullName.startsWith(filterTerm));
+  const group = useSelector(state => selectGroupByid(state, groupId)) || {};
+  // group name and hierarchy
+  const {
+    name: groupName = '...',
+    hierarchy = []
+  } = group;
+  const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
 
   return (<>
-    <Grid container spacing={2} alignItems="flex-end" justify='space-between' className={headerClasses.root}> 
-      <Grid item className={headerClasses.groupName}>
-        <Typography display="inline" variant="h4">{groupName}</Typography>
-        <Typography className={headerClasses.memberCount} display="inline" variant="body1">({persons.length})</Typography>
+    <Grid 
+      container
+      spacing={2}
+      alignItems='flex-end'
+      justify='space-between'
+      className={headerClasses.root}> 
+      <Grid item className={headerClasses.groupTitle}>
+        <Typography
+          color='textSecondary'
+          variant='h6'
+          component='p'>
+          {`${hierarchy.join(' / ')}${hierarchy.length !== 0 ?  ' / ' : ''}` }
+        </Typography>
+        <Typography variant='h6' component='p'>{groupName}</Typography>
+        <Typography className={headerClasses.memberCount} variant="body2">({persons.length})</Typography>
       </Grid>
       <Grid item>
         <SearchInput
           onValueChange={filterInputChange}
           resetOn={groupId}
-        />
+          validator={inputValidate}
+          placeholder='חפש אנשים בקבוצה' />
       </Grid>
     </Grid>
     <Divider/>
@@ -120,38 +105,6 @@ const PersonDisplay = ({ groupId }) => {
 
 PersonDisplay.propTypes = {
   groupId: PropTypes.string.isRequired,
-}
-
-const SearchInput = ({ onValueChange, resetOn }) => {
-  const [value, setValue] = useState('');
-  const onChange = e => {
-    const val = e.target.value;
-    if (inputValidate(val)){
-      setValue(val);
-      onValueChange(val);
-    }
-  }
-  useEffect(() => {
-    setValue('');
-    onValueChange('')
-  }, [resetOn, onValueChange])
-  
-  const classes = inputStyles();
-
-  return (
-    <OutlinedInput
-      fullWidth
-      onChange={onChange}
-      value={value}
-      placeholder='חפש אנשים בקבוצה'
-      endAdornment={
-        <InputAdornment>
-          <SearchIcon/>
-        </InputAdornment>
-      }
-      classes={{...classes}}
-  />
-  );
 }
 
 export default PersonDisplay;

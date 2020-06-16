@@ -5,36 +5,42 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import PersonDisplay from './PersonDisplay/PersonDisplay';
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import TreeIcon from 'components/shared/icons/Tree';
+ 
 
+
+
+const listHeaderHeight = 90;
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
     height: 'calc(100vh - 64px)',
     display: 'flex',
+    overflowY: 'hidden',
   },
   sideBar: {
-      // maxHeight: 'calc(100vh - 64px)',
-      // maxHeight: 'calc(100% - 3px)',
-      // direction: 'rtl',
-      // maxHeight: '150px',
-      // overflowY: 'auto',
-      // maxWidth: '500px',
-      // minWidth: '300px',
       width: '20%',
       boxShadow: '0px 0px 5px 0px rgba(125,120,125,0.8)',
       backgroundColor: theme.palette.background.default
-      // backgroundColor: '#FAFCFB'
   },
   listContainer: {
-    maxHeight: 'calc(100% - 19px)',
+    maxHeight: `calc(100% - ${listHeaderHeight}px)`,
+  },
+  listHeader: {
+    height: listHeaderHeight,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   personDisplay: {
-    padding: '20px 60px',
+    margin: '20px auto',
     width: '60%',
-    // height: '500px'
-    // backgroundColor: '#E4EAEA'
   }
 }));
 
@@ -53,7 +59,7 @@ const MainPage = props => {
   }, [rootGroupsIds]);
 
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
-  const handleSelection = (e, groupId, item) => {
+  const handleSelection = (e, groupId) => {
     setSelectedGroupId(groupId);
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
@@ -61,15 +67,17 @@ const MainPage = props => {
   return (
     <Box className={classes.root}>
       <div className={classes.sideBar}>
-          <div>עץ ארגוני</div>
-          <ScrollFix className={classes.listContainer}>
-            <GroupList 
-              selected={selectedGroupId}
-              onNodeSelected={handleSelection}
-              onNodeToggle={handleExpandedChange}
-              expanded={expandedGroups}
-            />
-          </ScrollFix>
+        <ListHeader/>
+        <Divider/>
+        <ScrollFix className={classes.listContainer}>
+        {/* <div className={classes.listContainer}> */}
+          <GroupList 
+            selected={selectedGroupId}
+            onNodeSelected={handleSelection}
+            onNodeToggle={handleExpandedChange}
+            expanded={expandedGroups}/>
+        </ScrollFix>
+        {/* </div> */}
       </div>
       
       <div className={classes.personDisplay}>
@@ -77,7 +85,26 @@ const MainPage = props => {
       </div>
     </Box>
   )
-  
+};
+
+const ListHeader = () => {
+  const classes = styles();
+  return (
+  <Grid 
+    container 
+    className={classes.listHeader}
+    alignContent='center' 
+    justify='center' 
+    spacing={2}>
+    <Grid item>
+     <TreeIcon fontSize='large' />
+    {/* <img src="sitemap-solid.svg" alt="" width="35px" style={{marginTop: "7px"}}/> */}
+      {/* <AccountTreeOutlinedIcon fontSize='large'/> */}
+    </Grid>
+    <Grid item>
+      <Typography variant="h4">עץ אירגוני</Typography>
+    </Grid>
+  </Grid>);
 };
 
 export default MainPage;
