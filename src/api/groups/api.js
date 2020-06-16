@@ -1,7 +1,7 @@
 import axios from 'axios';
 import rootGroup from './rootGroup';
 export const FETCH_DEPTH = 2;
-const BASE_URL = 'api/organizationGroups';
+const BASE_URL = '/api/organizationGroups';
 
 const instance = axios.create({
   baseURL: BASE_URL,

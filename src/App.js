@@ -22,7 +22,7 @@ function App() {
               <Switch>
                   <Route exact path='/' component={LandingPage} />
                   <Route path='/managepage' component={ManagePage} />
-                  <Route path='/addPerson' component={AddPerson} />
+                  <Route path='/addPerson/:personalNumber?' component={AddPerson} />
                   <Route path='/treeDemo' component={TreeDemo}/>
               </Switch>
             </Router>

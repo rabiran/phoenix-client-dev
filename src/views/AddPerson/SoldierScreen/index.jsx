@@ -6,13 +6,20 @@ import SoldierForm from "./SoldierForm";
 import styles from "./soldierScreen.style";
 import Avatar from "../../../components/shared/Avatar/index";
 import { loadSoldierLoading } from "../../../features/apiComponents/addSoldierTab/addSoldierTabSlice";
+import { useHistory } from "react-router-dom";
 // import faker from "faker";
 
-export default () => {
+export default ({ personalNumber }) => {
+  const dispatch = useDispatch();
+  let history = useHistory();
   const { loadingSearch, errorSearch, data } = useSelector(
     (state) => state.component.addSoldierTab
   );
-  const dispatch = useDispatch();
+  useMemo(() => {
+    if (personalNumber) {
+      dispatch(loadSoldierLoading({ personalNumber: personalNumber }));
+    }
+  }, [personalNumber]);
   const [soldier, setSoldier] = useState(data);
   useMemo(() => {
     setSoldier(data);
@@ -20,7 +27,11 @@ export default () => {
   const classes = styles();
   const handleSearch = (inputText) => {
     if (inputText) {
-      dispatch(loadSoldierLoading({ personalNumber: inputText }));
+      if (inputText === personalNumber) {
+        dispatch(loadSoldierLoading({ personalNumber: inputText }));
+      } else {
+        history.push(`/addPerson/${inputText}`);
+      }
     } else {
       setSoldier({});
     }

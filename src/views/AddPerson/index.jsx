@@ -6,6 +6,7 @@ import SoldierScreen from "./SoldierScreen";
 import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import { useParams } from "react-router-dom";
 
 export default function AddPerson() {
   const tabStyles = tabItemStyles();
@@ -14,7 +15,7 @@ export default function AddPerson() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const { personalNumber } = useParams();
   return (
     <div className={classes.AddPerson}>
       <div className={classes.background}></div>
@@ -28,7 +29,7 @@ export default function AddPerson() {
           <Tab label="אזרח" disableRipple classes={tabStyles} />
         </Tabs>
         <TabPanel className={classes.tabPanel} value={value} index={0}>
-          <SoldierScreen />
+          <SoldierScreen personalNumber={personalNumber}/>
         </TabPanel>
         <TabPanel className={classes.tabPanel} value={value} index={1}>
           Civilian in process...

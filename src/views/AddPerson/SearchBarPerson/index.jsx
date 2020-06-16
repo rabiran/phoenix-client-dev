@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
 import StyledButton from "../../../components/shared/styleComponent/StyleButton";
+import { useMemo } from "react";
 
 export default ({ onClickSearch, person, loading, error, errorMessage }) => {
   const [personalNumber, setPersonalNumber] = useState(
@@ -20,6 +21,10 @@ export default ({ onClickSearch, person, loading, error, errorMessage }) => {
     onClickSearch(prsnlNmbr);
   };
 
+  useMemo(()=> {
+    if(!_.isEmpty(person)) {
+      setPersonalNumber(person.personalNumber)}
+    },[person]);
   const handleChangeInput = (event) => {
     if (/^\d{0,9}$/.test(event.target.value)) {
       setPersonalNumber(event.target.value);

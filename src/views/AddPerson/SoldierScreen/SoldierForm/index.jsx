@@ -1,18 +1,21 @@
 import React, { useRef, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
+import letter from "../../../../assets/images/letter.png";
 import PersonalInfo from "../../PersonalInfo";
 import TeamAndJob from "../../TeamAndJob";
 import styles from "./soldierForm.style";
 import StyledButton from "../../../../components/shared/styleComponent/StyleButton";
 import { useFormHandled } from "../../../../helper/customHooks";
 import { PersonValidate } from "../../../../helper/personalValidation";
-import { updateSoldierLoading} from "../../../../features/apiComponents/addSoldierTab/addSoldierTabSlice";
+import {
+  updateSoldierLoading,
+  resetData,
+} from "../../../../features/apiComponents/addSoldierTab/addSoldierTabSlice";
 import MessageDialog from "../../../../components/shared/dialog/messageDialog";
-import {  
-  Backdrop,
-  CircularProgress,  
-} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { Backdrop, CircularProgress } from "@material-ui/core";
+import { useCallback } from "react";
 
 export default ({ soldier }) => {
   const fieldToUpdate = [
@@ -26,7 +29,12 @@ export default ({ soldier }) => {
     "address",
   ];
   const classes = styles();
-  const { loadingUpdate, successUpdate, errorUpdate } = useSelector(
+  const history = useHistory();
+  const handleDialog = useCallback((e) => {
+    dispatch(resetData());
+    e.target.innerText === "למסך הבית" ? history.push("/") : history.push("/addPerson");
+  },[]);
+  const { loadingUpdate, successUpdate } = useSelector(
     (state) => state.component.addSoldierTab
   );
   const dispatch = useDispatch();
@@ -294,12 +302,21 @@ export default ({ soldier }) => {
   };
 
   return (
-    <> 
-      <MessageDialog fullName={soldier.fullName} successUpdate={successUpdate}/>
+    <>
+      <MessageDialog
+        topImage={letter}
+        title="יש!"
+        message={`שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`}
+        actions={[
+          { name: "למסך הבית", func: handleDialog },
+          { name: "ערוך חייל נוסף", func: handleDialog },
+        ]}
+        open={successUpdate}
+      />
       <Backdrop className={classes.backdrop} open={loadingUpdate}>
         <CircularProgress color="primary" />
       </Backdrop>
-      <form method={"post"}>        
+      <form method={"post"}>
         <PersonalInfo
           formInputs={inputs}
           onChangeHandle={handleInputChange}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 export const FETCH_DEPTH = 2;
-const BASE_URL = 'api/persons';
+const BASE_URL = '/api/persons';
 
 const instance = axios.create({
   baseURL: BASE_URL,
