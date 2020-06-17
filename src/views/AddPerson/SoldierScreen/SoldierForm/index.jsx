@@ -30,14 +30,14 @@ export default ({ soldier }) => {
   ];
   const classes = styles();
   const history = useHistory();
+  const dispatch = useDispatch();
   const handleDialog = useCallback((e) => {
     dispatch(resetData());
     e.target.innerText === "למסך הבית" ? history.push("/") : history.push("/addPerson");
-  },[]);
+  },[dispatch, history]);
   const { loadingUpdate, successUpdate } = useSelector(
     (state) => state.component.addSoldierTab
   );
-  const dispatch = useDispatch();
   const {
     inputs,
     isValidForm,
@@ -280,7 +280,7 @@ export default ({ soldier }) => {
         isValid: true,
       },
     });
-  }, [soldier]);
+  }, [soldier, updateInputs]);
 
   const updateSoldier = (e) => {
     const fullPersonChange = handleSubmit();

@@ -19,7 +19,7 @@ export default ({ personalNumber }) => {
     if (personalNumber) {
       dispatch(loadSoldierLoading({ personalNumber: personalNumber }));
     }
-  }, [personalNumber]);
+  }, [personalNumber, dispatch]);
   const [soldier, setSoldier] = useState(data);
   useMemo(() => {
     setSoldier(data);

@@ -1,13 +1,16 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styles from "./messageDialog.style";
 import { Typography, Dialog, Link, DialogActions } from "@material-ui/core";
+
+const DialogBackground = ({ children }) => {
+  const {messageContainer} = styles();
+  
+  return <div className={messageContainer}>{children}</div>
+};
 
 export default ({ topImage, title, message, actions, open }) => {
   const classes = styles();
 
-  const DialogBackground = useCallback(({ children }) => (
-    <div className={classes.messageContainer}>{children}</div>
-  ),[]);
   return (
     <Dialog open={open} PaperComponent={DialogBackground}>
       <div className={classes.DialogContainer}>

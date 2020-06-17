@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { BasicValidate } from "./personalValidation";
 import _ from "lodash";
 
-export const useFormHandled = (callback) => {
+export const useFormHandled = () => {
   const [inputs, setInputs] = useState({});
   const [isValidForm, setIsValidForm] = useState(true);
   useMemo(()=>{
@@ -75,9 +75,9 @@ export const useFormHandled = (callback) => {
     setInputs(initInputs);
   };
 
-  const updateInputs = (updateInputs) => {
+  const updateInputs = useCallback((updateInputs) => {
     setInputs((oldInputs) => _.merge(oldInputs, updateInputs));
-  };
+  },[]);
 
   return {
     handleSubmit,
