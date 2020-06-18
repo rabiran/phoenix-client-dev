@@ -11,6 +11,7 @@ export const styles = makeStyles(theme => ({
     position: 'fixed',
   },
   AddPerson: {
+    marginTop: '64px', 
     height: "100%",
     width: "100%",
     display: "flex",

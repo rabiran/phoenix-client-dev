@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <div className='header-root'>
-      <AppBar position="relative">
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" className='header-title'>
             עוף החול נייטרו
