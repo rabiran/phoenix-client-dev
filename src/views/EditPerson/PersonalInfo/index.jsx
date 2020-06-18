@@ -61,7 +61,8 @@ export default ({
         />
       );
     },
-    [personDetails, classes, showOnly, disabled]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [personDetails, classes, showOnly, disabled, mainPage]
   );
   WrappedTextField.muiName = TextField.muiName;
 

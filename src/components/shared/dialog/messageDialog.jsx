@@ -12,7 +12,7 @@ export default ({ topImage, title, message, actions, open }) => {
   const classes = styles();
 
   return (
-    <Dialog open={open} PaperComponent={DialogBackground}>
+    <Dialog open={open} PaperComponent={DialogBackground} onClose={actions[0].func}>
       <div className={classes.DialogContainer}>
         <div className={classes.letter}>
           <img alt={'title'} src={topImage} />

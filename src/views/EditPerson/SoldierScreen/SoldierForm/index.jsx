@@ -314,8 +314,8 @@ export default ({ soldier, disabled }) => {
         title="יש!"
         message={`שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`}
         actions={[
-          { name: "למסך הבית", func: handleDialog },
           { name: "ערוך חייל נוסף", func: handleDialog },
+          { name: "למסך הבית", func: handleDialog },
         ]}
         open={successUpdate}
       />
