@@ -32,7 +32,7 @@ export default ({ personalNumber }) => {
       if (inputText === personalNumber) {        
         dispatch(loadSoldierLoading({ personalNumber: inputText }));
       } else {
-        history.push(`/addPerson/${inputText}`);
+        history.push(`/editPerson/${inputText}`);
       }
     } else {
       setSwitchPerson(true);

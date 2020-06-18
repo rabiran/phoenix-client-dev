@@ -7,7 +7,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
 import LandingPage from './views/LandingPage/LandingPage';
-import AddPerson from "./views/AddPerson";
+import EditPerson from "./views/EditPerson";
 import TreeDemo from './views/TreeListDemo/TreeDemo';
 import Header from './components/common/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -22,7 +22,7 @@ function App() {
               <Switch>
                   <Route exact path='/' component={LandingPage} />
                   <Route path='/managepage' component={ManagePage} />
-                  <Route path='/addPerson/:personalNumber?' component={AddPerson} />
+                  <Route path='/EditPerson/:personalNumber?' component={EditPerson} />
                   <Route path='/treeDemo' component={TreeDemo}/>
               </Switch>
             </Router>

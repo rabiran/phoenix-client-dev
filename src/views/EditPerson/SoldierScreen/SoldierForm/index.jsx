@@ -33,7 +33,7 @@ export default ({ soldier, disabled }) => {
   const dispatch = useDispatch();
   const handleDialog = useCallback((e) => {
     dispatch(resetData());
-    e.target.innerText === "למסך הבית" ? history.push("/") : history.push("/addPerson");
+    e.target.innerText === "למסך הבית" ? history.push("/") : history.push("/editPerson");
   },[dispatch, history]);
   const { loadingUpdate, successUpdate } = useSelector(
     (state) => state.component.addSoldierTab

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { styles, tabItemStyles } from "./addPerson.style";
+import { styles, tabItemStyles } from "./editPerson.style";
 import SoldierScreen from "./SoldierScreen";
 import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
