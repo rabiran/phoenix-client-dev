@@ -16,7 +16,7 @@ import {
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
 
-export default ({ formInputs, onChangeHandle, personDetails }) => {
+export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
   const rootIds = useSelector((state) => state.groups.rootGroupsIds);
   const [treeExpanded, setTreeExpanded] = useState(rootIds);
   const [treeSelected, setTreeSelected] = useState(null);
@@ -48,7 +48,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
   }, [groupById, personDetails]);
   const classes = styles();
 
-  let disabled = _.isEmpty(personDetails);
+  let disabledInput = disabled || _.isEmpty(personDetails);
   return (
     <div className={classes.teamAndJobContainer}>
       <div className={classes.expansionPanelContainer}>
@@ -61,7 +61,7 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
               setExpentionExtended(exp);
             }}
             expanded={expentionExtended}
-            disabled={disabled}
+            disabled={disabledInput}
             classes={{
               root: classes.expansionPanelRoot,
               rounded: classes.expansionPanelRounded,
@@ -110,9 +110,10 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           onChange={onChangeHandle}
           name="job"
           value={formInputs.job.value}
-          disabled={disabled}
+          disabled={disabledInput}
           placeholder="הקלד תפקיד"
           InputProps={{
+            classes: { input: classes.input},
             startAdornment: (
               <InputAdornment position="start">תפקיד:</InputAdornment>
             ),
@@ -122,9 +123,10 @@ export default ({ formInputs, onChangeHandle, personDetails }) => {
           onChange={onChangeHandle}
           name="description"
           value={formInputs.description.value}
-          disabled={disabled}
+          disabled={disabledInput}
           placeholder="הקלד פה תיאור תפקיד"
           InputProps={{
+            classes: {input: classes.input},
             startAdornment: (
               <InputAdornment position="start">תיאור:</InputAdornment>
             ),

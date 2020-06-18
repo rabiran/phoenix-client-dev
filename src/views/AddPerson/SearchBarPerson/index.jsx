@@ -11,7 +11,7 @@ import styles from "./searchBarPerson.styles";
 import StyledButton from "../../../components/shared/styleComponent/StyleButton";
 import { useMemo } from "react";
 
-export default ({ onClickSearch, person, loading, error, errorMessage }) => {
+export default ({ onClickSearch, person, loading, error, errorMessage, enableSearch }) => {
   const [personalNumber, setPersonalNumber] = useState(
     !_.isEmpty(person) ? person.personalNumber : ""
   );
@@ -43,7 +43,7 @@ export default ({ onClickSearch, person, loading, error, errorMessage }) => {
 
   let display;
 
-  if (_.isEmpty(person)) {
+  if (enableSearch || _.isEmpty(person)) {
     display = (
       <div className={classes.containerSearch}>
         <div className={classes.SearchInput}>

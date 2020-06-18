@@ -15,25 +15,27 @@ export default ({ personalNumber }) => {
   const { loadingSearch, errorSearch, data } = useSelector(
     (state) => state.component.addSoldierTab
   );
+  const [switchPerson, setSwitchPerson] = useState(true);
   useMemo(() => {
-    if (personalNumber) {
+    if (personalNumber) {      
       dispatch(loadSoldierLoading({ personalNumber: personalNumber }));
     }
   }, [personalNumber, dispatch]);
   const [soldier, setSoldier] = useState(data);
   useMemo(() => {
     setSoldier(data);
+    !_.isEmpty(data) && setSwitchPerson(false);
   }, [data]);
   const classes = styles();
   const handleSearch = (inputText) => {
     if (inputText) {
-      if (inputText === personalNumber) {
+      if (inputText === personalNumber) {        
         dispatch(loadSoldierLoading({ personalNumber: inputText }));
       } else {
         history.push(`/addPerson/${inputText}`);
       }
     } else {
-      setSoldier({});
+      setSwitchPerson(true);
     }
   };
   return (
@@ -47,13 +49,14 @@ export default ({ personalNumber }) => {
       <div className={classes.SearchBarPersonContainer}>
         <SearchBarPerson
           person={soldier}
+          enableSearch={switchPerson}
           onClickSearch={handleSearch}
           loading={loadingSearch}
           error={errorSearch}
           errorMessage={"לא נמצא חייל העונה למ.א שהוזן"}
         />
       </div>
-      <SoldierForm soldier={soldier} />
+      <SoldierForm soldier={soldier} disabled={switchPerson}/>
     </div>
   );
 };

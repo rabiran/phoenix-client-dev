@@ -55,7 +55,7 @@ export default makeStyles(theme => {
             top: '4px',
         },
         treeGroups: {
-            maxHeight: '200px',
+            maxHeight: '138px',
             overflow: 'auto',
         },
         root: {
@@ -110,6 +110,11 @@ export default makeStyles(theme => {
         },
         text: {
             color: 'black'
-        }
+        },
+        input: {
+            "&:-webkit-autofill": {
+                WebkitBoxShadow: '0 0 0 1000px rgb(220, 222, 222) inset'
+            },
+        },
     };
 });

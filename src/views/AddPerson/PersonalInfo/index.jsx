@@ -16,13 +16,14 @@ export default ({
   formInputs,
   onChangeHandle,
   personDetails,
+  disabled,
   showOnly,
   mainPage,
 }) => {
   const classes = styles({ showOnly, mainPage });
 
   const WrappedTextField = useCallback(
-    ({ displayName, name, fieldParams, adormentRootClass }) => {
+    ({ displayName, name, fieldParams, adormentRootClass, alwaysDisabled }) => {
       let notExistPerson = _.isEmpty(personDetails);
       let { value, isValid, errorMessage } = fieldParams;
       if (showOnly || mainPage) {
@@ -49,7 +50,7 @@ export default ({
           name={name}
           error={!isValid}
           value={value}
-          disabled={notExistPerson}
+          disabled={disabled || alwaysDisabled || notExistPerson}
           helperText={!isValid ? errorMessage : ""}
           InputProps={{
             classes: { input: classes.input, disabled: classes.disabled },
@@ -60,7 +61,7 @@ export default ({
         />
       );
     },
-    [personDetails, classes, showOnly]
+    [personDetails, classes, showOnly, disabled]
   );
   WrappedTextField.muiName = TextField.muiName;
 
@@ -151,6 +152,7 @@ export default ({
           name="identityCard"
           displayName="תעודת זהות"
           fieldParams={formInputs.identityCard}
+          alwaysDisabled
           adormentRootClass={classes.adormentRootFirstColumn}
         />
         <WrappedTextField
@@ -212,7 +214,7 @@ export default ({
       </div>
       <div className={classes.divider} />
       <div className={classes.prsnlinfSubContainer}>
-        <FormControl disabled={_.isEmpty(personDetails) || showOnly}>
+        <FormControl disabled={disabled || _.isEmpty(personDetails) || showOnly}>
           <FormLabel>סיווג ביטחוני (למילוי ע"י הקב"ט בלבד):</FormLabel>
           <RadioGroup
             name="withClearance"

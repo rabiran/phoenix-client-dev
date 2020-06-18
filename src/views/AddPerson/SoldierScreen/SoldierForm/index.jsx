@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { useCallback } from "react";
 
-export default ({ soldier }) => {
+export default ({ soldier, disabled }) => {
   const fieldToUpdate = [
     "firstName",
     "lastName",
@@ -326,17 +326,19 @@ export default ({ soldier }) => {
         <PersonalInfo
           formInputs={inputs}
           onChangeHandle={handleInputChange}
-          personDetails={soldier}                              
+          personDetails={soldier} 
+          disabled={disabled}                             
         />
         <TeamAndJob
           formInputs={inputs}
           onChangeHandle={handleInputChange}
           personDetails={soldier}
+          disabled={disabled}
         />
         <div className={classes.submitContainer}>
           <StyledButton
             onClick={updateSoldier}
-            disabled={_.isEmpty(soldier) || !isValidForm}
+            disabled={disabled || _.isEmpty(soldier) || !isValidForm}
           >
             שמור שינויים
           </StyledButton>
