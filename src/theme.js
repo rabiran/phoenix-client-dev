@@ -13,6 +13,9 @@ export const theme = responsiveFontSizes(createMuiTheme({
       background: {
         default: 'white',
       },
+      text: {
+        primary: "#000000",
+      },
       action: {
         selected: teal[400],
         expanded: teal[100]

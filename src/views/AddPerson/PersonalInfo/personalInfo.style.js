@@ -2,34 +2,39 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles(theme => {
     return {
-        rootFormControl: {
-            marginBottom: '4px',
-            marginTop: '4px',
-            height: '40px',
-        },
+        rootFormControl: ({ showOnly, mainPage }) => ({
+
+            marginBottom: showOnly || mainPage ? 'none' : '4px',
+            marginTop: showOnly || mainPage ? 'none' : '4px',
+            height: showOnly || mainPage ? 'none' : '40px',
+        }),
         input: {
             "&:-webkit-autofill": {
                 WebkitBoxShadow: '0 0 0 1000px rgb(199, 216, 216) inset'
-            }
+            },
+            '&$disabled': {
+                color: theme.palette.text.primary,
+            },
         },
+        disabled: {},
         prsnlinfSubContainer: {
             display: 'flex',
             flexDirection: 'column',
-            minWidth: '169px',
-            maxWidth: '290px',
-            margin: '0px 15px',
+            minWidth: '246px',
+            maxWidth: '246px',
+            margin: '15px',
         },
-        prsnlinfContainer: {
+        prsnlinfContainer: ({mainPage}) => ({
             position: 'relative',
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            flexFlow: 'row',
+            justifyContent: mainPage ? 'flex-start' : 'space-evenly',
             backgroundColor: 'rgb(199, 216, 216)',
             padding: '24px',
             '&:before': {
                 position: 'absolute',
-                top: -21,
-                left: 63,
+                top: mainPage ? 90 : -21,
+                left: mainPage ? 0 : 63,
                 content: '" "',
                 height: 27,
                 width: 27,
@@ -38,19 +43,33 @@ export default makeStyles(theme => {
                 transform: 'rotate(45deg)',
                 zIndex: 1,
             },
+        }),
+        [`@media (max-width: 1224px)`]: {
+            prsnlinfContainer: () => ({
+                display: 'flex',
+                flexFlow: 'row wrap',
+            }),
+            hiddenDivider: {
+                display: 'none',
+            },
         },
         prsnlinfAddressContainer: {
             display: 'flex',
             flexDirection: 'row'
         },
-        divider: {
+        divider: ({showOnly, mainPage}) => ({
             borderLeft: '1px dashed grey',
             margin: '0 10px',
-            height: '192px',
+            height: showOnly || mainPage ? '147px' : '192px',
+        }),
+        adormentRootFirstColumn: {
+            width: '128px',
         },
-        prsnlinfsabatContainer: {
-            minWidth: '246px',
-            maxWidth: '246px',
+        adormentRootSecondColumn: {
+            width: '49px',
+        },
+        adormentRootThirdColumn: {
+            width: '58px',
         },
     }
 });

@@ -220,6 +220,12 @@ export default ({ soldier }) => {
         errorMessage: "",
         isValid: true,
       },
+      personalNumber: {
+        value: soldier.personalNumber || "",                
+      },
+      clearance: {
+        value: soldier.clearance || "",                
+      },
       rank: {
         value: soldier.rank || "",
         errorMessage: "",
@@ -320,7 +326,7 @@ export default ({ soldier }) => {
         <PersonalInfo
           formInputs={inputs}
           onChangeHandle={handleInputChange}
-          personDetails={soldier}
+          personDetails={soldier}                              
         />
         <TeamAndJob
           formInputs={inputs}
