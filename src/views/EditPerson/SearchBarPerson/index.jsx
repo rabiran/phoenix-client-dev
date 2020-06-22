@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import _ from "lodash";
 import {
   Link,
@@ -9,22 +9,29 @@ import {
 } from "@material-ui/core";
 import styles from "./searchBarPerson.styles";
 import StyledButton from "../../../components/shared/styleComponent/StyleButton";
-import { useMemo } from "react";
+import PropTypes from "prop-types";
 
-export default ({ onClickSearch, person, loading, error, errorMessage, enableSearch }) => {
+
+export default function SearchBarPerson({ onClickSearch, person, loading, error, errorMessage, enableSearch }) {
+  // jss style
+  const classes = styles();
+  // value in input search
   const [personalNumber, setPersonalNumber] = useState(
     !_.isEmpty(person) ? person.personalNumber : ""
   );
+  // Error lable to input
   const [errorLabel, setErrorLabel] = useState("");
-  const classes = styles();
+  // handleSearch...
   const handleSearch = (prsnlNmbr) => {
     onClickSearch(prsnlNmbr);
   };
-
+  // Whether person changed, update personalNumber in input Search 
   useMemo(()=> {
     if(!_.isEmpty(person)) {
       setPersonalNumber(person.personalNumber)}
     },[person]);
+  
+  // Control value in input  
   const handleChangeInput = (event) => {
     if (/^\d{0,9}$/.test(event.target.value)) {
       setPersonalNumber(event.target.value);
@@ -43,6 +50,7 @@ export default ({ onClickSearch, person, loading, error, errorMessage, enableSea
 
   let display;
 
+  // If enable to search person
   if (enableSearch || _.isEmpty(person)) {
     display = (
       <div className={classes.containerSearch}>
@@ -79,6 +87,7 @@ export default ({ onClickSearch, person, loading, error, errorMessage, enableSea
         )}
       </div>
     );
+    // In case the person selected
   } else {
     display = (
       <div className={classes.personalNumberDetails}>
@@ -104,4 +113,31 @@ export default ({ onClickSearch, person, loading, error, errorMessage, enableSea
       {display}
     </div>
   );
+};
+
+SearchBarPerson.propTypes = {
+  /**
+   * Function to search
+   */
+  onClickSearch: PropTypes.func.isRequired, 
+  /**
+   * the Person Object
+   */
+  person: PropTypes.object,
+  /**
+  * indicate if fetch person from Kartoffel
+  */ 
+  loading: PropTypes.bool, 
+  /**
+   * object error if fetch person is wrong
+   */
+  error: PropTypes.object, 
+  /**
+   * What to write if get error from Kartoffel
+   */
+  errorMessage: PropTypes.string, 
+  /**
+   * Indicate if enable search
+   */
+  enableSearch: PropTypes.bool  
 };

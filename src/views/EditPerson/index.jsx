@@ -8,13 +8,19 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { useParams } from "react-router-dom";
 
-export default function AddPerson() {
+/**
+ * Screen of edit person
+ */
+export default function EditPerson() {
+  // jss Styles
   const tabStyles = tabItemStyles();
   const classes = styles();
+  // Handle toggle tabs
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  // Extract parameter from URL
   const { personalNumber } = useParams();
   return (
     <div className={classes.AddPerson}>
@@ -39,6 +45,9 @@ export default function AddPerson() {
   );
 }
 
+/**
+ * From materialUI examples. it's show only tab that selected
+ */
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -54,6 +63,10 @@ function TabPanel(props) {
       {value === index && <Box>{children}</Box>}
     </Typography>
   );
+}
+
+EditPerson.propTypes = {
+  
 }
 
 TabPanel.propTypes = {

@@ -15,27 +15,38 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import styles from "./TeamAndJob.style";
+import PropTypes from "prop-types";
 
-export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
+export default function TeamAndJob({ formInputs, onChangeHandle, personDetails, disabled }) {
+  // jss style
+  const classes = styles();
+  // RootId of tree from redux
   const rootIds = useSelector((state) => state.groups.rootGroupsIds);
+  // Array of expended in tree
   const [treeExpanded, setTreeExpanded] = useState(rootIds);
+  // Selected group 
   const [treeSelected, setTreeSelected] = useState(null);
-  const groupById = useSelector((state) => state.groups.byId[treeSelected]);
+  // expended expention toggle
   const [expentionExtended, setExpentionExtended] = useState(false);
+  // group of person from redux
+  const groupById = useSelector((state) => state.groups.byId[treeSelected]);
   const [hierarchyDisplay, setHierarchyDisplay] = useState("בחר צוות");
   const handleExpandedChange = (e, nodes) => setTreeExpanded(nodes);
+  // Wether select group is change in input and tree 
   const handleSelection = (e, node) => {
     const event = { target: { name: "directGroup", value: node } };
     onChangeHandle(event);
     setTreeSelected(node);
   };
+  // When are rootids loadded in redux, the tree expend them
   useEffect(() => {
     setTreeExpanded(rootIds);
   }, [rootIds]);
-  useEffect(() => {
-    setExpentionExtended(false);
+  // when are personalDetails changed, the expention closed
+  useEffect(() => {    
     setTreeSelected(null);
   }, [personDetails]);
+  // hierarchy display changed acording to group of person and selected 
   useEffect(() => {
     let hierarchyDisplay = _.isEmpty(personDetails)
       ? "בחר צוות"
@@ -46,8 +57,8 @@ export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
       : null
     setHierarchyDisplay(hierarchyDisplay);
   }, [groupById, personDetails]);
-  const classes = styles();
 
+  // Indicate if disabled input
   let disabledInput = disabled || _.isEmpty(personDetails);
   return (
     <div className={classes.teamAndJobContainer}>
@@ -55,6 +66,7 @@ export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
         <span>
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
+        {/* Closed expention if click away */}
         <ClickAwayListener onClickAway={() => setExpentionExtended(false)}>
           <ExpansionPanel
             onChange={(e, exp) => {
@@ -74,9 +86,7 @@ export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
                 expanded: classes.expansionPanelSummaryExpanded,
                 focused: classes.expansionPanelSummaryFocused,
               }}
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1-content"
-              id="panel1-header"
+              expandIcon={<ExpandMore />}              
             >
               <Typography>{hierarchyDisplay}</Typography>
             </ExpansionPanelSummary>
@@ -135,4 +145,23 @@ export default ({ formInputs, onChangeHandle, personDetails, disabled }) => {
       </div>
     </div>
   );
+};
+
+TeamAndJob.propTypes = {
+  /**
+   * values of fields
+   */
+  formInputs: PropTypes.object, 
+  /**
+   * function to handle input
+   */
+  onChangeHandle: PropTypes.func, 
+  /**
+   * person object from Kartoffel
+   */
+  personDetails: PropTypes.object, 
+  /**
+   * Indicate to disabled inputs 
+   */
+  disabled: PropTypes.bool
 };

@@ -11,17 +11,29 @@ import {
   FormControlLabel,
   FormLabel,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-export default ({
+/**
+ * Show and change field of personal information
+ */
+export default function PersonalInfo({
   formInputs,
   onChangeHandle,
   personDetails,
   disabled,
   showOnly,
   mainPage,
-}) => {
-  const classes = styles({ showOnly, mainPage });
-
+}) {
+  // jss styles
+  const classes = styles({ showOnly, mainPage });  
+  /**
+   * Wrapped textfield component
+   * @param {string} displayName represent field name in form
+   * @param {string} name attribute name
+   * @param {Object} fieldParams the info for field: value, isValid, errorMessage
+   * @param {Object} adormentRootClass the class for adormentRootClass
+   * @param {boolean} alwaysDisabled indication to disabled input field
+   */
   const WrappedTextField = useCallback(
     ({ displayName, name, fieldParams, adormentRootClass, alwaysDisabled }) => {
       let notExistPerson = _.isEmpty(personDetails);
@@ -61,11 +73,14 @@ export default ({
         />
       );
     },
+    // disabled eslint because in this useCallback if i insert to dependency array 'onChangeHandle' function, 
+    // the function rerender all the times and its not need to happen
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [personDetails, classes, showOnly, disabled, mainPage]
   );
   WrappedTextField.muiName = TextField.muiName;
 
+  // In case mainPage the fields differents
   if (mainPage) {
     let address = [formInputs.address.value, formInputs.homeNumber.value, formInputs.city.value].filter(value => value).join(', ');
     return (
@@ -237,4 +252,31 @@ export default ({
       </div>
     </div>
   );
+};
+
+PersonalInfo.propTypes = {
+  /**
+   * formInput is information about all fields: value, errorMessage, valid, etc.
+   */
+  formInputs: PropTypes.object.isRequired,
+  /**
+   * function that check input value 
+   */
+  onChangeHandle: PropTypes.func,
+  /**
+   * peresonObject
+   */
+  personDetails: PropTypes.object,
+  /**
+   *  Indication to disabled input field
+   */
+  disabled: PropTypes.bool,
+  /**
+   *  Indication to dispaly only show fields
+   */
+  showOnly: PropTypes.bool,
+  /**
+   *  Indication to match component to mainPage
+   */
+  mainPage: PropTypes.bool,  
 };

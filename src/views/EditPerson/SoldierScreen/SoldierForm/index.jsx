@@ -16,8 +16,13 @@ import MessageDialog from "../../../../components/shared/dialog/messageDialog";
 import { useHistory } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { useCallback } from "react";
+import PropTypes from "prop-types";
 
-export default ({ soldier, disabled }) => {
+/**
+ * form to soldier
+ */
+export default function SoldierForm({ soldier, disabled }) {
+  // Right now some field in form not relevant,  So I filter the filed to update (and directgroup)
   const fieldToUpdate = [
     "firstName",
     "lastName",
@@ -28,16 +33,15 @@ export default ({ soldier, disabled }) => {
     "mobilePhone",
     "address",
   ];
-  const classes = styles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const handleDialog = useCallback((e) => {
-    dispatch(resetData());
-    e.target.innerText === "למסך הבית" ? history.push("/") : history.push("/editPerson");
-  },[dispatch, history]);
-  const { loadingUpdate, successUpdate } = useSelector(
+  // Props from redux
+  const { loadingUpdate, successUpdate, errorUpdate } = useSelector(
     (state) => state.component.addSoldierTab
   );
+  // jss styles
+  const classes = styles();
+  // Access to URL
+  const history = useHistory();
+  const dispatch = useDispatch();
   const {
     inputs,
     isValidForm,
@@ -46,6 +50,17 @@ export default ({ soldier, disabled }) => {
     initializeInputs,
     updateInputs,
   } = useFormHandled();
+  // handled action in dialog
+  const handleDialog = useCallback(
+    (e) => {
+      dispatch(resetData());
+      e.target.innerText === "למסך הבית"
+        ? history.push("/")
+        : history.push("/editPerson");
+    },
+    [dispatch, history]
+  );
+  // In first time that component render intilize validition and other property for each field in form
   const initialRef = useRef(null);
   if (initialRef.current === null) {
     initializeInputs({
@@ -203,6 +218,7 @@ export default ({ soldier, disabled }) => {
     initialRef.current = "Done";
   }
 
+  // Each time a soldier reloads, their data is updated
   useMemo(() => {
     updateInputs({
       firstName: {
@@ -221,10 +237,10 @@ export default ({ soldier, disabled }) => {
         isValid: true,
       },
       personalNumber: {
-        value: soldier.personalNumber || "",                
+        value: soldier.personalNumber || "",
       },
       clearance: {
-        value: soldier.clearance || "",                
+        value: soldier.clearance || "",
       },
       rank: {
         value: soldier.rank || "",
@@ -288,16 +304,23 @@ export default ({ soldier, disabled }) => {
     });
   }, [soldier, updateInputs]);
 
+  // Update Soldier to Kartoffel
   const updateSoldier = (e) => {
+    // Get key value each field from useFormHandled
     const fullPersonChange = handleSubmit();
+    // filter according 'fieldToUpdate'
     const updatePerson = _.pick(fullPersonChange, fieldToUpdate);
     const directGroup = fullPersonChange.directGroup
       ? fullPersonChange.directGroup
       : null;
+    // Save phone changes in array 
     updatePerson.mobilePhone = updatePerson.mobilePhone
-      ? [updatePerson.mobilePhone]
-      : [];
-    updatePerson.phone = updatePerson.phone ? [updatePerson.phone] : [];
+      ? [updatePerson.mobilePhone].concat(soldier.mobilePhone.slice(1))
+      : soldier.mobilePhone.slice(1);
+    updatePerson.phone = updatePerson.phone
+      ? [updatePerson.phone].concat(soldier.phone.slice(1))
+      : soldier.phone.slice(1);
+    // update soldier in Kartoffel
     dispatch(
       updateSoldierLoading({
         personId: soldier.id,
@@ -309,6 +332,18 @@ export default ({ soldier, disabled }) => {
 
   return (
     <>
+      {/* error message dialog */}
+      <MessageDialog
+        topImage={letter}
+        title="אויש!"
+        message={`נוצרה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`}
+        actions={[
+          { name: "ערוך חייל נוסף", func: handleDialog },
+          { name: "למסך הבית", func: handleDialog },
+        ]}
+        open={!_.isEmpty(errorUpdate)}
+      />
+      {/* succeed message dialog */}
       <MessageDialog
         topImage={letter}
         title="יש!"
@@ -319,16 +354,19 @@ export default ({ soldier, disabled }) => {
         ]}
         open={successUpdate}
       />
+      {/* backdrop while save changes in Kartoffel */}
       <Backdrop className={classes.backdrop} open={loadingUpdate}>
         <CircularProgress color="primary" />
       </Backdrop>
       <form method={"post"}>
+        {/* field that connect to personal info */}
         <PersonalInfo
           formInputs={inputs}
           onChangeHandle={handleInputChange}
-          personDetails={soldier} 
-          disabled={disabled}                             
+          personDetails={soldier}
+          disabled={disabled}
         />
+        {/* field to change hirarchy of soldier */}
         <TeamAndJob
           formInputs={inputs}
           onChangeHandle={handleInputChange}
@@ -338,23 +376,24 @@ export default ({ soldier, disabled }) => {
         <div className={classes.submitContainer}>
           <StyledButton
             onClick={updateSoldier}
+            // can't click if soldier empty or search and if some value in fields in form not valid  
             disabled={disabled || _.isEmpty(soldier) || !isValidForm}
           >
             שמור שינויים
           </StyledButton>
-          {/* <span>
-          <Typography
-            color={"secondary"}
-            variant={"subtitle2"}
-            classes={{              
-              subtitle2: classes.errorMessageSubtitle2,
-            }}
-          >
-            {"אירעה שגיאה במהלך שמירת השינויים"}
-          </Typography>
-        </span> */}
         </div>
       </form>
     </>
   );
+}
+
+SoldierForm.propTypes = {
+  /**
+   * The soldier object from kartoffel
+   */
+  soldier: PropTypes.object,
+  /**
+   * Indication to disabled input field
+   */
+  disabled: PropTypes.bool,
 };
