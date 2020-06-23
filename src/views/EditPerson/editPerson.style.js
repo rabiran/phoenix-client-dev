@@ -26,7 +26,7 @@ export const styles = makeStyles(theme => ({
   tabPanel: {
     position: 'relative',
     borderRadius: "10px 10px 10px 10px",
-    backgroundColor: "rgb(220, 222, 222)",
+    backgroundColor: theme.palette.background.primary,
     padding: '24px 0px',
     boxShadow: '0px 0px 13px 11px #0e0e0e2e',
     minHeight: '609px',
@@ -44,7 +44,7 @@ export const styles = makeStyles(theme => ({
 export const tabItemStyles = makeStyles(theme => ({
   root: {
     marginRight: `${theme.spacing(1.7)}px`,
-    backgroundColor: "rgb(220, 222, 222)",
+    backgroundColor: theme.palette.background.primary,
     borderRadius: '5px 5px 0px 0px',
     minWidth: '102px',
     minHeight: '78px',

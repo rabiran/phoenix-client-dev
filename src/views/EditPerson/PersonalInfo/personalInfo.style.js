@@ -10,7 +10,7 @@ export default makeStyles(theme => {
         }),
         input: {
             "&:-webkit-autofill": {
-                WebkitBoxShadow: '0 0 0 1000px rgb(199, 216, 216) inset'
+                WebkitBoxShadow: `0 0 0 1000px ${theme.palette.background.secondary} inset`
             },
             '&$disabled': {
                 color: theme.palette.text.primary,
@@ -29,7 +29,7 @@ export default makeStyles(theme => {
             display: 'flex',
             flexFlow: 'row',
             justifyContent: mainPage ? 'flex-start' : 'space-evenly',
-            backgroundColor: 'rgb(199, 216, 216)',
+            backgroundColor: theme.palette.background.secondary,
             padding: '24px',
             '&:before': {
                 position: 'absolute',
@@ -38,7 +38,7 @@ export default makeStyles(theme => {
                 content: '" "',
                 height: 27,
                 width: 27,
-                background: 'rgb(220, 222, 222)',
+                background: theme.palette.background.primary,
                 transformOrigin: '0% 0%',
                 transform: 'rotate(45deg)',
                 zIndex: 1,

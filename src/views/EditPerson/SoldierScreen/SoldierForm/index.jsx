@@ -329,7 +329,7 @@ export default function SoldierForm({ soldier, disabled }) {
       })
     );
   };
-
+  
   return (
     <>
       {/* error message dialog */}

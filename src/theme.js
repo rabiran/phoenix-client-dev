@@ -12,6 +12,8 @@ export const theme = responsiveFontSizes(createMuiTheme({
       },
       background: {
         default: 'white',
+        primary: 'rgb(220, 222, 222)',
+        secondary: 'rgb(199, 216, 216)',
       },
       text: {
         primary: "#000000",

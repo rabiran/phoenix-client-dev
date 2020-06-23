@@ -113,7 +113,7 @@ export default makeStyles(theme => {
         },
         input: {
             "&:-webkit-autofill": {
-                WebkitBoxShadow: '0 0 0 1000px rgb(220, 222, 222) inset'
+                WebkitBoxShadow: `0 0 0 1000px ${theme.palette.background.primary} inset`
             },
         },
     };
