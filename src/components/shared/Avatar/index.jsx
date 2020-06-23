@@ -7,13 +7,16 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import RecordVoiceOverOutlinedIcon from "@material-ui/icons/RecordVoiceOverOutlined";
 import HourglassEmptyOutlinedIcon from "@material-ui/icons/HourglassEmptyOutlined";
 import clsx from "clsx";
+import PropTypes from "prop-types";
 
 const dictionary = {
+  // avatar size
   size: {
     small: 0.33,
     medium: 0.66,
     large: 1
   },
+  // Built-in badge
   badge: {
     setting: { icon: SettingsOutlinedIcon, tooltip: "הגדרות" },
     waiting: { icon: HourglassEmptyOutlinedIcon, tooltip: "ממתין" },
@@ -21,7 +24,7 @@ const dictionary = {
   }
 };
 
-export default ({
+export default function CustomAvatar({
   rootClassAvatar, // jss class
   badge, //setting, waiting, manager
   badgeComponnentIcon, // name of icon componnent
@@ -31,7 +34,7 @@ export default ({
   borderColor = "#faddcf", // border color of avatar
   fullName, // person's name
   uploadImage // true, false
-}) => {
+}) {
   const stylesProps = { borderColor };
   stylesProps.size = Object.keys(dictionary.size).includes(size)
     ? dictionary.size[size]
@@ -99,4 +102,47 @@ export default ({
       </Avatar>
     </Badge>
   );
+};
+
+CustomAvatar.propTypes = {
+  /**
+   * jss class
+   */
+  rootClassAvatar: PropTypes.node,
+  /**
+   * build-in badge: setting, waiting, manager
+   */
+  badge: PropTypes.string,
+  /**
+   * icon (if not used in build-in badge)
+   */
+  badgeComponnentIcon: PropTypes.node,
+  /**
+   * tooltip for badge (if not used in build-in badge)
+   */
+  badgeDescription: PropTypes.string,
+  /**
+   * size of avatar: small, medium, large. default: large
+   */
+  size: PropTypes.string,
+  /**
+   * path of image or image
+   */
+  image: PropTypes.node,
+  /**
+   * border color of avatar
+   */
+  borderColor: PropTypes.string,
+  /**
+   * person's name for alt image of avatar
+   */
+  fullName: PropTypes.string,
+  /**
+   * Indicate if display uploadImage. default: false
+   */
+  uploadImage: PropTypes.bool
+};
+
+CustomAvatar.defaultProps = {
+  borderColor: "#faddcf",
 };

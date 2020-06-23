@@ -1,14 +1,19 @@
 import React from "react";
 import styles from "./messageDialog.style";
 import { Typography, Dialog, Link, DialogActions } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-const DialogBackground = ({ children }) => {
+/**
+ * Component from root element to dialog 
+ */
+function DialogBackground ({ children }) {
   const {messageContainer} = styles();
   
   return <div className={messageContainer}>{children}</div>
 };
 
-export default ({ topImage, title, message, actions, open }) => {
+
+export default function MessageDialog({ topImage, title, message, actions, open }) {
   const classes = styles();
 
   return (
@@ -58,4 +63,27 @@ export default ({ topImage, title, message, actions, open }) => {
       </div>
     </Dialog>
   );
+};
+
+MessageDialog.propTypes = {
+  /**
+   * image on top dialog
+   */
+  topImage: PropTypes.node, 
+  /**
+   * Dialog title 
+   */
+  title: PropTypes.string, 
+  /**
+   * Dialog message
+   */
+  message: PropTypes.string.isRequired, 
+  /**
+   * Diplay name and functions of dialog actions, function in index 0 used to 'onClosed' dialog
+   */
+  actions: PropTypes.arrayOf(PropTypes.exact({func: PropTypes.func.isRequired, name: PropTypes.string.isRequired})).isRequired, 
+  /**
+   * Indicate if open dialog
+   */
+  open: PropTypes.bool.isRequired,
 };

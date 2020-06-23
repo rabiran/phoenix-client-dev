@@ -6,7 +6,7 @@ import PersonalInfo from "../../PersonalInfo";
 import TeamAndJob from "../../TeamAndJob";
 import styles from "./soldierForm.style";
 import StyledButton from "../../../../components/shared/styleComponent/StyleButton";
-import { useFormHandled } from "../../../../helper/customHooks";
+import { useFormHandled } from "../../../../helper/useFormHandled";
 import { PersonValidate } from "../../../../helper/personalValidation";
 import {
   updateSoldierLoading,
@@ -336,7 +336,7 @@ export default function SoldierForm({ soldier, disabled }) {
       <MessageDialog
         topImage={letter}
         title="אויש!"
-        message={`נוצרה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`}
+        message={`אירעה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`}
         actions={[
           { name: "ערוך חייל נוסף", func: handleDialog },
           { name: "למסך הבית", func: handleDialog },

@@ -1,18 +1,17 @@
 import { put, call, takeEvery, all } from 'redux-saga/effects';
-import { 
+import {
   loadSoldierLoading,
   loadSoldierError,
   loadSoldierSuccess,
   updateSoldierLoading,
   updateSoldierError,
-  updateSoldierSuccess  
+  updateSoldierSuccess
 } from './addSoldierTabSlice';
 import apiPersons from '../../../api/persons/api';
 import { setPersons } from "../../persons/personsSlice";
 
 /**
- * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
- * takes only the latest action, and cancels still running `fetchChildren` sagas.
+ * watches for `loadSoldierLoading` and 'updateSoldierLoading' actions and fires `fetchSoldier` or 'updateSoldier' saga.
  */
 function* watchSoldierTab() {
   yield takeEvery(loadSoldierLoading.type, fetchSoldier);
@@ -20,24 +19,20 @@ function* watchSoldierTab() {
 }
 
 /**
- * fetches a group's chil dren (group's id in the supplied action) 
- * and dispatches `fetchChildrenSuccess` action.
- * @param {*} action action of type `fetchChildrenRequest`
+ * fetches a person and dispatches `loadSoldierSuccess` action. 
  */
-function* fetchSoldier({payload}) {
+function* fetchSoldier({ payload }) {
   const { personalNumber } = payload;
   try {
     const person = yield call(apiPersons.fetchByPersonalNumber, personalNumber);
-    yield put(loadSoldierSuccess({person}));    
+    yield put(loadSoldierSuccess({ person }));
   } catch (error) {
-    yield put(loadSoldierError({error: error.response.data}));        
+    yield put(loadSoldierError({ error: error.response.data }));
   }
 }
 
 /**
- * fetches a group's chil dren (group's id in the supplied action) 
- * and dispatches `fetchChildrenSuccess` action.
- * @param {*} action action of type `fetchChildrenRequest`
+ * Save soldier in Kartoffel 
  */
 function* updateSoldier({ payload }) {
   const { personId, personUpdate, directGroup } = payload;
@@ -55,6 +50,6 @@ function* updateSoldier({ payload }) {
 
 export default function* rootSaga() {
   yield all([
-    watchSoldierTab(),  
+    watchSoldierTab(),
   ]);
 }
