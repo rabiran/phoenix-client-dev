@@ -16,7 +16,7 @@ function App() {
   return (
     <Provider store={store}>
       <RTL>
-        <ThemeProvider theme={theme}>        
+        <ThemeProvider theme={theme}>
             <Header/>
             <Router>
               <Switch>
