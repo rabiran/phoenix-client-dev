@@ -15,14 +15,14 @@ function App() {
     <Provider store={store}>
       <RTL>
         <ThemeProvider>
-              <Router>
-                <Header/>
-                <Switch>
-                    <Route exact path='/' component={LandingPage} />
-                    <Route path='/managepage' component={ManagePage} />
-                    <Route path='/treeDemo' component={TreeDemo}/>
-                </Switch>
-              </Router>
+          <Router>
+            <Header/>
+            <Switch>
+              <Route exact path='/' component={LandingPage} />
+              <Route path='/managepage' component={ManagePage} />
+              <Route path='/treeDemo' component={TreeDemo}/>
+            </Switch>
+          </Router>
         </ThemeProvider>
       </RTL>  
     </Provider>

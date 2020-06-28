@@ -23,40 +23,40 @@ const useStyles = makeStyles((theme) => ({
  * @param changeTheme method that changes theme
  * @param currentUrl currentUrl, used to color currentpage on menu.
  */
-export default function HeaderMenu(props) {
+export default function HeaderMenu({ handleClose, anchorEl, redirect, changeTheme, currentUrl}) {
     const classes = useStyles();
 
-    let current = props.currentUrl
+    let current = currentUrl
 
     return (
         <Menu
             id="header-menu"
-            anchorEl={props.anchorEl}
+            anchorEl={anchorEl}
             keepMounted
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            open={Boolean(props.anchorEl)}
-            onClose={props.handleClose}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
             getContentAnchorEl={null}
         >
-            <MenuItem onClick={()=> props.redirect('/')} >
+            <MenuItem onClick={()=> redirect('/')} >
                 <ListItemIcon className={current === '/' ? classes.focused : null}>
                     <Home />
                 </ListItemIcon>
                 <ListItemText primary='דף הבית' className={current === '/' ? classes.focused : null}/>
             </MenuItem>
-            <MenuItem onClick={()=> props.redirect('/managePage')} >
+            <MenuItem onClick={()=> redirect('/managePage')} >
                 <ListItemIcon className={current === '/managePage'  ? classes.focused : null}>
                     <SupervisorAccount />
                 </ListItemIcon>
                 <ListItemText primary='עמוד ניהול' className={current === '/managePage' ? classes.focused : null}/>
             </MenuItem>
-            <MenuItem onClick={()=> props.redirect('/treeDemo')} >
+            <MenuItem onClick={()=> redirect('/treeDemo')} >
                 <ListItemIcon className={current === '/treeDemo' ? classes.focused : null}>
                     <Hotel />
                 </ListItemIcon>
                 <ListItemText primary='עץ' className={current === '/treeDemo'  ? classes.focused : null}/>
             </MenuItem>
-            <MenuItem onClick={()=> props.changeTheme()} >
+            <MenuItem onClick={()=> changeTheme()} >
                 <ListItemIcon>
                     <Brightness3 />
                 </ListItemIcon>
