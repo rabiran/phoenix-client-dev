@@ -23,6 +23,9 @@ const styles = makeStyles({
   },
   content: {
     height:'100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 
@@ -58,8 +61,8 @@ const PersonDisplay = ({ groupId }) => {
   const filterInputChange = useCallback(value => {
     setFilterDebounced.current(value);
   }, [setFilterDebounced]) 
-  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  // const persons = fakePersons
+  // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+  const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   // group name and hierarchy
@@ -97,7 +100,7 @@ const PersonDisplay = ({ groupId }) => {
     <Divider/>
     <div className={classes.content}>{
       loading ? 
-      <Spinner/> : 
+      <Spinner size={80}/> : 
       <PersonGrid persons={persons} itemWidth={120}/>
     }</div>
     </>);
