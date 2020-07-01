@@ -5,6 +5,7 @@ import PersonItem from './PersonGridItem';
 import PropTypes from 'prop-types';
 import { VirtuosoGrid } from 'react-virtuoso';
 import ReactResizeDetector from 'react-resize-detector';
+import { FixedSizeGrid } from 'react-window';
 
 const renderVirtualThreshold = 100;
 const AVATAR_MARGIN = 5;
@@ -14,6 +15,26 @@ const styles = makeStyles({
   label: {},
   avatar: {},
 });
+
+const ITEMS_IN_ROW = 9;
+const ITEM_WIDTH = 85;
+const ITEM_HEIGHT = 120;
+
+function getPersonObject(row, column, flattenedArr) {
+  const index = row * ITEMS_IN_ROW + column;
+  return index < flattenedArr.length ? flattenedArr[index] : null;
+}
+
+const Cell = ({ columnIndex, rowIndex, style, data }) => {
+  const person = getPersonObject(rowIndex, columnIndex, data);
+  return person ? 
+    (<PersonItem 
+      label={person.fullName} 
+      style={style} 
+      avatarSize={75} 
+      width={ITEM_WIDTH} 
+      height={ITEM_HEIGHT}/>) : null;
+}
 
 const PersonGrid = ({
   persons,
@@ -81,12 +102,33 @@ const PersonGrid = ({
     </div>
   );
 
+  
+
+  const renderReactWindow = ({ width, height }) => (
+    <FixedSizeGrid
+      itemData={persons}
+      itemKey={({ columnIndex, data, rowIndex }) => {
+        const p = getPersonObject(rowIndex, columnIndex, data);
+        return p ? p.id : `${rowIndex*ITEMS_IN_ROW + columnIndex}`;
+      }}
+      rowCount={Math.ceil(persons.length / ITEMS_IN_ROW)}
+      columnCount={ITEMS_IN_ROW}
+      rowHeight={ITEM_HEIGHT}
+      columnWidth={ITEM_WIDTH}
+      height={height || 0}
+      width={width || 0}
+    >
+      {Cell}
+    </FixedSizeGrid>
+  );
+
   return (
     <ReactResizeDetector handleWidth handleHeight>
-      {({width, height}) => 
+      {({width, height}) => renderReactWindow({width, height})}
+      {/* {({width, height}) => 
         persons.length < renderVirtualThreshold 
         ? renderNormalGrid({ width, height })
-        : renderVirtualGrid({ width, height })}
+        : renderVirtualGrid({ width, height })} */}
     </ReactResizeDetector>
   );
 };

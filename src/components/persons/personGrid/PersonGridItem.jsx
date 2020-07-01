@@ -25,12 +25,13 @@ export const PersonGridItem = ({
   label,
   height,
   width,
-  avatarSize
+  avatarSize,
+  style
 }) => {
   const classes = styles({ height, width, avatarSize });
   return (
-    <div className={classes.root}>
-      <Avatar className={classes.avatar}></Avatar>    
+    <div className={classes.root} style={style}>
+      <Avatar className={classes.avatar}/>    
       <div className={classes.label}><Typography>{ label }</Typography></div>
     </div>
   );

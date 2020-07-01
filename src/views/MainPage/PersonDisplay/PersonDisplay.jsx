@@ -58,8 +58,8 @@ const PersonDisplay = ({ groupId }) => {
   const filterInputChange = useCallback(value => {
     setFilterDebounced.current(value);
   }, [setFilterDebounced]) 
-  const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  // const persons = fakePersons
+  // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
+  const persons = fakePersons
     .filter(p => p.fullName.startsWith(filterTerm));
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   // group name and hierarchy
@@ -98,7 +98,9 @@ const PersonDisplay = ({ groupId }) => {
     <div className={classes.content}>{
       loading ? 
       <Spinner/> : 
-      <PersonGrid persons={persons} itemWidth={120}/>
+      <PersonGrid persons={persons} itemWidth={75} 
+        // itemRenderer={p => (<div style={{width:50, height: 50}}>{p.fullName}</div>)}
+      />
     }</div>
     </>);
 };
