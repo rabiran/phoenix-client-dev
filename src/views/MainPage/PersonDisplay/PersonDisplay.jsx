@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
-import PersonGrid from 'components/persons/personGrid';
+import PersonGrid from 'components/persons/personGrid/VirtualGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import SearchInput from './SearchInput';
@@ -22,7 +22,7 @@ const styles = makeStyles({
     // width: '80%'
   },
   content: {
-    height:'100%',
+    height:'90%',
   },
 });
 
@@ -54,9 +54,12 @@ const PersonDisplay = ({ groupId }) => {
   const headerClasses = headerStyles();  
   // debounce the filterTerm update
   const [filterTerm, setFilter] = useState('');
-  const setFilterDebounced = useRef(_.debounce(setFilter));
+  const setFilterDebounced = 
+    // useRef(_.debounce(setFilter));
+    useCallback(_.debounce(setFilter), [setFilter]);
   const filterInputChange = useCallback(value => {
-    setFilterDebounced.current(value);
+    // setFilterDebounced.current(value);
+    setFilterDebounced(value)
   }, [setFilterDebounced]) 
   // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
   const persons = fakePersons
@@ -98,7 +101,7 @@ const PersonDisplay = ({ groupId }) => {
     <div className={classes.content}>{
       loading ? 
       <Spinner/> : 
-      <PersonGrid persons={persons} itemWidth={75} 
+      <PersonGrid persons={persons} itemWidth={90} itemHeight={150}
         // itemRenderer={p => (<div style={{width:50, height: 50}}>{p.fullName}</div>)}
       />
     }</div>
