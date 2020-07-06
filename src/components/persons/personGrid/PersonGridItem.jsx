@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 
+const AVATAR_MARGIN = 5;
+
 const styles = makeStyles({
   root: ({ width, height }) => ({
     width,
@@ -28,7 +30,9 @@ export const PersonGridItem = ({
   avatarSize,
   style
 }) => {
-  const classes = styles({ height, width, avatarSize });
+  const itemWidth = style.width || width;
+  const defaultAvatarSize = itemWidth ? itemWidth - 2 * AVATAR_MARGIN : null;
+  const classes = styles({ height, width, avatarSize: avatarSize || defaultAvatarSize }); 
   return (
     <div className={classes.root} style={style}>
       <Avatar className={classes.avatar}/>    

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
-import PersonGrid from 'components/persons/personGrid';
+import PersonGrid from 'components/persons/personGrid/VirtualGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import SearchInput from './SearchInput';
@@ -22,10 +22,10 @@ const styles = makeStyles({
     // width: '80%'
   },
   content: {
-    height:'100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height:'80%',
   },
 });
 
@@ -51,19 +51,30 @@ const inputValidate = val => {
     && !/[\s'`]{2,}/.test(val);
 }
 
+const fns = new Set();
+
 const PersonDisplay = ({ groupId }) => {
   // styles
   const classes = styles();
   const headerClasses = headerStyles();  
   // debounce the filterTerm update
   const [filterTerm, setFilter] = useState('');
-  const setFilterDebounced = useRef(_.debounce(setFilter));
+  const deb = _.debounce(setFilter);
+  const setFilterDebounced = 
+    // _.debounce(setFilter);
+    // useRef(_.debounce(setFilter));
+    useCallback(deb, []);
+
+  fns.add(setFilterDebounced);
+  console.log(fns);
+
   const filterInputChange = useCallback(value => {
-    setFilterDebounced.current(value);
-  }, [setFilterDebounced]) 
-  // const persons = (useSelector(state => selectPersonsByGroupId(state, groupId)) || [])
-  const persons = fakePersons
-    .filter(p => p.fullName.startsWith(filterTerm));
+    // setFilterDebounced.current(value);
+    setFilterDebounced(value);
+  }, [setFilterDebounced]);
+  // const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
+  const persons = fakePersons;
+  const filteredPersons = useMemo(() => persons.filter(p => p.fullName.startsWith(filterTerm)), [filterTerm, persons]) ;
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   // group name and hierarchy
   const {
@@ -87,7 +98,7 @@ const PersonDisplay = ({ groupId }) => {
           {`${hierarchy.join(' / ')}${hierarchy.length !== 0 ?  ' / ' : ''}` }
         </Typography>
         <Typography variant='h6' component='p'>{groupName}</Typography>
-        <Typography className={headerClasses.memberCount} variant="body2">({persons.length})</Typography>
+        <Typography className={headerClasses.memberCount} variant="body2">({filteredPersons.length})</Typography>
       </Grid>
       <Grid item>
         <SearchInput
@@ -101,7 +112,9 @@ const PersonDisplay = ({ groupId }) => {
     <div className={classes.content}>{
       loading ? 
       <Spinner size={80}/> : 
-      <PersonGrid persons={persons} itemWidth={120}/>
+      <PersonGrid persons={filteredPersons} itemWidth={100} itemHeight={160} spacing={3}
+        // itemRenderer={p => (<div style={{width:50, height: 50}}>{p.fullName}</div>)}
+      />
     }</div>
     </>);
 };
