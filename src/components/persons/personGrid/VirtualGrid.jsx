@@ -1,22 +1,41 @@
-import React, { forwardRef, useMemo, memo } from 'react';
-import { FixedSizeGrid, areEqual } from 'react-window';
+import React, { forwardRef } from 'react';
+import { FixedSizeGrid } from 'react-window';
 import { useTheme } from '@material-ui/styles';
 import PersonItem from './PersonGridItem';
 import ReactResizeDetector from 'react-resize-detector';
 import uniqid from 'uniqid';
 import PropTypes from 'prop-types';
 
-
 const MIN_COLS = 1;
 
-const flatIndex = (row, col, maxCol) => row * maxCol + col; 
+/**
+ * Returns the index of a grid cell in a flat 1-D arary
+ * @param {Number} row grid row index
+ * @param {Number} col grid column index
+ * @param {Number} numOfCols number of columns
+ */
+const flatIndex = (row, col, numOfCols) => row * numOfCols + col; 
 
-const getFlatArrayItem = (row, col, maxCol, arr) => {
-  const index = flatIndex(row, col, maxCol);
-  if (index >= arr.length) return null;
-  return arr[index];
+/**
+ * Returns the element in a 1-D array corresponding to grid indices (row, column) 
+ * or null if the index is out of bounds
+ * @param {Number} row grid row index
+ * @param {Number} col grid column index
+ * @param {Number} numOfCols number of columns
+ * @param {Array} arr array
+ */
+const getFlatArrayItem = (row, col, numOfCols, arr) => {
+  const index = flatIndex(row, col, numOfCols);
+  return index < arr.length ? arr[index] : null;
 }
 
+/**
+ * Renders a `PersonGridItem`
+ * @typedef {Object} itemRendererParam
+ * @property {*} itemData rendered item data
+ * @property {Object} style style to be applied to the root element
+ * @param {itemRendererParam} p
+ */
 const defaultItemRenderer = ({ itemData, style }) => (
   <PersonItem 
     label={itemData.fullName} 
@@ -34,20 +53,6 @@ const InnerElementType = forwardRef(({ style, ...rest }, ref) => (
   />
 ));
 
-const getCellComponent = ({ padding, numOfCols, itemRenderer }) => 
-  memo(({ columnIndex, rowIndex, style, data, isScrolling }) => {
-    const itemData = getFlatArrayItem(rowIndex, columnIndex, numOfCols, data);
-    const itemStyle = {
-      ...style,
-      width: style.width - padding,
-      height: style.height - padding,
-      padding: padding / 2,
-    };
-    const renderItem = itemRenderer || defaultItemRenderer;
-    return itemData ? renderItem({ itemData, style: itemStyle }) : null;
-  }, areEqual);
-  
-
 const VirtualGrid = ({
   persons,
   itemWidth,
@@ -59,7 +64,6 @@ const VirtualGrid = ({
 }) => {
   const theme = useTheme();
   const padding = theme.spacing(spacing);
-  // const InnerElementType = useMemo(() => getInnerElementType({ padding }), [padding]);
   
   return (
     <ReactResizeDetector handleWidth handleHeight>
@@ -68,7 +72,6 @@ const VirtualGrid = ({
           Math.max(Math.floor((width - padding) / (itemWidth + padding)), MIN_COLS) 
           : 0);
         const numOfrows = numOfCols ? Math.ceil(persons.length / numOfCols) : 0;
-        const Cell = getCellComponent({ padding, numOfCols, itemRenderer });
         return (
           <FixedSizeGrid
             style={style}
@@ -86,9 +89,18 @@ const VirtualGrid = ({
             width={width || 0}
             direction={theme.direction}
             overscanRowCount={3}
-            useIsScrolling
-          >
-            {Cell}
+            useIsScrolling>
+            {({ columnIndex, rowIndex, style, data }) => {
+              const itemData = getFlatArrayItem(rowIndex, columnIndex, numOfCols, data);
+              const itemStyle = {
+                ...style,
+                width: style.width - padding,
+                height: style.height - padding,
+                padding: padding / 2,
+              };
+              const renderItem = itemRenderer || defaultItemRenderer;
+              return itemData ? renderItem({ itemData, style: itemStyle }) : null;
+            }}
           </FixedSizeGrid>);
       }}
     </ReactResizeDetector>
@@ -102,7 +114,7 @@ VirtualGrid.propTypes = {
    */
   itemWidth: PropTypes.number.isRequired,
   /**
-   * Heught (in pixels) of each gridItem
+   * Height (in pixels) of each gridItem
    */
   itemHeight: PropTypes.number.isRequired,
   /**
@@ -111,7 +123,7 @@ VirtualGrid.propTypes = {
   spacing: PropTypes.number,
   /**
    * number of items to display in each row. if not given this number will 
-   * be calculated automatically based on the parent width & height
+   * be calculated automatically based on the parent width
    */
   itemsInRow: PropTypes.number,
   /**
