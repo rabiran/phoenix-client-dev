@@ -51,23 +51,13 @@ const inputValidate = val => {
     && !/[\s'`]{2,}/.test(val);
 }
 
-const fns = new Set();
-
 const PersonDisplay = ({ groupId }) => {
   // styles
   const classes = styles();
   const headerClasses = headerStyles();  
   // debounce the filterTerm update
   const [filterTerm, setFilter] = useState('');
-  const deb = _.debounce(setFilter);
-  const setFilterDebounced = 
-    // _.debounce(setFilter);
-    // useRef(_.debounce(setFilter));
-    useCallback(deb, []);
-
-  fns.add(setFilterDebounced);
-  console.log(fns);
-
+  const setFilterDebounced = useCallback(_.debounce(setFilter), []);
   const filterInputChange = useCallback(value => {
     // setFilterDebounced.current(value);
     setFilterDebounced(value);
