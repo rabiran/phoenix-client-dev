@@ -7,6 +7,7 @@ import uniqid from 'uniqid';
 import PropTypes from 'prop-types';
 
 const MIN_COLS = 1;
+const OVERSCAN_ROW_COUNT = 3;
 
 /**
  * Returns the index of a grid cell in a flat 1-D arary
@@ -88,13 +89,13 @@ const VirtualGrid = ({
             height={height || 0}
             width={width || 0}
             direction={theme.direction}
-            overscanRowCount={3}
+            overscanRowCount={OVERSCAN_ROW_COUNT}
             useIsScrolling>
             {({ columnIndex, rowIndex, style, data }) => {
               const itemData = getFlatArrayItem(rowIndex, columnIndex, numOfCols, data);
               const itemStyle = {
                 ...style,
-                width: style.width - padding,
+                width: style.width - padding, // real item dimensions
                 height: style.height - padding,
                 padding: padding / 2,
               };
