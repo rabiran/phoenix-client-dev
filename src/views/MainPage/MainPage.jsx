@@ -7,7 +7,7 @@ import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
-import PersonDisplay from './PersonDisplay/PersonDisplay';
+import GroupMembersDisplay from './GroupMembersDisplay';
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -38,7 +38,7 @@ const styles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  personDisplay: {
+  groupMembersDisplay: {
     margin: '20px auto',
     width: '60%',
   }
@@ -80,8 +80,8 @@ const MainPage = props => {
         {/* </div> */}
       </div>
       
-      <div className={classes.personDisplay}>
-        <PersonDisplay groupId={selectedGroupId} />
+      <div className={classes.groupMembersDisplay}>
+        <GroupMembersDisplay groupId={selectedGroupId} />
       </div>
     </Box>
   )
