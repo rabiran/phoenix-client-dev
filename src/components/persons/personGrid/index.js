@@ -1,3 +1,3 @@
-import PersonGrid from './PersonGrid';
+import VirtualGrid from './VirtualGrid';
 
-export default PersonGrid;
+export default VirtualGrid;
