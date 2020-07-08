@@ -30,7 +30,7 @@ export const PersonGridItem = ({
   avatarSize,
   style
 }) => {
-  const itemWidth = style.width || width;
+  const itemWidth = (!!style && style.width) || width;
   const defaultAvatarSize = itemWidth ? itemWidth - 2 * AVATAR_MARGIN : null;
   const classes = styles({ height, width, avatarSize: avatarSize || defaultAvatarSize }); 
   return (
