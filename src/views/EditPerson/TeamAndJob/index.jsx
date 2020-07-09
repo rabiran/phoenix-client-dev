@@ -27,7 +27,7 @@ export default function TeamAndJob({ formInputs, onChangeHandle, personDetails, 
   // Selected group 
   const [treeSelected, setTreeSelected] = useState(null);
   // expended expention toggle
-  const [expentionExtended, setExpentionExtended] = useState(false);
+  const [expansionPanelExpanded, setExpansionPanelExpanded] = useState(false);
   // group of person from redux
   const groupById = useSelector((state) => state.groups.byId[treeSelected]);
   const [hierarchyDisplay, setHierarchyDisplay] = useState("בחר צוות");
@@ -67,12 +67,12 @@ export default function TeamAndJob({ formInputs, onChangeHandle, personDetails, 
           <strong>צוות ותפקיד</strong> השלם את הפרטים הבאים:
         </span>
         {/* Closed expention if click away */}
-        <ClickAwayListener onClickAway={() => setExpentionExtended(false)}>
+        <ClickAwayListener onClickAway={() => setExpansionPanelExpanded(false)}>
           <ExpansionPanel
             onChange={(e, exp) => {
-              setExpentionExtended(exp);
+              setExpansionPanelExpanded(exp);
             }}
-            expanded={expentionExtended}
+            expanded={expansionPanelExpanded}
             disabled={disabledInput}
             classes={{
               root: classes.expansionPanelRoot,

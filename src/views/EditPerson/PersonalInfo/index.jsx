@@ -84,8 +84,8 @@ export default function PersonalInfo({
   if (mainPage) {
     let address = [formInputs.address.value, formInputs.homeNumber.value, formInputs.city.value].filter(value => value).join(', ');
     return (
-      <div className={clsx(classes.prsnlinfContainer)}>
-        <div className={clsx(classes.prsnlinfSubContainer)}>
+      <div className={classes.prsnlinfContainer}>
+        <div className={classes.prsnlinfSubContainer}>
           <WrappedTextField
             name="personalNumber"
             displayName="מס' אישי"
@@ -112,7 +112,7 @@ export default function PersonalInfo({
           />          
         </div>
         <div className={classes.divider} />
-        <div className={clsx(classes.prsnlinfSubContainer)}>
+        <div className={classes.prsnlinfSubContainer}>
           <WrappedTextField
             name="phone"
             displayName="טלפון"
@@ -150,8 +150,8 @@ export default function PersonalInfo({
   }
 
   return (
-    <div className={clsx(classes.prsnlinfContainer)}>
-      <div className={clsx(classes.prsnlinfSubContainer)}>
+    <div className={classes.prsnlinfContainer}>
+      <div className={classes.prsnlinfSubContainer}>
         <WrappedTextField
           name="firstName"
           displayName="שם פרטי"
@@ -179,7 +179,7 @@ export default function PersonalInfo({
         />
       </div>
       <div className={classes.divider} />
-      <div className={clsx(classes.prsnlinfSubContainer)}>
+      <div className={classes.prsnlinfSubContainer}>
         <WrappedTextField
           name="phone"
           displayName="טלפון"
@@ -200,7 +200,7 @@ export default function PersonalInfo({
         />
       </div>
       <div className={clsx(classes.divider, classes.hiddenDivider)} />
-      <div className={clsx(classes.prsnlinfSubContainer)}>
+      <div className={classes.prsnlinfSubContainer}>
         <WrappedTextField
           name="address"
           displayName="כתובת"

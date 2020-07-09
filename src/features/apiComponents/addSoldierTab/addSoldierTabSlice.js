@@ -21,12 +21,12 @@ const editSoldierTabSlice = createSlice({
       state.loadingSearch = true;
     },
     // Error from kartoffel if dont find soldier
-    loadSoldierError(state, { type, payload }) {
+    loadSoldierError(state, { payload }) {
       state.errorSearch = payload.error;
       state.loadingSearch = false;
     },
     // Set data (soldier object) from Kartoffel
-    loadSoldierSuccess(state, { type, payload }) {
+    loadSoldierSuccess(state, { payload }) {
       state.data = payload.person;
       state.loadingSearch = false;
     },
@@ -35,12 +35,12 @@ const editSoldierTabSlice = createSlice({
       state.loadingUpdate = true;
     },
     // Error from kartoffel if accur error  
-    updateSoldierError(state, { type, payload }) {
+    updateSoldierError(state, { payload }) {
       state.errorUpdate = payload.error;
       state.loadingUpdate = false;
     },
     // Save data (soldier Object) from Kartoffel
-    updateSoldierSuccess(state, { type, payload }) {
+    updateSoldierSuccess(state, { payload }) {
       state.data = payload.person;
       state.successUpdate = true;
       state.loadingUpdate = false;

@@ -4,9 +4,9 @@ export default makeStyles(theme => {
     return {
         rootFormControl: ({ showOnly, mainPage }) => ({
 
-            marginBottom: showOnly || mainPage ? 'none' : '4px',
-            marginTop: showOnly || mainPage ? 'none' : '4px',
-            height: showOnly || mainPage ? 'none' : '40px',
+            marginBottom: showOnly || mainPage ? null : '4px',
+            marginTop: showOnly || mainPage ? null : '4px',
+            height: showOnly || mainPage ? null : '40px',
         }),
         input: {
             "&:-webkit-autofill": {

@@ -8,7 +8,7 @@ const personsSlice = createSlice({
   name: 'persons',
   initialState,
   reducers: {
-    setPersons(state, action) {
+    setPerson(state, action) {
       const person = action.payload.person;
       state.byId[person.id] = person;
     },
@@ -19,6 +19,6 @@ const personsSlice = createSlice({
 export const getPersons = state => state.persons.byId;
 
 // Actions
-export const { setPersons } = personsSlice.actions;
+export const { setPerson } = personsSlice.actions;
 
 export default personsSlice.reducer;

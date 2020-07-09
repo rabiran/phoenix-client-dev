@@ -8,7 +8,7 @@ import {
   updateSoldierSuccess
 } from './addSoldierTabSlice';
 import apiPersons from '../../../api/persons/api';
-import { setPersons } from "../../persons/personsSlice";
+import { setPerson } from "../../persons/personsSlice";
 
 /**
  * watches for `loadSoldierLoading` and 'updateSoldierLoading' actions and fires `fetchSoldier` or 'updateSoldier' saga.
@@ -37,12 +37,12 @@ function* fetchSoldier({ payload }) {
 function* updateSoldier({ payload }) {
   const { personId, personUpdate, directGroup } = payload;
   try {
-    let person = (yield call(apiPersons.updatePerson, personId, personUpdate)).data;
+    let person = (yield call(apiPersons.updatePerson, personId, personUpdate));
     if (directGroup) {
-      person = (yield call(apiPersons.updateDirectGroup, personId, directGroup)).data;
+      person = (yield call(apiPersons.updateDirectGroup, personId, directGroup));
     }
     yield put(updateSoldierSuccess({ person }));
-    yield put(setPersons({ person }))
+    yield put(setPerson({ person }))
   } catch (error) {
     yield put(updateSoldierError({ error: error.response.data }));
   }

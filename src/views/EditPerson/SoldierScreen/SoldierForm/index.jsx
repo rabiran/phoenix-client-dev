@@ -35,7 +35,7 @@ export default function SoldierForm({ soldier, disabled }) {
   ];
   // Props from redux
   const { loadingUpdate, successUpdate, errorUpdate } = useSelector(
-    (state) => state.component.addSoldierTab
+    (state) => state.components.addSoldierTab
   );
   // jss styles
   const classes = styles();
@@ -51,12 +51,17 @@ export default function SoldierForm({ soldier, disabled }) {
     updateInputs,
   } = useFormHandled();
   // handled action in dialog
-  const handleDialog = useCallback(
+  const mainPage = useCallback(
     (e) => {
       dispatch(resetData());
-      e.target.innerText === "למסך הבית"
-        ? history.push("/")
-        : history.push("/editPerson");
+      history.push("/");
+    },
+    [dispatch, history]
+  );
+  const EditAnotherSoldier = useCallback(
+    (e) => {
+      dispatch(resetData());
+      history.push("/editPerson");
     },
     [dispatch, history]
   );
@@ -307,13 +312,13 @@ export default function SoldierForm({ soldier, disabled }) {
   // Update Soldier to Kartoffel
   const updateSoldier = (e) => {
     // Get key value each field from useFormHandled
-    const fullPersonChange = handleSubmit();
+    const fullPersonChange = handleSubmit(e);
     // filter according 'fieldToUpdate'
     const updatePerson = _.pick(fullPersonChange, fieldToUpdate);
     const directGroup = fullPersonChange.directGroup
       ? fullPersonChange.directGroup
       : null;
-    // Save phone changes in array 
+    // Save phone changes in array
     updatePerson.mobilePhone = updatePerson.mobilePhone
       ? [updatePerson.mobilePhone].concat(soldier.mobilePhone.slice(1))
       : soldier.mobilePhone.slice(1);
@@ -329,31 +334,29 @@ export default function SoldierForm({ soldier, disabled }) {
       })
     );
   };
-  
+
+  const dialogProps = {
+    title: "",
+    message: "",
+    actions: [
+      { name: "ערוך חייל נוסף", func: EditAnotherSoldier },
+      { name: "למסך הבית", func: mainPage },
+    ],
+  };
+  if (!_.isEmpty(errorUpdate)) {
+    dialogProps.title = "אויש!";
+    dialogProps.message = `אירעה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`;
+  } else if (successUpdate) {
+    dialogProps.title = "יש!";
+    dialogProps.message = `שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`;
+  }
   return (
-    <>
-      {/* error message dialog */}
+    <>      
       <MessageDialog
         topImage={letter}
-        title="אויש!"
-        message={`אירעה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`}
-        actions={[
-          { name: "ערוך חייל נוסף", func: handleDialog },
-          { name: "למסך הבית", func: handleDialog },
-        ]}
-        open={!_.isEmpty(errorUpdate)}
-      />
-      {/* succeed message dialog */}
-      <MessageDialog
-        topImage={letter}
-        title="יש!"
-        message={`שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`}
-        actions={[
-          { name: "ערוך חייל נוסף", func: handleDialog },
-          { name: "למסך הבית", func: handleDialog },
-        ]}
-        open={successUpdate}
-      />
+        { ...dialogProps }
+        open={!_.isEmpty(errorUpdate) || successUpdate}
+      />     
       {/* backdrop while save changes in Kartoffel */}
       <Backdrop className={classes.backdrop} open={loadingUpdate}>
         <CircularProgress color="primary" />
@@ -364,7 +367,7 @@ export default function SoldierForm({ soldier, disabled }) {
           formInputs={inputs}
           onChangeHandle={handleInputChange}
           personDetails={soldier}
-          disabled={disabled}
+          disabled={disabled}          
         />
         {/* field to change hirarchy of soldier */}
         <TeamAndJob
@@ -376,7 +379,7 @@ export default function SoldierForm({ soldier, disabled }) {
         <div className={classes.submitContainer}>
           <StyledButton
             onClick={updateSoldier}
-            // can't click if soldier empty or search and if some value in fields in form not valid  
+            // can't click if soldier empty or search and if some value in fields in form not valid
             disabled={disabled || _.isEmpty(soldier) || !isValidForm}
           >
             שמור שינויים

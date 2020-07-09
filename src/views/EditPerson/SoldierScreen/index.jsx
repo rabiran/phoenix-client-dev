@@ -20,7 +20,7 @@ export default function SoldierScreen({ personalNumber }) {
   let history = useHistory();
   // Props from redux
   const { loadingSearch, errorSearch, data } = useSelector(
-    (state) => state.component.addSoldierTab
+    (state) => state.components.addSoldierTab
   );
   // Allowing to search soldier
   const [switchPerson, setSwitchPerson] = useState(true);
@@ -60,6 +60,7 @@ export default function SoldierScreen({ personalNumber }) {
         <Avatar
           rootClassAvatar={classes.avatarRoot}
           uploadImage={!_.isEmpty(soldier)}
+          badge='setting'                
         />
       </div>
       <div className={classes.SearchBarPersonContainer}>

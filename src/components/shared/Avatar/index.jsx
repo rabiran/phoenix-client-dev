@@ -12,16 +12,16 @@ import PropTypes from "prop-types";
 const dictionary = {
   // avatar size
   size: {
-    small: 0.33,
-    medium: 0.66,
-    large: 1
+    small: 61,
+    medium: 121,
+    large: 184,
   },
   // Built-in badge
   badge: {
     setting: { icon: SettingsOutlinedIcon, tooltip: "הגדרות" },
     waiting: { icon: HourglassEmptyOutlinedIcon, tooltip: "ממתין" },
-    manager: { icon: RecordVoiceOverOutlinedIcon, tooltip: "מנהל קבוצה" }
-  }
+    manager: { icon: RecordVoiceOverOutlinedIcon, tooltip: "מנהל קבוצה" },
+  },
 };
 
 export default function CustomAvatar({
@@ -29,22 +29,21 @@ export default function CustomAvatar({
   badge, //setting, waiting, manager
   badgeComponnentIcon, // name of icon componnent
   badgeDescription, // tooltip for badge
-  size, // small, medium, large
+  size, // small, medium, large or pixels
   image, // path of image
-  borderColor = "#faddcf", // border color of avatar
+  borderColor, // border color of avatar
   fullName, // person's name
-  uploadImage // true, false
+  uploadImage, // true, false
 }) {
-  const stylesProps = { borderColor };
+  const stylesProps = { borderColor, uploadImage };
   stylesProps.size = Object.keys(dictionary.size).includes(size)
     ? dictionary.size[size]
-    : dictionary.size["large"];
+    : size;
   const classes = styles(stylesProps);
   let badgeContent,
     ComponentName = null,
     tooltip = null,
-    altImage,
-    avatarClassColor = classes.bgColorRoot;
+    altImage;
   if (badgeComponnentIcon) {
     ComponentName = badgeComponnentIcon;
     tooltip = badgeDescription;
@@ -80,8 +79,6 @@ export default function CustomAvatar({
     </div>
   );
 
-  if (!uploadImage) avatarClassColor = classes.bgColorDefaultAvater;
-
   return (
     <Badge
       color="primary"
@@ -89,20 +86,20 @@ export default function CustomAvatar({
       overlap="circle"
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "right"
+        horizontal: "right",
       }}
       badgeContent={badgeContent}
     >
       <Avatar
         alt={fullName}
         src={image}
-        classes={{ root: clsx(rootClassAvatar, avatarClassColor, classes.root) }}
+        classes={{ root: clsx(rootClassAvatar, classes.root) }}
       >
         {altImage}
       </Avatar>
     </Badge>
   );
-};
+}
 
 CustomAvatar.propTypes = {
   /**
@@ -116,15 +113,19 @@ CustomAvatar.propTypes = {
   /**
    * icon (if not used in build-in badge)
    */
-  badgeComponnentIcon: PropTypes.node,
+  badgeComponnentIcon: PropTypes.elementType,
   /**
    * tooltip for badge (if not used in build-in badge)
    */
   badgeDescription: PropTypes.string,
   /**
-   * size of avatar: small, medium, large. default: large
+   * size of avatar: small, medium, large. default: large or pixels
    */
-  size: PropTypes.string,
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(["small", "medium", "large"]),
+    PropTypes.number
+  ]),
+
   /**
    * path of image or image
    */
@@ -140,9 +141,10 @@ CustomAvatar.propTypes = {
   /**
    * Indicate if display uploadImage. default: false
    */
-  uploadImage: PropTypes.bool
+  uploadImage: PropTypes.bool,
 };
 
 CustomAvatar.defaultProps = {
   borderColor: "#faddcf",
+  size: "large",
 };

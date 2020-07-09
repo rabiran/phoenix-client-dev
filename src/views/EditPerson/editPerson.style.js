@@ -11,7 +11,7 @@ export const styles = makeStyles(theme => ({
     position: 'fixed',
   },
   AddPerson: {
-    marginTop: '39px', 
+    marginTop: '39px',
     height: "100%",
     width: "100%",
     display: "flex",
@@ -55,13 +55,14 @@ export const tabItemStyles = makeStyles(theme => ({
     letterSpacing: '0px',
     fontSize: '30px',
     fontWeight: 'bold',
+    '&$selected': {
+      color: theme.palette.primary.main,
+      zIndex: '2',
+    },
   },
   selected: {
-    color: theme.palette.primary.main,
-    zIndex: '2',
   },
-  wrapper: {
-    zIndex: 2,
+  wrapper: {    
     lineHeight: 'initial',
     textTransform: 'initial',
     position: 'relative',

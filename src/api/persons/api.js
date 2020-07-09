@@ -1,5 +1,4 @@
 import axios from 'axios';
-export const FETCH_DEPTH = 2;
 const BASE_URL = '/api/persons';
 
 const instance = axios.create({
@@ -15,10 +14,10 @@ const fetchAll = async () => {
 
 /**
  * Fetch person by id
- * @param {string} id 
+ * @param {string} personalNumber 
  */
-const fetchByPersonalNumber = async (id) => {
-  return (await instance.get(`/personalNumber/${id}`)).data;
+const fetchByPersonalNumber = async (personalNumber) => {
+  return (await instance.get(`/personalNumber/${personalNumber}`)).data;
 };
 
 /**
@@ -27,7 +26,7 @@ const fetchByPersonalNumber = async (id) => {
  * @param {object} personUpdate Object with changed fields
  */
 const updatePerson = async (personId, personUpdate) => {
-  return (await instance.put(`/${personId}`, { ...personUpdate }));
+  return (await instance.put(`/${personId}`, { ...personUpdate })).data;
 };
 
 /**
@@ -36,7 +35,7 @@ const updatePerson = async (personId, personUpdate) => {
  * @param {string} newGroupId new id's group  
  */
 const updateDirectGroup = async (personId, newGroupId) => {
-  return (await instance.put(`/${personId}/assign`, {group: newGroupId}));
+  return (await instance.put(`/${personId}/assign`, {group: newGroupId})).data;
 };
 
 export default {

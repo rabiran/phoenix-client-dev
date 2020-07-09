@@ -6,5 +6,5 @@ import { componentReducers } from "./apiComponents";
 export default combineReducers({
   groups: groupsReducer,
   persons: personsReducer,
-  component: componentReducers,
+  components: componentReducers,
 });

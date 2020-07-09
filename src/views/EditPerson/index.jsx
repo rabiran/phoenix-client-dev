@@ -16,9 +16,9 @@ export default function EditPerson() {
   const tabStyles = tabItemStyles();
   const classes = styles();
   // Handle toggle tabs
-  const [value, setValue] = useState(0);
+  const [visibleTabIndex, setVisibleTabIndex] = useState(0);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setVisibleTabIndex(newValue);
   };
   // Extract parameter from URL
   const { personalNumber } = useParams();
@@ -27,17 +27,17 @@ export default function EditPerson() {
       <div className={classes.background}></div>
       <div className={classes.tabContent}>
         <Tabs
-          value={value}
+          value={visibleTabIndex}
           onChange={handleChange}
           classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
         >
           <Tab label="חייל" disableRipple classes={tabStyles} />
           <Tab label="אזרח" disableRipple classes={tabStyles} />
         </Tabs>
-        <TabPanel className={classes.tabPanel} value={value} index={0}>
+        <TabPanel className={classes.tabPanel} value={visibleTabIndex} index={0}>
           <SoldierScreen personalNumber={personalNumber}/>
         </TabPanel>
-        <TabPanel className={classes.tabPanel} value={value} index={1}>
+        <TabPanel className={classes.tabPanel} value={visibleTabIndex} index={1}>
           Civilian in process...
         </TabPanel>
       </div>
@@ -63,10 +63,6 @@ function TabPanel(props) {
       {value === index && <Box>{children}</Box>}
     </Typography>
   );
-}
-
-EditPerson.propTypes = {
-  
 }
 
 TabPanel.propTypes = {
