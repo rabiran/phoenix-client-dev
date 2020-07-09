@@ -31,11 +31,10 @@ const getFlatArrayItem = (row, col, numOfCols, arr) => {
 }
 
 /**
- * Renders a `PersonGridItem`
- * @typedef {Object} itemRendererParam
- * @property {*} itemData rendered item data
- * @property {Object} style style to be applied to the root element
- * @param {itemRendererParam} p
+ * Renders a `PersonGridItem`.
+ * function signature `({ itemData, style }) => React.Element`
+ * @param {*} p.itemData rendered item data
+ * @param {Srting} p.style style to be applied to the root element
  */
 const defaultItemRenderer = ({ itemData, style }) => (
   <PersonItem 

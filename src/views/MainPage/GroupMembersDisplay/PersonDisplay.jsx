@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
@@ -28,19 +27,23 @@ const styles = makeStyles(theme => ({
     // width: '80%'
   },
   content: {
-    display: 'flex',
+    // display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)) * MIN_ROWS,
+    // height: (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)) * MIN_ROWS,
+    // minHeight: ITEM_HEIGHT,
+    flexGrow: 1,
+    flexShrink: 1,
   },
 }));
 
 const headerStyles = makeStyles({
   root: {
-    // height: '7%',
-    marginBottom: '3px',
+    height: '60px',
+    // marginBottom: '3px',
     // minHeight: '40px'
     // paddingBottom: '8px'
+    flexGrow: 0
   },
   groupTitle: {
     display: 'flex',
@@ -84,14 +87,21 @@ const PersonDisplay = ({ groupId }) => {
 
   //determine grid item size
 
-  return (<>
-    <Grid 
+  return (<Grid 
+    style={{
+      height: '100%',
+      flexWrap: 'nowrap',
+    }} 
+    container 
+    direction="column">
+    <Grid
+      item
       container
       spacing={2}
       alignItems='flex-end'
       justify='space-between'
       className={headerClasses.root}> 
-      <Grid item className={headerClasses.groupTitle} spacing={2}>
+      <Grid item className={headerClasses.groupTitle}>
         <Typography
           color='textSecondary'
           variant='h6'
@@ -119,7 +129,7 @@ const PersonDisplay = ({ groupId }) => {
         itemHeight={ITEM_HEIGHT} 
         spacing={ITEM_SPACING}/>
     }</div>
-    </>);
+    </Grid>);
 };
 
 PersonDisplay.propTypes = {
