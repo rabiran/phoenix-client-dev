@@ -18,32 +18,23 @@ const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i
 
 const ITEM_HEIGHT = 160;
 const ITEM_WIDTH = 100;
-const MIN_ROWS = 2;
 const ITEM_SPACING = 3;
 
 const styles = makeStyles(theme => ({
   root: {
-    overflow: 'hidden',
-    // width: '80%'
+    flexWrap: 'nowrap',
+    height: '100%',
   },
   content: {
-    // display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // height: (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)) * MIN_ROWS,
-    // minHeight: ITEM_HEIGHT,
+    minHeight: ITEM_HEIGHT,
     flexGrow: 1,
     flexShrink: 1,
   },
 }));
 
-const headerStyles = makeStyles({
+const headerStyles = makeStyles(theme => ({
   root: {
-    height: '60px',
-    // marginBottom: '3px',
-    // minHeight: '40px'
-    // paddingBottom: '8px'
-    flexGrow: 0
+    marginBottom: theme.spacing(1),
   },
   groupTitle: {
     display: 'flex',
@@ -53,7 +44,7 @@ const headerStyles = makeStyles({
   memberCount: {
     marginLeft: '7px',
   }
-});
+}));
 
 const onlyLetters = new RegExp(/^[a-z\u0590-\u05fe\s`']*$/i);
 
@@ -71,7 +62,6 @@ const PersonDisplay = ({ groupId }) => {
   const [filterTerm, setFilter] = useState('');
   const setFilterDebounced = useCallback(_.debounce(setFilter), []);
   const filterInputChange = useCallback(value => {
-    // setFilterDebounced.current(value);
     setFilterDebounced(value);
   }, [setFilterDebounced]);
   // const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
@@ -85,19 +75,14 @@ const PersonDisplay = ({ groupId }) => {
   } = group;
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
 
-  //determine grid item size
-
-  return (<Grid 
-    style={{
-      height: '100%',
-      flexWrap: 'nowrap',
-    }} 
+  return (
+  <Grid 
+    className={classes.root} 
     container 
     direction="column">
     <Grid
       item
       container
-      spacing={2}
       alignItems='flex-end'
       justify='space-between'
       className={headerClasses.root}> 
@@ -120,16 +105,21 @@ const PersonDisplay = ({ groupId }) => {
       </Grid>
     </Grid>
     <Divider/>
-    <div className={classes.content}>{
-      loading ? 
-      <Spinner size={80}/> : 
-      <PersonGrid 
-        persons={filteredPersons} 
-        itemWidth={ITEM_WIDTH} 
-        itemHeight={ITEM_HEIGHT} 
-        spacing={ITEM_SPACING}/>
-    }</div>
-    </Grid>);
+    <Grid 
+      container
+      justify='center'
+      alignItems='center'
+      className={classes.content}>
+      {
+        loading ? <Spinner size={80}/> :
+        <PersonGrid 
+          persons={filteredPersons} 
+          itemWidth={ITEM_WIDTH} 
+          itemHeight={ITEM_HEIGHT} 
+          spacing={ITEM_SPACING}/>  
+      }
+    </Grid>
+  </Grid>);
 };
 
 PersonDisplay.propTypes = {
