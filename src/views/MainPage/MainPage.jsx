@@ -81,7 +81,7 @@ const MainPage = props => {
       </div>
       
       <div className={classes.groupMembersDisplay}>
-        <GroupMembersDisplay groupId={selectedGroupId} />
+        {selectedGroupId && <GroupMembersDisplay groupId={selectedGroupId}/>}
       </div>
     </Box>
   )
