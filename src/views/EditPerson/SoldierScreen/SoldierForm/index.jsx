@@ -9,9 +9,12 @@ import StyledButton from "../../../../components/shared/styleComponent/StyleButt
 import { useFormHandled } from "../../../../helper/useFormHandled";
 import { PersonValidate } from "../../../../helper/personalValidation";
 import {
-  updateSoldierLoading,
+  updateSoldierRequest,
   resetData,
-} from "../../../../features/apiComponents/addSoldierTab/addSoldierTabSlice";
+  getLoadings,
+  getErrors,
+  getOpenDialog,
+} from "../../../../features/apiComponents/editSoldierTab/editSoldierTabSlice";
 import MessageDialog from "../../../../components/shared/dialog/messageDialog";
 import { useHistory } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@material-ui/core";
@@ -33,9 +36,17 @@ export default function SoldierForm({ soldier, disabled }) {
     "mobilePhone",
     "address",
   ];
+
   // Props from redux
-  const { loadingUpdate, successUpdate, errorUpdate } = useSelector(
-    (state) => state.components.addSoldierTab
+  const { updateInProgress, openDialog, updateSoldierError } = useSelector(
+    (state) => {
+      const openDialog = getOpenDialog(state);
+      return {
+        ...getLoadings(state),
+        ...getErrors(state),
+        openDialog,
+      };
+    }
   );
   // jss styles
   const classes = styles();
@@ -327,7 +338,7 @@ export default function SoldierForm({ soldier, disabled }) {
       : soldier.phone.slice(1);
     // update soldier in Kartoffel
     dispatch(
-      updateSoldierLoading({
+      updateSoldierRequest({
         personId: soldier.id,
         personUpdate: updatePerson,
         directGroup,
@@ -343,22 +354,24 @@ export default function SoldierForm({ soldier, disabled }) {
       { name: "למסך הבית", func: mainPage },
     ],
   };
-  if (!_.isEmpty(errorUpdate)) {
-    dialogProps.title = "אויש!";
-    dialogProps.message = `אירעה בעיה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`;
-  } else if (successUpdate) {
-    dialogProps.title = "יש!";
-    dialogProps.message = `שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`;
+  if (openDialog) {
+    if (!_.isEmpty(updateSoldierError)) {
+      dialogProps.title = "אויש!";
+      dialogProps.message = `אירעה שגיאה בשמירת פרטי החייל ${soldier.fullName}, אנא פנה למנהל המערכת`;
+    } else {
+      dialogProps.title = "יש!";
+      dialogProps.message = `שינוי פרטי החייל ${soldier.fullName} נשמרו בהצלחה`;
+    }
   }
   return (
-    <>      
+    <>
       <MessageDialog
         topImage={letter}
-        { ...dialogProps }
-        open={!_.isEmpty(errorUpdate) || successUpdate}
-      />     
+        {...dialogProps}
+        open={openDialog}
+      />
       {/* backdrop while save changes in Kartoffel */}
-      <Backdrop className={classes.backdrop} open={loadingUpdate}>
+      <Backdrop className={classes.backdrop} open={updateInProgress}>
         <CircularProgress color="primary" />
       </Backdrop>
       <form method={"post"}>
@@ -367,7 +380,7 @@ export default function SoldierForm({ soldier, disabled }) {
           formInputs={inputs}
           onChangeHandle={handleInputChange}
           personDetails={soldier}
-          disabled={disabled}          
+          disabled={disabled}
         />
         {/* field to change hirarchy of soldier */}
         <TeamAndJob

@@ -9,7 +9,7 @@ const personsSlice = createSlice({
   initialState,
   reducers: {
     setPerson(state, action) {
-      const person = action.payload.person;
+      const person = action.payload;
       state.byId[person.id] = person;
     },
   },
