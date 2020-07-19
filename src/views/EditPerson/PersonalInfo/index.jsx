@@ -21,11 +21,11 @@ export default function PersonalInfo({
   onChangeHandle,
   personDetails,
   disabled,
-  showOnly,
+  readOnly,
   mainPage,
 }) {
   // jss styles
-  const classes = styles({ showOnly, mainPage });  
+  const classes = styles({ readOnly, mainPage });  
   /**
    * Wrapped textfield component
    * @param {string} displayName represent field name in form
@@ -38,7 +38,7 @@ export default function PersonalInfo({
     ({ displayName, name, fieldParams, adormentRootClass, alwaysDisabled }) => {
       let notExistPerson = _.isEmpty(personDetails);
       let { value, isValid, errorMessage } = fieldParams;
-      if (showOnly || mainPage) {
+      if (readOnly || mainPage) {
         return (
           <TextField
             classes={{ root: classes.rootFormControl }}
@@ -76,7 +76,7 @@ export default function PersonalInfo({
     // disabled eslint because in this useCallback if i insert to dependency array 'onChangeHandle' function, 
     // the function rerender all the times and its not need to happen
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [personDetails, classes, showOnly, disabled, mainPage]
+    [personDetails, classes, readOnly, disabled, mainPage]
   );
   WrappedTextField.muiName = TextField.muiName;
 
@@ -230,7 +230,7 @@ export default function PersonalInfo({
       </div>
       <div className={classes.divider} />
       <div className={classes.prsnlinfSubContainer}>
-        <FormControl disabled={disabled || _.isEmpty(personDetails) || showOnly}>
+        <FormControl disabled={disabled || _.isEmpty(personDetails) || readOnly}>
           <FormLabel>סיווג ביטחוני (למילוי ע"י הקב"ט בלבד):</FormLabel>
           <RadioGroup
             name="withClearance"
@@ -274,7 +274,7 @@ PersonalInfo.propTypes = {
   /**
    *  Indication to dispaly only show fields
    */
-  showOnly: PropTypes.bool,
+  readOnly: PropTypes.bool,
   /**
    *  Indication to match component to mainPage
    */

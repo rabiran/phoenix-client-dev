@@ -2,11 +2,11 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles(theme => {
     return {
-        rootFormControl: ({ showOnly, mainPage }) => ({
+        rootFormControl: ({ readOnly, mainPage }) => ({
 
-            marginBottom: showOnly || mainPage ? null : '4px',
-            marginTop: showOnly || mainPage ? null : '4px',
-            height: showOnly || mainPage ? null : '40px',
+            marginBottom: readOnly || mainPage ? null : '4px',
+            marginTop: readOnly || mainPage ? null : '4px',
+            height: readOnly || mainPage ? null : '40px',
         }),
         input: {
             "&:-webkit-autofill": {
