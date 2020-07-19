@@ -24,6 +24,7 @@ const editSoldierTabSlice = createSlice({
     fetchSoldierSuccess(state, { payload }) {
       state.person = payload;
       state.fetchInProgress = false;
+      state.searchSoldierError = false;
     },
     // Error from kartoffel if dont find soldier
     fetchSoldierError: {
@@ -31,7 +32,7 @@ const editSoldierTabSlice = createSlice({
         state.searchSoldierError = payload;
         state.fetchInProgress = false;
       },
-      prepare: ({payload}) => ({ payload, error: true }),
+      prepare: (payload) => ({ payload, error: true }),
     },
     // Indicate update soldier 
     updateSoldierRequest(state) {
@@ -49,7 +50,7 @@ const editSoldierTabSlice = createSlice({
         state.updateSoldierError = payload;
         state.updateInProgress = false;
       },
-      prepare: ({payload}) => ({ payload, error: true }),
+      prepare: (payload) => ({ payload, error: true }),
     },
     // Reset state
     resetData(state) {

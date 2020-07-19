@@ -14,10 +14,42 @@ export default makeStyles(theme => {
         SearchBarPersonContainer: {
             position: 'relative',
             zIndex: '2',
+            padding: '24px 24px 5px 24px',
+            minHeight: '85px',
         },
         submitContainer: {
             display: 'flex',
             justifyContent: 'center'
+        },
+        titleSearchBar: {
+            fontWeight: "bold",
+        },
+        containerSearch: {
+            display: 'flex',
+            alignItems: 'baseline'
+        },
+        errorMessageRoot: {
+           /*  position:'relative',
+            top:'15px', */
+            marginLeft: '13px',
+        },
+        errorMessageSubtitle2: {
+            fontWeight: "bold",
+        },
+        personalNumberDetails: {
+            fontWeight: "bold",
+            marginTop: '10px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '208px',
+            alignItems: 'baseline',
+        },
+        inputLabel: {
+            fontWeight: 'unset',
+            color: 'black',            
+        },
+        updateLink:{
+            cursor: 'pointer',
         },
     };
 });

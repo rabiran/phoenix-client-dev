@@ -4,7 +4,7 @@ export default makeStyles(theme => ({
     iconColorPrimary:{
         color: theme.palette.background.paper
     }, 
-    fontSizeLargeIcon: props => ({
+    fontSizeDefaultIcon: props => ({
         width: `${12/23 * props.size}px`,
         height: `${12/23 * props.size}px`,
     }),

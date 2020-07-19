@@ -5,7 +5,7 @@ import SearchBarPerson from "../SearchBarPerson";
 import SoldierForm from "./SoldierForm";
 import styles from "./soldierScreen.style";
 import Avatar from "../../../components/shared/Avatar/index";
-import { 
+import {
   fetchSoldierRequest,
   getLoadings,
   getErrors,
@@ -13,12 +13,17 @@ import {
 } from "../../../features/apiComponents/editSoldierTab/editSoldierTabSlice";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Typography, InputLabel, Link } from "@material-ui/core";
 // import faker from "faker";
 
 /**
  * tab of soldier
  */
 export default function SoldierScreen({ personalNumber }) {
+  const errorMessage = "לא נמצא חייל העונה למ.א שהוזן";
+  const personalNumberTitle = "מספר אישי:";
+  const searchBarTitle = "הקלד מספר אישי להשלמת פרטי החייל:";
+  const updateLinkMessage = "עדכן";
   // jss styles
   const classes = styles();
   const dispatch = useDispatch();
@@ -26,7 +31,7 @@ export default function SoldierScreen({ personalNumber }) {
   // Props from redux
   const { fetchInProgress, searchSoldierError, person } = useSelector(
     (state) => {
-      const person  = getPerson(state);
+      const person = getPerson(state);
       return {
         ...getLoadings(state),
         ...getErrors(state),
@@ -35,10 +40,10 @@ export default function SoldierScreen({ personalNumber }) {
     }
   );
   // Allowing to search soldier
-  const [switchPerson, setSwitchPerson] = useState(true);
-  // Whether personalNumber has changed, fetch person from kartoffel 
+  const [personEditable, setPersonEditable] = useState(true);
+  // Whether personalNumber has changed, fetch person from kartoffel
   useMemo(() => {
-    if (personalNumber) {      
+    if (personalNumber) {
       dispatch(fetchSoldierRequest({ personalNumber: personalNumber }));
     }
   }, [personalNumber, dispatch]);
@@ -46,46 +51,93 @@ export default function SoldierScreen({ personalNumber }) {
   // Whether data changed, update soldier state and disable option to search
   useMemo(() => {
     setSoldier(person);
-    !_.isEmpty(person) && setSwitchPerson(false);
+    !_.isEmpty(person) && setPersonEditable(false);
   }, [person]);
   /**
    * Function to search person
    * if personalNumber equal to previous disabled search and dont research
    * if the inputText empty, enable search
-   * else editPerson/{inputText}  
+   * else editPerson/{inputText}
    * @param {string} inputText the personalNumber to search
    */
   const handleSearch = (inputText) => {
     if (inputText) {
-      if (inputText === personalNumber) {        
-        setSwitchPerson(false);
+      if (inputText === personalNumber && soldier.personalNumber === personalNumber) {
+        setPersonEditable(false);
       } else {
         history.push(`/editPerson/${inputText}`);
       }
     } else {
-      setSwitchPerson(true);
+      setPersonEditable(true);
     }
   };
+
+  let searchBarOrUpdate;
+
+  // If enable to search person
+  if (personEditable || _.isEmpty(soldier)) {
+    searchBarOrUpdate = (
+      <>
+        <SearchBarPerson
+          person={soldier}         
+          onClickSearch={handleSearch}
+          loading={fetchInProgress}
+        />
+        <div>
+          {!_.isEmpty(searchSoldierError) && !fetchInProgress && (
+            <span>
+              <Typography
+                color={"secondary"}
+                variant={"subtitle2"}
+                classes={{
+                  root: classes.errorMessageRoot,
+                  subtitle2: classes.errorMessageSubtitle2,
+                }}
+              >
+                {errorMessage}
+              </Typography>
+            </span>
+          )}
+        </div>
+      </>
+    );
+    // In case the person selected
+  } else {
+    searchBarOrUpdate = (
+      <div className={classes.personalNumberDetails}>
+        <InputLabel className={classes.inputLabel} disabled={true}>
+          {personalNumberTitle}
+        </InputLabel>
+        <InputLabel className={classes.inputLabel}>{personalNumber}</InputLabel>
+        <Link
+          underline="always"
+          className={classes.updateLink}
+          onClick={() => handleSearch("")}
+        >
+          {updateLinkMessage}
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className={classes.avatarContainer}>
         <Avatar
           rootClassAvatar={classes.avatarRoot}
           uploadImage={!_.isEmpty(soldier)}
-          badge='setting'                
+          badge="setting"
         />
       </div>
       <div className={classes.SearchBarPersonContainer}>
-        <SearchBarPerson
-          person={soldier}
-          enableSearch={switchPerson}
-          onClickSearch={handleSearch}
-          loading={fetchInProgress}
-          error={searchSoldierError}
-          errorMessage={"לא נמצא חייל העונה למ.א שהוזן"}
-        />
+        <div className={classes.titleSearchBar}>
+          <span>{searchBarTitle}</span>
+        </div>
+        <div className={classes.containerSearch}>
+          {searchBarOrUpdate}          
+        </div>
       </div>
-      <SoldierForm soldier={soldier} disabled={switchPerson}/>
+      <SoldierForm soldier={soldier} disabled={personEditable} />
     </div>
   );
 };
@@ -94,5 +146,5 @@ SoldierScreen.propTypes = {
   /**
    * personalNumber of person
    */
-  personalNumber: PropTypes.string, 
+  personalNumber: PropTypes.string,
 };

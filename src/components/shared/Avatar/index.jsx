@@ -74,7 +74,7 @@ export default function CustomAvatar({
       <PersonOutlineOutlinedIcon
         color="disabled"
         fontSize="large"
-        classes={{ fontSizeLarge: classes.fontSizeLargeIcon }}
+        classes={{ fontSizeLarge: classes.fontSizeDefaultIcon }}
       />
     </div>
   );
