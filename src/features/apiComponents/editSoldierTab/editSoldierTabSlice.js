@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 const initialState = {
   fetchInProgress: false,
@@ -9,11 +9,13 @@ const initialState = {
   person: {},
 };
 
+const sliceName = 'editSoldierTab';
+
 /**
  * Actions and reducers for editSoldier component
  */
 const editSoldierTabSlice = createSlice({
-  name: 'editSoldierTab',
+  name: sliceName,
   initialState,
   reducers: {
     // Indicate search soldier
@@ -54,30 +56,28 @@ const editSoldierTabSlice = createSlice({
     },
     // Reset state
     resetData(state) {
-      state.fetchInProgress = false;
-      state.updateInProgress = false;
-      state.openDialog = false;
-      state.searchSoldierError = {};
-      state.updateSoldierError = {};
-      state.person = {};
+      for(const key in initialState) {
+        state[key] = initialState[key]
+      }
     },
   },
 });
 
 // selectors
 
-export const getPerson = store => {
-  return store.components.editSoldierTab.person
-}; 
-export const getLoadings = store => {
-  const {fetchInProgress, updateInProgress} = store.components.editSoldierTab;
-  return {fetchInProgress, updateInProgress};
-};
-export const getErrors = store => {
-  const {searchSoldierError, updateSoldierError} = store.components.editSoldierTab;
-  return {searchSoldierError, updateSoldierError};
-};
+const root = key => state => state.components[sliceName][key];
+
+export const selectPerson = root('person');
+export const selectErrors = createSelector(
+  root('searchSoldierError'),
+  root('updateSoldierError'),
+  (searchSoldierError, updateSoldierError) => ({ searchSoldierError, updateSoldierError })
+);
+export const getLoadings = selectErrors;
 export const getOpenDialog = store => store.components.editSoldierTab.openDialog;
+
+export const selectIsFetching = root('fetchInProgress');
+export const selectIsUpdating = root('updateInProgress');
 
 export const {
   fetchSoldierRequest,
