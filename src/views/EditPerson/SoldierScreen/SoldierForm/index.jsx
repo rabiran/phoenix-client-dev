@@ -12,7 +12,7 @@ import {
   updateSoldierRequest,
   resetData,
   getLoadings,
-  getErrors,
+  selectErrors,
   getOpenDialog,
 } from "../../../../features/apiComponents/editSoldierTab/editSoldierTabSlice";
 import MessageDialog from "../../../../components/shared/dialog/messageDialog";
@@ -43,7 +43,7 @@ export default function SoldierForm({ soldier, disabled }) {
       const openDialog = getOpenDialog(state);
       return {
         ...getLoadings(state),
-        ...getErrors(state),
+        ...selectErrors(state),
         openDialog,
       };
     }
