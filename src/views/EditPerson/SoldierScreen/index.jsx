@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import SearchBarPerson from "../SearchBarPerson";
@@ -7,85 +7,97 @@ import styles from "./soldierScreen.style";
 import Avatar from "../../../components/shared/Avatar/index";
 import {
   fetchSoldierRequest,
-  getLoadings,
-  getErrors,
-  getPerson,
+  selectErrors,
+  selectPerson,
+  resetData,
+  selectIsFetching,
+  fetchSoldierError,
 } from "../../../features/apiComponents/editSoldierTab/editSoldierTabSlice";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Typography, InputLabel, Link } from "@material-ui/core";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { useEffect } from "react";
 // import faker from "faker";
 
-/**
- * tab of soldier
- */
+const errorMessage = "לא נמצא חייל העונה למ.א שהוזן";
+const personalNumberTitle = "מספר אישי:";
+const searchBarTitle = "הקלד מספר אישי להשלמת פרטי החייל:";
+const updateLinkMessage = "חיפוש חדש";
+
 export default function SoldierScreen({ personalNumber }) {
-  const errorMessage = "לא נמצא חייל העונה למ.א שהוזן";
-  const personalNumberTitle = "מספר אישי:";
-  const searchBarTitle = "הקלד מספר אישי להשלמת פרטי החייל:";
-  const updateLinkMessage = "עדכן";
   // jss styles
   const classes = styles();
   const dispatch = useDispatch();
   let history = useHistory();
   // Props from redux
-  const { fetchInProgress, searchSoldierError, person } = useSelector(
-    (state) => {
-      const person = getPerson(state);
-      return {
-        ...getLoadings(state),
-        ...getErrors(state),
-        person,
-      };
-    }
-  );
-  // Allowing to search soldier
-  const [personEditable, setPersonEditable] = useState(true);
+  const fetchInProgress = useSelector(selectIsFetching);
+  const { searchSoldierError } = useSelector(selectErrors);
+  const person = useSelector(selectPerson)
+  const showError = !_.isEmpty(searchSoldierError) && !fetchInProgress;
+
+  
+  const displaySearchInput = !personalNumber || _.isEmpty(person);
   // Whether personalNumber has changed, fetch person from kartoffel
-  useMemo(() => {
+  useEffect(() => {
     if (personalNumber) {
-      dispatch(fetchSoldierRequest({ personalNumber: personalNumber }));
+      dispatch(fetchSoldierRequest({ personalNumber }));
+    } 
+  },[personalNumber, dispatch]);
+  
+  //set focus on search Input
+  const searchInputRef = useRef(null);
+  useEffect(() => {
+    if(searchInputRef.current && (displaySearchInput || showError)) {
+      searchInputRef.current.focus();
     }
-  }, [personalNumber, dispatch]);
-  const [soldier, setSoldier] = useState(person);
-  // Whether data changed, update soldier state and disable option to search
-  useMemo(() => {
-    setSoldier(person);
-    !_.isEmpty(person) && setPersonEditable(false);
-  }, [person]);
-  /**
-   * Function to search person
-   * if personalNumber equal to previous disabled search and dont research
-   * if the inputText empty, enable search
-   * else editPerson/{inputText}
-   * @param {string} inputText the personalNumber to search
-   */
-  const handleSearch = (inputText) => {
-    if (inputText) {
-      if (inputText === personalNumber && soldier.personalNumber === personalNumber) {
-        setPersonEditable(false);
-      } else {
-        history.push(`/editPerson/${inputText}`);
-      }
-    } else {
-      setPersonEditable(true);
-    }
-  };
+  },[displaySearchInput, showError])
 
-  let searchBarOrUpdate;
+  const triggerSearch = personalNumberInput => {
+    history.push(`/editPerson/${personalNumberInput}`);
+  }
 
-  // If enable to search person
-  if (personEditable || _.isEmpty(soldier)) {
-    searchBarOrUpdate = (
-      <>
-        <SearchBarPerson
-          person={soldier}         
-          onClickSearch={handleSearch}
-          loading={fetchInProgress}
+  const pnSearchOrDisplay = displaySearchInput ? 
+    <div>
+      <SearchBarPerson
+        ref={searchInputRef}
+        onClickSearch={triggerSearch}
+        disabled={fetchInProgress}
+      />
+      {fetchInProgress && <LinearProgress/>} 
+    </div> :
+    <div className={classes.personalNumberDetails}>
+      <InputLabel className={classes.inputLabel} disabled={true}>
+        {personalNumberTitle}
+      </InputLabel>
+      <InputLabel className={classes.inputLabel}>{personalNumber}</InputLabel>
+      <Link
+        underline="always"
+        className={classes.updateLink}
+        component={RouterLink}
+        to='/editPerson'
+        onClick={() => dispatch(resetData())}
+      >
+        {updateLinkMessage}
+      </Link>
+    </div>
+
+  return (
+    <div>
+      <div className={classes.avatarContainer}>
+        <Avatar
+          rootClassAvatar={classes.avatarRoot}
+          uploadImage={!_.isEmpty(person)}
+          badge="setting"
         />
-        <div>
-          {!_.isEmpty(searchSoldierError) && !fetchInProgress && (
-            <span>
+      </div>
+      <div className={classes.SearchBarPersonContainer}>
+        <div className={classes.titleSearchBar}>
+          <span>{searchBarTitle}</span>
+        </div>
+        <div className={classes.containerSearch}>
+          {pnSearchOrDisplay}
+          {showError && (<span>
               <Typography
                 color={"secondary"}
                 variant={"subtitle2"}
@@ -96,48 +108,10 @@ export default function SoldierScreen({ personalNumber }) {
               >
                 {errorMessage}
               </Typography>
-            </span>
-          )}
-        </div>
-      </>
-    );
-    // In case the person selected
-  } else {
-    searchBarOrUpdate = (
-      <div className={classes.personalNumberDetails}>
-        <InputLabel className={classes.inputLabel} disabled={true}>
-          {personalNumberTitle}
-        </InputLabel>
-        <InputLabel className={classes.inputLabel}>{personalNumber}</InputLabel>
-        <Link
-          underline="always"
-          className={classes.updateLink}
-          onClick={() => handleSearch("")}
-        >
-          {updateLinkMessage}
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className={classes.avatarContainer}>
-        <Avatar
-          rootClassAvatar={classes.avatarRoot}
-          uploadImage={!_.isEmpty(soldier)}
-          badge="setting"
-        />
-      </div>
-      <div className={classes.SearchBarPersonContainer}>
-        <div className={classes.titleSearchBar}>
-          <span>{searchBarTitle}</span>
-        </div>
-        <div className={classes.containerSearch}>
-          {searchBarOrUpdate}          
+            </span>)}          
         </div>
       </div>
-      <SoldierForm soldier={soldier} disabled={personEditable} />
+      <SoldierForm soldier={person} disabled={displaySearchInput} />
     </div>
   );
 };

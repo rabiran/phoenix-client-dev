@@ -41,8 +41,12 @@ export default makeStyles(theme => {
             marginTop: '10px',
             display: 'flex',
             justifyContent: 'space-between',
-            width: '208px',
+            // width: '208px',
             alignItems: 'baseline',
+            '& > *': {
+              marginLeft: '5px',
+              marginRight: '5px',    
+            }
         },
         inputLabel: {
             fontWeight: 'unset',
