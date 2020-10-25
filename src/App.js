@@ -12,6 +12,7 @@ import Header from './components/common/Header';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import GridDemo from './views/GridDemo/GridDemo';
 import MainPage from './views/MainPage/MainPage';
+import Notifier from 'components/common/Notifier';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                   <Redirect to='main'/>
               </Switch>
             </Router>
+            <Notifier/>
         </ThemeProvider>
       </RTL>  
     </Provider>

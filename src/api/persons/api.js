@@ -1,13 +1,10 @@
-import axios from 'axios';
 import { fetchGroupMembers } from '../groups/api'
-const BASE_URL = 'api/persons';
+import axoisClient from '../axiosClient';
 
-const instance = axios.create({
-  baseURL: BASE_URL,
-});
+const BASE_URL = '/persons';
 
 const fetchById = async id => {
-  const res = (await instance.get(`/${id}`)).data;
+  const res = (await axoisClient.get(`${BASE_URL}/${id}`)).data;
   return personFromApiResponse(res);
 }
 

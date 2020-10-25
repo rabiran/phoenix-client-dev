@@ -1,14 +1,11 @@
-import axios from 'axios';
 import rootGroup from './rootGroup';
-export const FETCH_DEPTH = 2;
-const BASE_URL = 'api/organizationGroups';
+import axoisClient from '../axiosClient';
 
-const instance = axios.create({
-  baseURL: BASE_URL,
-});
+export const FETCH_DEPTH = 2;
+const BASE_URL = '/organizationGroups';
 
 const fetchAll = async () => {
-  return (await instance.get()).data.map(groupFromApiResponse);
+  return (await axoisClient.get(BASE_URL)).data.map(groupFromApiResponse);
 };
 
 
@@ -31,17 +28,17 @@ const fetchAll = async () => {
  * @param {number} depth 
  */
 const fetchSubtree = async (parentId, depth = FETCH_DEPTH) => {
-  const children = (await instance.get(`/${parentId}/children?maxDepth=${depth}`)).data;
+  const children = (await axoisClient.get(`${BASE_URL}/${parentId}/children?maxDepth=${depth}`)).data;
   return children.map(groupFromApiResponse);
 };
 
 const fetchGroupById = async id => {
-  const res = (await instance.get(`/${id}`)).data
+  const res = (await axoisClient.get(`${BASE_URL}/${id}`)).data
   return groupFromApiResponse(res);
 };
 
 const fetchGroupMembers = async id => {
-  const { directMembers } = (await instance.get(`/${id}?populate=directMembers`)).data
+  const { directMembers } = (await axoisClient.get(`${BASE_URL}/${id}?populate=directMembers`)).data
   return directMembers;
 }
 
