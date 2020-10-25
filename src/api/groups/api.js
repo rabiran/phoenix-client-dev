@@ -2,7 +2,7 @@ import rootGroup from './rootGroup';
 import axoisClient from '../axiosClient';
 
 export const FETCH_DEPTH = 2;
-const BASE_URL = '/organizationGroups';
+const BASE_URL = '/groups';
 
 const fetchAll = async () => {
   return (await axoisClient.get(BASE_URL)).data.map(groupFromApiResponse);
@@ -38,8 +38,9 @@ const fetchGroupById = async id => {
 };
 
 const fetchGroupMembers = async id => {
-  const { directMembers } = (await axoisClient.get(`${BASE_URL}/${id}?populate=directMembers`)).data
-  return directMembers;
+  // const { directMembers } = (await axoisClient.get(`${BASE_URL}/${id}?populate=directMembers`)).data
+  return (await axoisClient.get(`${BASE_URL}/${id}/directMembers`)).data;
+  // return directMembers;
 }
 
 /**
