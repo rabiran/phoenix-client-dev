@@ -6,7 +6,6 @@ import { theme } from './theme.js';
 import { ThemeProvider } from '@material-ui/core/styles';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
-import LandingPage from './views/LandingPage/LandingPage';
 import TreeDemo from './views/TreeListDemo/TreeDemo';
 import Header from './components/common/Header';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
