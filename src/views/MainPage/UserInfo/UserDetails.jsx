@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/styles';
 import TextField from 'components/shared/text/LabeledValue';
 import LabeledValue from 'components/shared/text/LabeledValue';
+import Grid from '@material-ui/core/Grid';
 
 
 const styles = makeStyles({
@@ -11,11 +12,14 @@ const styles = makeStyles({
     width: '100%',
   },
   column: {
+    // paddingTop: '10%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    width: '50%',
-    paddingLeft: '40px'
+    // justifyContent: '',
+    // flexBasis: '50%',
+    // width: '50%',
+    flexGrow: 1,
+    // paddingLeft: '40px'
   },
   divider: {
     borderLeft: '1px dashed grey',
@@ -28,7 +32,7 @@ const styles = makeStyles({
 const StyledField = withStyles(theme => ({
   root: {
     display: 'flex',
-    padding: '5px'
+    // padding: '5px'
   },
   label: {
     // width: '100%',
@@ -40,6 +44,7 @@ const StyledField = withStyles(theme => ({
   },
   value: {
     fontWeight: 'bold',
+    maxWidth: '50%'
   }
 }))(LabeledValue);
 
@@ -54,6 +59,76 @@ const UserDetails = ({
   address
 }) => {
   const classes = styles();
+  // return (
+  //   <Grid container wrap='nowrap' justify='space-around'>
+  //     <Grid item>
+  //       <Grid container direction='column' justify='center'  spacing={1}>
+  //         <Grid item>
+  //           <StyledField
+  //             label='מספר אישי:'
+  //             name='personalNumber'
+  //             value={personalNumber}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='תעודת זהות:'
+  //             name='identityCard'
+  //             value={identityCard}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='דרגה:'
+  //             name='rank'
+  //             value={rank}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='סיווג:'
+  //             name='clearance'
+  //             value={clearance}
+  //           />
+  //         </Grid>
+  //       </Grid>
+  //     </Grid>
+  //     <Grid item>
+  //       <Grid container direction='column' justify='center' spacing={1}>
+  //         <Grid item>
+  //           <StyledField
+  //             label='טלפון:'
+  //             name='phone'
+  //             value={phone}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='נייד:'
+  //             name='mobilePhone'
+  //             value={mobilePhone}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='מייל:'
+  //             name='mail'
+  //             value={mail}
+  //           />
+  //         </Grid>
+  //         <Grid item>
+  //           <StyledField
+  //             label='כתובת:'
+  //             name='address'
+  //             value={address}
+  //           />
+  //         </Grid>
+  //       </Grid>
+  //     </Grid>
+  //   </Grid>
+  // )
+
+
   return (
     <div className={classes.root}>
       <div className={classes.column}>
