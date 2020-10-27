@@ -7,7 +7,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-
 const styles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -18,7 +17,7 @@ export default function Header() {
   const classes = styles();
   return (
     <div className='header-root'>
-      <AppBar position="static">
+      <AppBar position="relative">
         <Toolbar>
           <IconButton className={classes.menuButton} edge="start" color="inherit">
             <MenuIcon/>

@@ -64,8 +64,8 @@ const PersonDisplay = ({ groupId }) => {
   const filterInputChange = useCallback(value => {
     setFilterDebounced(value);
   }, [setFilterDebounced]);
-  // const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
-  const persons = fakePersons;
+  const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
+  // const persons = fakePersons;
   const filteredPersons = useMemo(() => persons.filter(p => p.fullName.startsWith(filterTerm)), [filterTerm, persons]) ;
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   // group name and hierarchy

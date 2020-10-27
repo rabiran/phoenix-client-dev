@@ -12,15 +12,34 @@ import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import TreeIcon from 'components/shared/icons/Tree';
+import UserInfo from './UserInfo/UserInfo';
  
 
-
+const user = {
+  fullName: 'אלעד נייטרו',
+  job: 'עייף מאוד',
+  hierarchy: ['כובעי הקש','swoop','voo'],
+  personalNumber: '5676403',
+  identityCard: '312571458',
+  rank: 'תותחופלצת',
+  clearance: '7',
+  phone: '077-65756',
+  mobilePhone: '050-6711121',
+  mail: 'nitro@gmail.com',
+  address: 'עם טקסט ארוך מידי בשביל זה רחוב הנרקומנים',
+}
 
 const listHeaderHeight = 90;
+const userDetailsHeight = 200;
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
     height: 'calc(100vh - 64px)',
+    // display: 'flex',
+    overflowY: 'hidden',
+  },
+  groupsAndMembers: {
+    height: `calc(100% - ${userDetailsHeight}px)`,
     display: 'flex',
     overflowY: 'hidden',
   },
@@ -64,8 +83,13 @@ const MainPage = props => {
     dispatch(fetchByGroupIdIfNeeded(groupId));
   };
 
-  return (
-    <Box className={classes.root}>
+  return ( 
+  <Box className={classes.root}>
+    <UserInfo 
+      user={user}
+      height={userDetailsHeight}
+    />
+    <Box className={classes.groupsAndMembers}>
       <div className={classes.sideBar}>
         <ListHeader/>
         <Divider/>
@@ -83,8 +107,8 @@ const MainPage = props => {
       <div className={classes.groupMembersDisplay}>
         {selectedGroupId && <GroupMembersDisplay groupId={selectedGroupId}/>}
       </div>
-    </Box>
-  )
+    </Box> 
+  </Box>)
 };
 
 const ListHeader = () => {
