@@ -2,7 +2,7 @@ import rootGroup from './rootGroup';
 import axoisClient from '../axiosClient';
 
 export const FETCH_DEPTH = 2;
-const BASE_URL = '/groups';
+const BASE_URL = 'api/groups';
 
 const fetchAll = async () => {
   return (await axoisClient.get(BASE_URL)).data.map(groupFromApiResponse);

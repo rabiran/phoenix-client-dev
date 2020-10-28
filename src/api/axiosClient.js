@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'api';
-
 const axoisClient = axios.create({
-  baseURL: API_URL,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  }
 });
 
 const errorInterceptor = error => {
