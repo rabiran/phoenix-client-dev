@@ -4,23 +4,27 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 
-const styles = makeStyles({
+const styles = makeStyles(theme => ({
   root: {},
   avatar: ({ avatarSize = 170 }) => ({
     width: avatarSize,
     height: avatarSize,
+    [theme.breakpoints.down('lg')]: {
+      width: 150,
+      height: 150,
+    },
     margin: 'auto auto',
   }),
   avatarContainer: {
     height: '100%',
     display: 'flex',
-    paddingLeft: '5px'
+    paddingLeft: '15px'
   },
   description: {
     padding: 30,
-    paddingLeft: 70,
+    paddingLeft: '7%',
   }
-})
+}))
 
 const UserDescription = (props) => {
   const {
@@ -35,8 +39,8 @@ const UserDescription = (props) => {
         <Avatar className={classes.avatar} />
       </Grid>
       <Grid item className={classes.description}>
-        <Typography variant='h3'>{`${fullName} | ${job}`}</Typography>
-        <Typography variant='h5'>{hierarchy.join(' | ')}</Typography>
+        <Typography variant='h4'>{`${fullName} | ${job}`}</Typography>
+        <Typography variant='h6'>{hierarchy.join(' | ')}</Typography>
       </Grid>
     </Grid>
   )

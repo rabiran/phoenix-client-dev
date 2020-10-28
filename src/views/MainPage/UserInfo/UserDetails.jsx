@@ -19,6 +19,7 @@ const styles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    minWidth: 200
   },
   divider: {
     borderRight: '1px dashed grey',
@@ -34,7 +35,7 @@ const StyledField = withStyles(theme => ({
   },
   label: ({ shortLabel }) => ({
     flexGrow: 1,
-    maxWidth: shortLabel ? '90px': '110px',
+    maxWidth: shortLabel ? '80px': '110px',
     minWidth: '75px',
     fontWeight: 'bold',
     color: theme.palette.grey[600],

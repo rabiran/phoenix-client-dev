@@ -22,14 +22,11 @@ const LabeledValue = (props) => {
     <div className={classes.root}>
       <Typography
         className={classes.label}
-        // component=''
-        // variant='body1'
-        >
-          {`${label}`}
-        </Typography>
+      >
+        {label}
+      </Typography>
       <Typography
         className={classes.value}
-        // component='span'
       >
         {value}
       </Typography>
