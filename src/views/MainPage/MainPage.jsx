@@ -8,26 +8,26 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import ScrollFix from 'components/shared/ScrollFix/ScrollFix';
 import GroupMembersDisplay from './GroupMembersDisplay';
-import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import TreeIcon from 'components/shared/icons/Tree';
 import UserInfo from './UserInfo/UserInfo';
+import { selectUser } from 'features/auth/authSlice';
  
 
-const user = {
-  fullName: 'אלעד נייטרו',
-  job: 'עייף מאוד',
-  hierarchy: ['כובעי הקש','swoop','voo'],
-  personalNumber: '5676403',
-  identityCard: '312571458',
-  rank: 'תותחופלצת',
-  clearance: '7',
-  phone: '077-65756',
-  mobilePhone: '050-6711121',
-  mail: 'nitro@gmail.com',
-  address: 'עם טקסט ארוך מידי בשביל זה רחוב הנרקומנים',
-}
+// const user = {
+//   fullName: 'אלעד נייטרו',
+//   job: 'עייף מאוד',
+//   hierarchy: ['כובעי הקש','swoop','voo'],
+//   personalNumber: '5676403',
+//   identityCard: '312571458',
+//   rank: 'תותחופלצת',
+//   clearance: '7',
+//   phone: '077-65756',
+//   mobilePhone: '050-6711121',
+//   mail: 'nitro@gmail.com',
+//   address: 'עם טקסט ארוך מידי בשביל זה רחוב הנרקומנים',
+// }
 
 const listHeaderHeight = 90;
 const userDetailsHeight = 200;
@@ -76,6 +76,8 @@ const MainPage = props => {
       setSelectedGroupId(rootGroupsIds[0]);
     }
   }, [rootGroupsIds]);
+
+  const user = useSelector(selectUser);
 
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
   const handleSelection = (e, groupId) => {

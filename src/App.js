@@ -12,6 +12,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import GridDemo from './views/GridDemo/GridDemo';
 import MainPage from './views/MainPage/MainPage';
 import Notifier from 'components/common/Notifier';
+import Spinner from 'components/shared/Loading/Spinner';
+import ProtectedRoute from 'components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -22,10 +24,11 @@ function App() {
             <Router>
               <Switch>
                   {/* <Route exact path='/' component={LandingPage} /> */}
-                  <Route path='/managepage' component={ManagePage} />
-                  <Route path='/treeDemo' component={TreeDemo}/>
-                  <Route path='/grid' component={GridDemo}/>
-                  <Route path='/main' component={MainPage}/>
+                  <ProtectedRoute path='/managepage' component={ManagePage} />
+                  <ProtectedRoute path='/treeDemo' component={TreeDemo}/>
+                  <ProtectedRoute path='/grid' component={GridDemo}/>
+                  <ProtectedRoute path='/main' component={MainPage}/>
+                  <Route path='/login' component={Spinner}/>
                   <Redirect to='main'/>
               </Switch>
             </Router>
