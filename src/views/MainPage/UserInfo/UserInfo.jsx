@@ -23,7 +23,7 @@ const styles = makeStyles(theme => ({
     background: 'rgb(199, 216, 216)',
     display: 'flex',
   }
-}))
+}));
 
 const UserInfo = (props) => {
   const {
