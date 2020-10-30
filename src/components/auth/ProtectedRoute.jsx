@@ -3,9 +3,9 @@ import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../../features/auth/authSlice';
 
-const ProtectedRoute = ({ children, component, ...rest }) => {
+const ProtectedRoute = ({ children, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const toRender = children || component;
+  const toRender = children;
   return (
     <Route
       {...rest}
