@@ -1,9 +1,8 @@
-import axiosClient from '../axiosClient';
 import axoisClient from '../axiosClient';
 
 const BASE_URL = '/auth';
 
-const getUser = async () => await axoisClient.get(`${BASE_URL}/user`);
+const getUser = async () => await (await axoisClient.get(`${BASE_URL}/user`)).data;
 
 export {
   getUser
