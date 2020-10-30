@@ -51,12 +51,13 @@ function* fakeLogin(){
     "status": "active",
     "updatedAt": "2020-10-22T05:38:29.964Z",
     "id": "5e5688324203fc40043591aa",
-    "dischargeDay": "2022-11-30T22:00:00.000Z"
+    "dischargeDay": "2022-11-30T22:00:00.000Z",
+    "personalNumber": "5666666"
   }
-  yield delay(1000);
+  yield delay(3000);
   yield put(loginSuccess({ user }))
+  return { error: null };
 }
 
 
 export const login = mockAuth ? fakeLogin : _login;
-
