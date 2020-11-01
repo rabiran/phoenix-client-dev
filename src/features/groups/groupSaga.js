@@ -1,8 +1,9 @@
-import { put, call, takeEvery, all } from 'redux-saga/effects';
+import { put, call, takeEvery, all, select } from 'redux-saga/effects';
 import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
-import { fetchGroupById, fetchSubtree, getRootGroupId } from 'api/groups';
+import { fetchGroupById, fetchSubtree, fetchGroupByPath } from 'api/groups';
 import { safe } from 'utils/saga.helpers';
 import { setError } from 'features/errorSlice';
+import { selectUser } from 'features/auth/authSlice';
 
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
@@ -29,15 +30,15 @@ function* fetchChildren(action) {
 }
 
 function* initRootGroup() {
-  // get root id (in the real app it will come from the authenticated user)
-  const rootId = yield call(getRootGroupId);
-  // request the root children
-  yield put(fetchChildrenRequest({ id: rootId }));
-  // request the root group itslef
-  const { result: rootGroup, error } = yield safe(call(fetchGroupById, rootId));
+  // get root group from the user's top hierarchy 
+  const user = yield select(selectUser);
+  const rootPath = user.hierarchy[0];
+  const { result: rootGroup, error } = yield safe(call(fetchGroupByPath, rootPath));
   if(!error) {
     // root group fetched - put success action 
     yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
+    // request the root children
+    yield put(fetchChildrenRequest({ id: rootGroup.id }));
   }
 }
 

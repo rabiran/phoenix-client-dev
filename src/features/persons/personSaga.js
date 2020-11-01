@@ -28,7 +28,7 @@ function* initPersonsSaga() {
 
 export default function* rootSaga() {
   yield all([
-    initPersonsSaga(),
+    // initPersonsSaga(),
     watchFetchByGroupId()
   ]);
 }

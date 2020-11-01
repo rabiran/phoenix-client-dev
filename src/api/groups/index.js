@@ -9,7 +9,8 @@ export const {
   getRootGroupId,
   fetchSubtree,
   fetchGroupById,
-  fetchAll
+  fetchAll,
+  fetchGroupByPath
 } = toExport;
 
 export default toExport;

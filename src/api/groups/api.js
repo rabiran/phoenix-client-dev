@@ -44,6 +44,11 @@ const fetchGroupMembers = async id => {
   // return directMembers;
 }
 
+const fetchGroupByPath = async path => {
+  const res = (await axoisClient.get(`${BASE_URL}/path/${encodeURIComponent(path)}`)).data;
+  return groupFromApiResponse(res);
+}
+
 /**
  * stub for now
  */
@@ -70,12 +75,14 @@ export {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
-  fetchGroupMembers
+  fetchGroupMembers,
+  fetchGroupByPath
 };
 
 export default {
   fetchAll,
   getRootGroupId,
   fetchGroupById,
-  fetchSubtree
+  fetchSubtree,
+  fetchGroupByPath
 }

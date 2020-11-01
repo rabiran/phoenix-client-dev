@@ -76,8 +76,9 @@ const MainPage = props => {
   useEffect(() => {
     if(rootGroupsIds.length > 0) {
       setSelectedGroupId(rootGroupsIds[0]);
+      dispatch(fetchByGroupIdIfNeeded(rootGroupsIds[0]));
     }
-  }, [rootGroupsIds]);
+  }, [rootGroupsIds, dispatch]);
  
   const user = useSelector(selectUser);
 
