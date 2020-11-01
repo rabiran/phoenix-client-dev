@@ -9,10 +9,12 @@ import Spinner from 'components/shared/Loading/Spinner';
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    // color: '#fff',
   },
+  spinner: {
+    color: 'white',
+  }
 }));
-
 
 const Authenticating = () => {
   const classes = useStyles();
@@ -28,7 +30,7 @@ const Authenticating = () => {
 
   return (
     <Backdrop className={classes.backdrop} open={!isAuthenticated}>
-      <Spinner/>
+      <Spinner className={classes.spinner}/>
     </Backdrop>
   );
 }
