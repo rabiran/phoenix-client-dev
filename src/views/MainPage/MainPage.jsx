@@ -12,7 +12,9 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import TreeIcon from 'components/shared/icons/Tree';
 import UserInfo from './UserInfo/UserInfo';
+import LoadingBar from 'components/shared/Loading/Bar';
 import { selectUser } from 'features/auth/authSlice';
+import { useMemo } from 'react';
  
 
 // const user = {
@@ -76,8 +78,11 @@ const MainPage = props => {
       setSelectedGroupId(rootGroupsIds[0]);
     }
   }, [rootGroupsIds]);
-
+ 
   const user = useSelector(selectUser);
+
+  const rootGroupLoading = useMemo(() => rootGroupsIds.length === 0, [rootGroupsIds])
+
 
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
   const handleSelection = (e, groupId) => {
@@ -91,6 +96,7 @@ const MainPage = props => {
       user={user}
       height={userDetailsHeight}
     />
+    {rootGroupLoading && <LoadingBar/>}
     <Box className={classes.groupsAndMembers}>
       <div className={classes.sideBar}>
         <ListHeader/>
