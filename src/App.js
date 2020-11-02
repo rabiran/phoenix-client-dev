@@ -33,11 +33,11 @@ function App() {
                   <ProtectedRoute path='/grid'>
                     <GridDemo/>
                   </ProtectedRoute>
-                  <ProtectedRoute path='/main'>
+                  <ProtectedRoute exact path='/main'>
                     <MainPage/>
                   </ProtectedRoute>
                   <Route path='/login' component={LoginView}/>
-                  <Redirect to='main'/>
+                  <Redirect to='/main'/>
               </Switch>
             </Router>
             <Notifier/>
