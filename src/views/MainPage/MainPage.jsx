@@ -71,24 +71,29 @@ const MainPage = props => {
   const [selectedGroupId, setSelectedGroupId] = useState(null);
   const dispatch = useDispatch();
 
-  // initially select the first root group
   const rootGroupsIds = useSelector(selectRootGroupsIds);
+  const rootGroupLoading = useMemo(() => rootGroupsIds.length === 0, [rootGroupsIds])
+
+  // initially select the first root group
   useEffect(() => {
     if(rootGroupsIds.length > 0) {
       setSelectedGroupId(rootGroupsIds[0]);
-      dispatch(fetchByGroupIdIfNeeded(rootGroupsIds[0]));
     }
   }, [rootGroupsIds, dispatch]);
+
+  // fetch members on selection change
+  useEffect(() => {
+    if(selectedGroupId) {
+      dispatch(fetchByGroupIdIfNeeded(selectedGroupId));
+    }
+  }, [selectedGroupId, dispatch]);
  
+  // select the connected user
   const user = useSelector(selectUser);
-
-  const rootGroupLoading = useMemo(() => rootGroupsIds.length === 0, [rootGroupsIds])
-
 
   const handleExpandedChange = (e, nodes) => setExpandedGroups(nodes);
   const handleSelection = (e, groupId) => {
     setSelectedGroupId(groupId);
-    dispatch(fetchByGroupIdIfNeeded(groupId));
   };
 
   return ( 
