@@ -1,7 +1,7 @@
 import { fetchGroupMembers } from '../groups/api'
 import axoisClient from '../axiosClient';
 
-const BASE_URL = 'api/persons';
+const BASE_URL = '/api/persons';
 
 const fetchById = async id => {
   const res = (await axoisClient.get(`${BASE_URL}/${id}`)).data;
