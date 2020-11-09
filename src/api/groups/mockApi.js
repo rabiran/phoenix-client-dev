@@ -30,16 +30,22 @@ const fetchGroupById = async id => {
   return resolveAfter(rootGroup);
 };
 
+const fetchGroupByPath = async path => {
+  return resolveAfter(rootGroup);
+}
+
 export {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
   fetchAll,
+  fetchGroupByPath
 };
 
 export default {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
-  fetchAll
+  fetchAll,
+  fetchGroupByPath
 };

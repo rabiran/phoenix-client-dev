@@ -1,6 +1,9 @@
-import { put, call, takeEvery, all } from 'redux-saga/effects';
+import { put, call, takeEvery, all, select } from 'redux-saga/effects';
 import { fetchChildrenRequest , fetchChildrenSuccess } from './groupsSlice';
-import {fetchGroupById, fetchSubtree, getRootGroupId} from 'api/groups/index';
+import { fetchGroupById, fetchSubtree, fetchGroupByPath } from 'api/groups';
+import { safe } from 'utils/saga.helpers';
+import { setError } from 'features/errorSlice';
+import { selectUser } from 'features/auth/authSlice';
 
 /**
  * watches for `fetchChildrenRequest` actions and fires `fetchChildren` saga.
@@ -17,25 +20,26 @@ export function* watchFetchChildrenRequest() {
  */
 function* fetchChildren(action) {
   const { id } = action.payload;
-  const groups = yield call(fetchSubtree, id);
-  yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
+  const { result: groups, error } = yield safe(call(fetchSubtree, id));
+  if(!error) {
+    yield put(fetchChildrenSuccess({ groups, upsert: false, parentId: id }));
+  } else {
+    yield put(setError(error));
+  }
+  
 }
 
 function* initRootGroup() {
-  const rootId = yield call(getRootGroupId);
-  const { rootGroup, groups } = yield all({
-    rootGroup: call(fetchGroupById, rootId),
-    groups: call(fetchSubtree, rootId)
-  });
-
-  /* Direct children as root groups */
-  // yield put(fetchGroupsSuccess({ groups }))
-  // yield put(setRootGroupsIds({ ids: rootGroup.children }));
-
-  /* Group as single root */
-  yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
-  yield put(fetchChildrenSuccess({ groups, parentId: rootId }));
-
+  // get root group from the user's top hierarchy 
+  const user = yield select(selectUser);
+  const rootPath = user.hierarchy[0];
+  const { result: rootGroup, error } = yield safe(call(fetchGroupByPath, rootPath));
+  if(!error) {
+    // root group fetched - put success action 
+    yield put(fetchChildrenSuccess({ groups: [rootGroup] }));
+    // request the root children
+    yield put(fetchChildrenRequest({ id: rootGroup.id }));
+  }
 }
 
 export default function* rootSaga() {

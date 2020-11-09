@@ -1,15 +1,14 @@
-import axios from 'axios';
+import { fetchGroupMembers } from '../groups/api'
+import axoisClient from '../axiosClient';
+
 const BASE_URL = '/api/persons';
 
-const instance = axios.create({
-  baseURL: BASE_URL,
-});
 
 /**
  * Get all persons
  */
 const fetchAll = async () => {
-  return (await instance.get()).data;
+  return (await axoisClient.get()).data;
 };
 
 /**
@@ -17,7 +16,7 @@ const fetchAll = async () => {
  * @param {string} personalNumber 
  */
 const fetchByPersonalNumber = async (personalNumber) => {
-  return (await instance.get(`/personalNumber/${personalNumber}`)).data;
+  return (await axoisClient.get(`/personalNumber/${personalNumber}`)).data;
 };
 
 /**
@@ -26,7 +25,7 @@ const fetchByPersonalNumber = async (personalNumber) => {
  * @param {object} personUpdate Object with changed fields
  */
 const updatePerson = async (personId, personUpdate) => {
-  return (await instance.put(`/${personId}`, { ...personUpdate })).data;
+  return (await axoisClient.put(`/${personId}`, { ...personUpdate })).data;
 };
 
 /**
@@ -35,7 +34,31 @@ const updatePerson = async (personId, personUpdate) => {
  * @param {string} newGroupId new id's group  
  */
 const updateDirectGroup = async (personId, newGroupId) => {
-  return (await instance.put(`/${personId}/assign`, {group: newGroupId})).data;
+  return (await axoisClient.put(`/${personId}/assign`, {group: newGroupId})).data;
+};
+
+const fetchById = async id => {
+  const res = (await axoisClient.get(`${BASE_URL}/${id}`)).data;
+  return personFromApiResponse(res);
+}
+
+const fetchByGroupId = async id => {
+  const res = await fetchGroupMembers(id);
+  return res.map(personFromApiResponse);
+};
+
+const personFromApiResponse = person => {
+  const { _id, ...rest } = person;
+  return rest;
+};
+
+export {
+  updateDirectGroup,
+  updatePerson,
+  fetchAll,
+  fetchByPersonalNumber,
+  fetchById,
+  fetchByGroupId
 };
 
 export default {
@@ -43,4 +66,6 @@ export default {
   updatePerson,
   fetchAll,
   fetchByPersonalNumber,
+  fetchById,
+  fetchByGroupId
 }
