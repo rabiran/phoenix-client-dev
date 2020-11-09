@@ -8,15 +8,15 @@ const BASE_URL = '/api/persons';
  * Get all persons
  */
 const fetchAll = async () => {
-  return (await axoisClient.get()).data;
+  return (await axoisClient.get(`${BASE_URL}`)).data;
 };
 
 /**
  * Fetch person by id
  * @param {string} personalNumber 
  */
-const fetchByPersonalNumber = async (personalNumber) => {
-  return (await axoisClient.get(`/personalNumber/${personalNumber}`)).data;
+const fetchByPersonalNumber = async (identifier) => {
+  return (await axoisClient.get(`${BASE_URL}/identifier/${identifier}`)).data;
 };
 
 /**
@@ -25,7 +25,7 @@ const fetchByPersonalNumber = async (personalNumber) => {
  * @param {object} personUpdate Object with changed fields
  */
 const updatePerson = async (personId, personUpdate) => {
-  return (await axoisClient.put(`/${personId}`, { ...personUpdate })).data;
+  return (await axoisClient.put(`${BASE_URL}/${personId}`, { ...personUpdate })).data;
 };
 
 /**
@@ -34,7 +34,7 @@ const updatePerson = async (personId, personUpdate) => {
  * @param {string} newGroupId new id's group  
  */
 const updateDirectGroup = async (personId, newGroupId) => {
-  return (await axoisClient.put(`/${personId}/assign`, {group: newGroupId})).data;
+  return (await axoisClient.put(`${BASE_URL}/${personId}/assign`, {group: newGroupId})).data;
 };
 
 const fetchById = async id => {
