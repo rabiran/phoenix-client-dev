@@ -1,4 +1,6 @@
 import { put, call, takeEvery, all } from 'redux-saga/effects';
+import { safeCall, safe } from 'utils/saga.helpers';
+
 import {
   fetchSoldierRequest,
   fetchSoldierSuccess,
@@ -23,11 +25,11 @@ function* watchSoldierTab() {
  */
 function* fetchSoldier({ payload }) {
   const { personalNumber } = payload;
-  try {
-    const person = yield call(apiPersons.fetchByPersonalNumber, personalNumber);
+  const { result: person, error } = yield safeCall(apiPersons.fetchByPersonalNumber, personalNumber);
+  if(!error) {
     yield put(fetchSoldierSuccess(person));
-  } catch (error) {
-    yield put(fetchSoldierError(error.response.data));
+  } else {
+    yield put(fetchSoldierError(error));
   }
 }
 

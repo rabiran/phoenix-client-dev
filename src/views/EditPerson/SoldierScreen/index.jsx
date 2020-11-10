@@ -36,14 +36,15 @@ export default function SoldierScreen({ personalNumber }) {
   const person = useSelector(selectPerson)
   const showError = !_.isEmpty(searchSoldierError) && !fetchInProgress;
 
-  
+  // if already editing a person, hide the search input
   const displaySearchInput = !personalNumber || _.isEmpty(person);
+
   // Whether personalNumber has changed, fetch person from kartoffel
   useEffect(() => {
     if (personalNumber) {
       dispatch(fetchSoldierRequest({ personalNumber }));
     } 
-  },[personalNumber, dispatch]);
+  }, [personalNumber, dispatch]);
   
   //set focus on search Input
   const searchInputRef = useRef(null);
@@ -51,12 +52,13 @@ export default function SoldierScreen({ personalNumber }) {
     if(searchInputRef.current && (displaySearchInput || showError)) {
       searchInputRef.current.focus();
     }
-  },[displaySearchInput, showError])
+  }, [displaySearchInput, showError])
 
   const triggerSearch = personalNumberInput => {
     history.push(`/editPerson/${personalNumberInput}`);
   }
 
+  // 
   const pnSearchOrDisplay = displaySearchInput ? 
     <div>
       <SearchBarPerson
