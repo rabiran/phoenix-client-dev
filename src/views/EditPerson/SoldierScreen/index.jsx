@@ -22,7 +22,7 @@ import { useEffect } from "react";
 
 const errorMessage = "לא נמצא חייל העונה למ.א שהוזן";
 const personalNumberTitle = "מספר אישי:";
-const searchBarTitle = "הקלד מספר אישי להשלמת פרטי החייל:";
+const searchBarTitle = "הקלד מספר אישי או ת.ז להשלמת פרטי החייל:";
 const updateLinkMessage = "חיפוש חדש";
 
 export default function SoldierScreen({ personalNumber }) {
