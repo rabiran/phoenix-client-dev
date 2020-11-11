@@ -21,8 +21,8 @@ function App() {
     <Provider store={store}>
       <RTL>
         <ThemeProvider theme={theme}>
-            <Header/>
             <Router>
+            <Header/>
               <Switch>
                   <Route path='/treeDemo' component={TreeDemo}/>
                   {/* <Route exact path='/' component={LandingPage} /> */}
