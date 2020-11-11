@@ -19,8 +19,8 @@ export const styles = makeStyles(theme => ({
   },
   tabContent: {
     width: '60%',
-    position: "relative",
-    top: "66px",
+    // position: "relative",
+    // top: "66px",
     minWidth: "min-content"
   },
   tabPanel: {
