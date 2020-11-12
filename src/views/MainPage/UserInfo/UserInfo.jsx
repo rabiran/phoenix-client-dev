@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import UserDescription from './UserDescription';
 import { makeStyles } from '@material-ui/styles';
-import UserDetails from './UserDetails';
+import UserDetails from 'components/persons/personDetails/PersonDetails';
 
 
 const SquareSize = 30;
@@ -38,7 +38,7 @@ const styles = makeStyles(theme => ({
     background: 'rgb(199, 216, 216)',
     display: 'flex',
     paddingLeft: theme.spacing(2)
-  }
+  },
 }));
 
 const UserInfo = (props) => {
@@ -62,7 +62,7 @@ const UserInfo = (props) => {
         }}
       />
       <div className={classes.details}>
-        <UserDetails { ...details }/>
+        <UserDetails { ...details } />
       </div>
     </Box>
   );
