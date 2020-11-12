@@ -43,7 +43,10 @@ export default function SoldierScreen({ personalNumber }) {
   useEffect(() => {
     if (personalNumber) {
       dispatch(fetchSoldierRequest({ personalNumber }));
-    } 
+    }
+    return function clearData() {
+      dispatch(resetData());
+    }
   }, [personalNumber, dispatch]);
   
   //set focus on search Input
@@ -78,7 +81,6 @@ export default function SoldierScreen({ personalNumber }) {
         className={classes.updateLink}
         component={RouterLink}
         to='/editPerson'
-        onClick={() => dispatch(resetData())}
       >
         {updateLinkMessage}
       </Link>
