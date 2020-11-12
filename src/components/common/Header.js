@@ -70,7 +70,7 @@ export default function Header() {
           </Menu>
           <IconButton
             component={Link}
-            to='main'
+            to='/main'
             className={classes.menuButton} 
             edge="start" 
             color="inherit"
