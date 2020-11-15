@@ -49,9 +49,10 @@ const PersonDetails = ({
   mobilePhone,
   mail,
   address,
-  labeledValueClasses = {}
+  labeledValueClasses = {},
+  ...rest
 }) => {
-  const classes = styles();
+  const classes = styles(rest);
   return (
     <div className={classes.root}>
       <div className={classes.column}>
