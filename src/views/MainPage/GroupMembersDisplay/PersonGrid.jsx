@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Grid from 'components/persons/personGrid';
+import Grid from 'components/shared/VirtualGrid/VirtualGrid';
 import PersonGridItem from 'components/persons/personGrid/PersonGridItem';
 import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
 import { makeStyles } from '@material-ui/styles';
@@ -34,11 +34,12 @@ const PersonGrid = ({
 
   return (<>
     <Grid
-      persons={persons}
+      items={persons}
       itemWidth={itemWidth} 
       itemHeight={itemHeight} 
       spacing={spacing}
-      itemRenderer={({ itemData: person, style }) => {
+      itemKey={({ item: person }) => person.id}
+      itemRenderer={({ item: person, style }) => {
         return (
           <PersonGridItem
             classes={gridItemClasses}
