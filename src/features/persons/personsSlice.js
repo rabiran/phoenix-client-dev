@@ -11,6 +11,10 @@ const personsSlice = createSlice({
   name: 'persons',
   initialState,
   reducers: {
+    setPerson(state, action) {
+      const person = action.payload;
+      state.byId[person.id] = person;
+    },
     fetchByGroupIdSuccess(state, action) {
       const { groupId, persons } = action.payload;
       const newPersonsIdMap = createIdMap(persons);
@@ -49,8 +53,7 @@ const personsSlice = createSlice({
         },
         error: true 
       })
-    }
-
+    },
   }
 });
 
@@ -99,7 +102,8 @@ export const {
   /**
    * @param groupId the id of the group which fetch requset failed.
    */
-  fetchByGroupIdError
+  fetchByGroupIdError,
+  setPerson,
 } = personsSlice.actions;
 
 export const fetchByGroupIdIfNeeded = groupId => (dispatch, getState) => {

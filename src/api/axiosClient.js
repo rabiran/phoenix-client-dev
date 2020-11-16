@@ -9,7 +9,16 @@ const axoisClient = axios.create({
 
 const errorInterceptor = error => {
   const { response, message, stack } = error;
-  return Promise.reject(response ? response : { message, stack });
+  const status = response?.status;
+  const statusText = response?.statusText;
+  const data = response?.data;
+  return Promise.reject({
+    message: data?.message || message,
+    status,
+    statusText,
+    data,
+    stack
+  });
 }
 
 axoisClient.interceptors.response.use(null, errorInterceptor);

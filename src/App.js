@@ -6,6 +6,7 @@ import { theme } from './theme.js';
 import { ThemeProvider } from '@material-ui/core/styles';
 import RTL from './components/common/RTL';
 import ManagePage from './views/ManagePage/ManagePage';
+import EditPerson from "./views/EditPerson";
 import TreeDemo from './views/TreeListDemo/TreeDemo';
 import Header from './components/common/Header';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
@@ -20,9 +21,10 @@ function App() {
     <Provider store={store}>
       <RTL>
         <ThemeProvider theme={theme}>
-            <Header/>
             <Router>
+            <Header/>
               <Switch>
+                  <Route path='/treeDemo' component={TreeDemo}/>
                   {/* <Route exact path='/' component={LandingPage} /> */}
                   <ProtectedRoute path='/managepage'>
                     <ManagePage/>
@@ -35,6 +37,9 @@ function App() {
                   </ProtectedRoute>
                   <ProtectedRoute exact path='/main'>
                     <MainPage/>
+                  </ProtectedRoute>
+                  <ProtectedRoute path='/EditPerson/:personalNumber?'>
+                    <EditPerson/>
                   </ProtectedRoute>
                   <Route path='/login' component={LoginView}/>
                   <Redirect to='/main'/>

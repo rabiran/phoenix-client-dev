@@ -1,6 +1,7 @@
 import { all, call } from 'redux-saga/effects';
 import personsRoot from './persons/personSaga';
 import groupsRoot from './groups/groupSaga';
+import { componentSaga } from "./apiComponents";
 import { login } from './auth/authSaga';
 
 
@@ -12,6 +13,7 @@ export default function* rootSaga() {
   }
   yield all([
     groupsRoot(),
+    componentSaga(),
     personsRoot()
   ]);
 }
