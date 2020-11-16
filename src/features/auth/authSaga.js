@@ -59,7 +59,7 @@ function* fakeLogin(){
     "dischargeDay": "2022-11-30T22:00:00.000Z",
     "personalNumber": "5666666"
   }
-  yield delay(3000);
+  yield delay(500);
   yield put(loginSuccess({ user }))
   return { error: null };
 }
