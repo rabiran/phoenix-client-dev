@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
 import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
-import PersonGrid from 'components/persons/personGrid';
+import PersonGrid from './PersonGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import SearchInput from './SearchInput';
@@ -16,7 +16,7 @@ import faker from 'faker/locale/en';
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
 const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
-const ITEM_HEIGHT = 160;
+const ITEM_HEIGHT = 130;
 const ITEM_WIDTH = 100;
 const ITEM_SPACING = 3;
 
@@ -113,10 +113,11 @@ const PersonDisplay = ({ groupId }) => {
       {
         loading ? <Spinner size={80}/> :
         <PersonGrid 
-          persons={filteredPersons} 
-          itemWidth={ITEM_WIDTH} 
-          itemHeight={ITEM_HEIGHT} 
-          spacing={ITEM_SPACING}/>  
+          persons={filteredPersons}
+          itemWidth={ITEM_WIDTH}
+          itemHeight={ITEM_HEIGHT}
+          spacing={ITEM_SPACING}
+        />
       }
     </Grid>
   </Grid>);
