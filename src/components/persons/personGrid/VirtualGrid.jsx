@@ -32,12 +32,15 @@ const getFlatArrayItem = (row, col, numOfCols, arr) => {
 
 /**
  * Renders a `PersonGridItem`.
- * function signature `({ itemData, style }) => React.Element`
+ * function signature `({ itemData, style, onItemClick }) => React.Element`
  * @param {*} p.itemData rendered item data
  * @param {Srting} p.style style to be applied to the root element
+ * @param {Function} p.onItemClick callback function to call when item clicked
+ *                                 `(clickEvent, itemData) => void`
  */
-const defaultItemRenderer = ({ itemData, style }) => (
-  <PersonItem 
+const defaultItemRenderer = ({ itemData, style, onItemClick }) => (
+  <PersonItem
+    onClick={e => onItemClick(e, itemData)}
     label={itemData.fullName} 
     style={style}/>
 );
@@ -55,6 +58,7 @@ const InnerElementType = forwardRef(({ style, ...rest }, ref) => (
 
 const VirtualGrid = ({
   persons,
+  onItemClick = () => {},
   itemWidth,
   itemHeight,
   spacing = 0,
@@ -99,7 +103,7 @@ const VirtualGrid = ({
                 padding: padding / 2,
               };
               const renderItem = itemRenderer || defaultItemRenderer;
-              return itemData ? renderItem({ itemData, style: itemStyle }) : null;
+              return itemData ? renderItem({ itemData, style: itemStyle, onClick: onItemClick }) : null;
             }}
           </FixedSizeGrid>);
       }}
@@ -109,6 +113,12 @@ const VirtualGrid = ({
 
 VirtualGrid.propTypes = {
   persons: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /**
+   * Function to call when grid item is being clicked.
+  
+   * Signature: `(clickEvent, itemData) => void`
+   */
+  onItemClick: PropTypes.func,
   /**
    * Width (in pixels) of each gridItem
    */
@@ -128,9 +138,13 @@ VirtualGrid.propTypes = {
   itemsInRow: PropTypes.number,
   /**
    * Custom item renderer, to render items other than the default `PersonGridItem`.
-   * function signature: `({ itemData, style }) => ReactElement`
-   * where `itemData` is the person object corresponding to the rendered item.
+   * function signature: `({ itemData, style, onItemClick }) => ReactElement` where:
+  
+   * `itemData` is the person object corresponding to the rendered item.
+
    * `style` - a style object to be applied to the root element of the rendered item
+   
+   * `onItemClick` - the `onItemClick` prop passed to the grid component
    */
   itemRenderer: PropTypes.func
 }
