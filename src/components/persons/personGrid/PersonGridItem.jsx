@@ -28,14 +28,22 @@ export const PersonGridItem = ({
   height,
   width,
   avatarSize,
-  style
+  onClick,
+  style,
+  ...rest
 }) => {
   const itemWidth = (!!style && style.width) || width;
   const defaultAvatarSize = itemWidth ? itemWidth - 2 * AVATAR_MARGIN : null;
-  const classes = styles({ height, width, avatarSize: avatarSize || defaultAvatarSize }); 
+  const classes = styles({ height, width, avatarSize: avatarSize || defaultAvatarSize, ...rest }); 
   return (
-    <div className={classes.root} style={style}>
-      <Avatar className={classes.avatar}/>    
+    <div 
+      className={classes.root} 
+      style={style}
+      onClick={onClick}
+    >
+      <Avatar
+        className={classes.avatar}
+      />    
       <div className={classes.label}><Typography>{ label }</Typography></div>
     </div>
   );
