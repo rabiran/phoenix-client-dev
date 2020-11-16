@@ -14,12 +14,14 @@ import {
   getLoadings,
   selectErrors,
   getOpenDialog,
+  selectIsUpdating,
 } from "../../../../features/apiComponents/editSoldierTab/editSoldierTabSlice";
 import MessageDialog from "../../../../components/shared/dialog/messageDialog";
 import { useHistory } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 
 /**
  * form to soldier
@@ -38,16 +40,9 @@ export default function SoldierForm({ soldier, disabled }) {
   ];
 
   // Props from redux
-  const { updateInProgress, openDialog, updateSoldierError } = useSelector(
-    (state) => {
-      const openDialog = getOpenDialog(state);
-      return {
-        ...getLoadings(state),
-        ...selectErrors(state),
-        openDialog,
-      };
-    }
-  );
+  const updateInProgress = useSelector(selectIsUpdating);
+  const openDialog = useSelector(getOpenDialog);
+  const { updateSoldierError } = useSelector(selectErrors);
   // jss styles
   const classes = styles();
   // Access to URL
@@ -57,19 +52,19 @@ export default function SoldierForm({ soldier, disabled }) {
     inputs,
     isValidForm,
     handleInputChange,
-    handleSubmit,
+    getKeyValueObject,
     initializeInputs,
     updateInputs,
   } = useFormHandled();
   // handled action in dialog
-  const mainPage = useCallback(
+  const toMainPage = useCallback(
     (e) => {
       dispatch(resetData());
       history.push("/");
     },
     [dispatch, history]
   );
-  const EditAnotherSoldier = useCallback(
+  const editAnotherSoldier = useCallback(
     (e) => {
       dispatch(resetData());
       history.push("/editPerson");
@@ -235,7 +230,7 @@ export default function SoldierForm({ soldier, disabled }) {
   }
 
   // Each time a soldier reloads, their data is updated
-  useMemo(() => {
+  useEffect(() => {
     updateInputs({
       firstName: {
         value: soldier.firstName || "",
@@ -322,13 +317,14 @@ export default function SoldierForm({ soldier, disabled }) {
 
   // Update Soldier to Kartoffel
   const updateSoldier = (e) => {
+    e.preventDefault();
     // Get key value each field from useFormHandled
-    const fullPersonChange = handleSubmit(e);
+    const fullPersonChange = getKeyValueObject();
     // filter according 'fieldToUpdate'
     const updatePerson = _.pick(fullPersonChange, fieldToUpdate);
-    const directGroup = fullPersonChange.directGroup
-      ? fullPersonChange.directGroup
-      : null;
+    if(!!fullPersonChange.directGroup) {
+      updatePerson.directGroup = fullPersonChange.directGroup
+    }
     // Save phone changes in array
     updatePerson.mobilePhone = updatePerson.mobilePhone
       ? [updatePerson.mobilePhone].concat(soldier.mobilePhone.slice(1))
@@ -341,7 +337,6 @@ export default function SoldierForm({ soldier, disabled }) {
       updateSoldierRequest({
         personId: soldier.id,
         personUpdate: updatePerson,
-        directGroup,
       })
     );
   };
@@ -350,8 +345,8 @@ export default function SoldierForm({ soldier, disabled }) {
     title: "",
     message: "",
     actions: [
-      { name: "ערוך חייל נוסף", func: EditAnotherSoldier },
-      { name: "למסך הבית", func: mainPage },
+      { name: "ערוך חייל נוסף", func: editAnotherSoldier },
+      { name: "למסך הבית", func: toMainPage },
     ],
   };
   if (openDialog) {
