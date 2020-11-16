@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { BasicValidate } from "./personalValidation";
 import _ from "lodash";
 /**
@@ -8,30 +8,39 @@ import _ from "lodash";
 export const useFormHandled = () => {
   // Object with all details on each field
   const [inputs, setInputs] = useState({});
-  // Indicate if all form values is valid
+  // Indicate if all form values are valid
   const [isValidForm, setIsValidForm] = useState(true);
   // Each time the inputs changes, checks if the form is valid
-  useMemo(() => {
-    for (const field of Object.values(inputs)) {
-      if (field.isValid !== undefined && !field.isValid) {
-        return setIsValidForm(false);
+  useEffect(() => {
+    let isValid = true;
+    for(const inputValue of Object.values(inputs)) {
+      if(inputValue.isValid !== undefined && !inputValue.isValid) {
+        isValid = false;
+        break;
       }
     }
-
-    return setIsValidForm(true);
+    setIsValidForm(isValid);
   }, [inputs]);
 
   // Return object that key is name of field and value is value of this filed
-  const handleSubmit = (event) => {
-    if (event) {
-      event.preventDefault();
-    }
+  // const handleSubmit = (event) => {
+  //   if (event) {
+  //     event.preventDefault();
+  //   }
 
+  //   const flatObject = {};
+  //   for (let [key, value] of Object.entries(inputs)) {
+  //     flatObject[key] = value.value ? value.value : "";
+  //   }
+
+  //   return flatObject;
+  // };
+
+  const getKeyValueObject = () => {
     const flatObject = {};
-    for (let [key, value] of Object.entries(inputs)) {
-      flatObject[key] = value.value ? value.value : "";
+    for (const [key, value] of Object.entries(inputs)) {
+      flatObject[key] = value.value || '';
     }
-
     return flatObject;
   };
 
@@ -106,11 +115,11 @@ export const useFormHandled = () => {
    * i can to do this here. its override prevent values
    */
   const updateInputs = useCallback((updateInputs) => {
-    setInputs((oldInputs) => _.merge(oldInputs, updateInputs));
+    setInputs((oldInputs) => _.merge({}, oldInputs, updateInputs));
   }, []);
 
   return {
-    handleSubmit,
+    getKeyValueObject,
     handleInputChange,
     initializeInputs,
     updateInputs,
