@@ -37,16 +37,17 @@ function* fetchSoldier({ payload }) {
  * Save soldier in Kartoffel 
  */
 function* updateSoldier({ payload }) {
-  const { personId, personUpdate, directGroup } = payload;
-  try {
-    let person = (yield call(apiPersons.updatePerson, personId, personUpdate));
-    if (directGroup) {
-      person = (yield call(apiPersons.updateDirectGroup, personId, directGroup));
-    }
-    yield put(updateSoldierSuccess(person ));
+  const { personId, personUpdate } = payload;
+  // change 'directGroup' parameter name to match api
+  const { directGroup: directGroupId, ...rest } = personUpdate;
+  const toUpdate = { directGroupId, ...rest };
+
+  const { result: person, error } = yield safeCall(apiPersons.updatePerson, personId, toUpdate);
+  if(!error) {
+    yield put(updateSoldierSuccess(person));
     yield put(setPerson(person))
-  } catch (error) {
-    yield put(updateSoldierError(error.response.data));
+  } else {
+    yield put(updateSoldierError(error));
   }
 }
 
