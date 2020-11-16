@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
@@ -99,13 +99,8 @@ const TreeList = (props) => {
     itemHeight = '44px',
   } = props;
 
-  const loadedMap = useRef({});
-
   const handleLoad = id => {
-    if (!loadedMap.current[id] && loadData) {
-      loadedMap.current[id] = true;
-      loadData(id);
-    }
+    loadData(id);
   };
  
   return (
