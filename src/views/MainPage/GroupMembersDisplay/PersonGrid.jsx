@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Grid from 'components/shared/VirtualGrid/VirtualGrid';
+import Grid from 'components/shared/VirtualGrid';
 import PersonGridItem from 'components/persons/personGrid/PersonGridItem';
 import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
 import { makeStyles } from '@material-ui/styles';
