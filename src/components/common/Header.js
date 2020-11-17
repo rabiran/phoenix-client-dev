@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import NavDrawer from './NavDrawer';
+import { selectIsUserCanEdit } from 'features/auth/authSlice';
+import { useSelector } from 'react-redux';
 
 
 const styles = makeStyles(theme => ({
@@ -19,18 +20,12 @@ const styles = makeStyles(theme => ({
 
 export default function Header() {
   const classes = styles();
-
-  // menu state
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const userHasEditorPrivilege = useSelector(selectIsUserCanEdit);
+ 
+  // drawer state
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const openDrawer = () => setDrawerOpen(true);
+  const closeDrawer = () => setDrawerOpen(false);
 
   return (
     <div className='header-root'>
@@ -40,11 +35,16 @@ export default function Header() {
             className={classes.menuButton} 
             edge="start" 
             color="inherit"
-            onClick={handleMenu}
+            onClick={openDrawer}
           >
             <MenuIcon/>
           </IconButton>
-          <Menu
+          <NavDrawer
+            open={drawerOpen} 
+            onClose={closeDrawer}
+            disableEditButton={!userHasEditorPrivilege}
+          />
+          {/* <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
               vertical: 'bottom',
@@ -67,7 +67,7 @@ export default function Header() {
             >
               עריכת פרטים
             </MenuItem>
-          </Menu>
+          </Menu> */}
           <IconButton
             component={Link}
             to='/main'
