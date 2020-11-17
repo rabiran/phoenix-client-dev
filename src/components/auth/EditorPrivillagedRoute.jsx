@@ -12,7 +12,7 @@ const EditorPrivillagedRoute = ({ children, ...rest }) => {
         isPrivillaged ? (children) : (
           <Redirect
             to={{
-              pathname: '/main',
+              pathname: '/kermit',
               state: { from: location }
             }}
           />)

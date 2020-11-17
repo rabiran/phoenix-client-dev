@@ -16,6 +16,7 @@ import Notifier from 'components/common/Notifier';
 import AuthenticatedRoute from 'components/auth/AuthenticatedRoute';
 import EditorPrivillagedRoute from 'components/auth/EditorPrivillagedRoute';
 import LoginView from 'views/LoginView';
+import Kermit from 'views/UnauthorizedKermit';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                     <EditPerson/>
                   </EditorPrivillagedRoute>
                   <Route path='/login' component={LoginView}/>
+                  <Route path='/kermit' component={Kermit}/>
                   <Redirect to='/main'/>
               </Switch>
             </Router>
