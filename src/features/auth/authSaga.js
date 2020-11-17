@@ -52,7 +52,9 @@ function* fakeLogin(){
     "026666998"
     ],
     "rank": "mega",
-    "responsibility": "none",
+    "responsibility": "HR",
+    // "responsibility": "none",
+    "responsibilityLocation": "5e56858e4203fc40043591a5",
     "status": "active",
     "updatedAt": "2020-10-22T05:38:29.964Z",
     "id": "5e5688324203fc40043591aa",

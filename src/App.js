@@ -13,8 +13,10 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import GridDemo from './views/GridDemo/GridDemo';
 import MainPage from './views/MainPage/MainPage';
 import Notifier from 'components/common/Notifier';
-import ProtectedRoute from 'components/auth/ProtectedRoute';
+import AuthenticatedRoute from 'components/auth/AuthenticatedRoute';
+import EditorPrivillagedRoute from 'components/auth/EditorPrivillagedRoute';
 import LoginView from 'views/LoginView';
+
 
 function App() {
   return (
@@ -26,21 +28,21 @@ function App() {
               <Switch>
                   <Route path='/treeDemo' component={TreeDemo}/>
                   {/* <Route exact path='/' component={LandingPage} /> */}
-                  <ProtectedRoute path='/managepage'>
+                  <AuthenticatedRoute path='/managepage'>
                     <ManagePage/>
-                  </ProtectedRoute>
-                  <ProtectedRoute path='/treeDemo'>
+                  </AuthenticatedRoute>
+                  <AuthenticatedRoute path='/treeDemo'>
                     <TreeDemo/>
-                  </ProtectedRoute>
-                  <ProtectedRoute path='/grid'>
+                  </AuthenticatedRoute>
+                  <AuthenticatedRoute path='/grid'>
                     <GridDemo/>
-                  </ProtectedRoute>
-                  <ProtectedRoute exact path='/main'>
+                  </AuthenticatedRoute>
+                  <AuthenticatedRoute exact path='/main'>
                     <MainPage/>
-                  </ProtectedRoute>
-                  <ProtectedRoute path='/EditPerson/:personalNumber?'>
+                  </AuthenticatedRoute>
+                  <EditorPrivillagedRoute path='/EditPerson/:personalNumber?'>
                     <EditPerson/>
-                  </ProtectedRoute>
+                  </EditorPrivillagedRoute>
                   <Route path='/login' component={LoginView}/>
                   <Redirect to='/main'/>
               </Switch>

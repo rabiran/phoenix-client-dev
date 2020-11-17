@@ -5,6 +5,17 @@ const initialState = {
   error: null
 }
 
+export const Responsibility = Object.freeze({
+    None: 'none',
+    HumanResources: 'HR',
+    SecurityOfficer: 'SO',
+});
+
+const hasEditorPrivillage = user => {
+  return user.responsibility === Responsibility.HumanResources 
+    || user.responsibility === Responsibility.SecurityOfficer;
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -29,6 +40,7 @@ const authSlice = createSlice({
 export const selectUser = state => state.auth.user;
 export const selectIsError = state => !!state.auth.error;
 export const selectIsAuthenticated = state => !!selectUser(state);
+export const selectIsUserCanEdit = state => selectIsAuthenticated(state) && hasEditorPrivillage(selectUser(state));
 
 // actions
 export const {
