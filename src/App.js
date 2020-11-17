@@ -41,9 +41,11 @@ function App() {
                   <AuthenticatedRoute exact path='/main'>
                     <MainPage/>
                   </AuthenticatedRoute>
-                  <EditorPrivillagedRoute path='/EditPerson/:personalNumber?'>
-                    <EditPerson/>
-                  </EditorPrivillagedRoute>
+                  <AuthenticatedRoute path='/EditPerson/:personalNumber?'>
+                    <EditorPrivillagedRoute>
+                      <EditPerson/>
+                    </EditorPrivillagedRoute>
+                  </AuthenticatedRoute>
                   <Route path='/login' component={LoginView}/>
                   <Route path='/kermit' component={Kermit}/>
                   <Redirect to='/main'/>
