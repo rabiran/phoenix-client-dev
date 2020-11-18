@@ -25,18 +25,18 @@ const styles = makeStyles(theme => ({
     flexWrap: 'nowrap',
     height: '100%',
   },
-  content: {
-    minHeight: ITEM_HEIGHT,
+  membersSection: {
     flexGrow: 1,
-    // flexShrink: 1,
+    minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
   },
   waitingSection: {
     backgroundColor: 'white',
-    margin: 10
+    marginTop: theme.spacing(1),
   },
   waitingPersonsGrid: {
-    maxHeight: 2 * (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)),
-    minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
+    // maxHeight: 2 * (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)),
+    // minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
+    height: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
   }
 }));
 
@@ -88,6 +88,7 @@ const PersonDisplay = ({ groupId }) => {
   <Grid 
     className={classes.root} 
     container 
+    // spacing={1}
     direction="column">
     <Grid
       item
@@ -104,7 +105,7 @@ const PersonDisplay = ({ groupId }) => {
         </Typography>
         <Typography variant='h6' component='p'>{groupName}</Typography>
         <Typography className={headerClasses.memberCount} variant="body2">({filteredPersons.length})</Typography>
-      </Grid>
+      </Grid> 
       <Grid item>
         <SearchInput
           onValueChange={filterInputChange}
@@ -115,31 +116,26 @@ const PersonDisplay = ({ groupId }) => {
     </Grid>
     <Divider/>
     <Grid
-      // container
       item
-      direction='column'
       className={classes.waitingSection}  
     >
-      {/* <Grid item> */}
-        <Typography>{`ממתינים (${waitingPersons.length})`}</Typography>
-      {/* </Grid> */}
-      <Grid 
-        item
-        className={classes.waitingPersonsGrid}
-      >
+      <Typography component='span'>{`ממתינים`}</Typography>
+      <Typography component='span' variant='button'>{`(${waitingPersons.length})`}</Typography>
+      <div className={classes.waitingPersonsGrid}>
         <PersonGrid
           persons={persons}
           itemWidth={ITEM_WIDTH}
           itemHeight={ITEM_HEIGHT}
           spacing={ITEM_SPACING}
         />
-      </Grid>
+      </div>
     </Grid>
     <Grid 
       item
-      // justify='center'
-      // alignItems='center'
-      className={classes.content}>
+      container
+      justify='center'
+      alignItems='center'
+      className={classes.membersSection}>
       {
         loading ? <Spinner size={80}/> :
         <PersonGrid 
