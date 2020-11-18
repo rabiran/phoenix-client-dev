@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useSelector } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
-import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
+import { selectPersonsByGroupId, selectIsLoadingByGroupId, selectWaitingList } from 'features/persons/personsSlice';
 import { selectGroupByid } from 'features/groups/groupsSlice';
 import PersonGrid from './PersonGrid';
 import PropTypes from 'prop-types';
@@ -28,8 +28,16 @@ const styles = makeStyles(theme => ({
   content: {
     minHeight: ITEM_HEIGHT,
     flexGrow: 1,
-    flexShrink: 1,
+    // flexShrink: 1,
   },
+  waitingSection: {
+    backgroundColor: 'white',
+    margin: 10
+  },
+  waitingPersonsGrid: {
+    maxHeight: 2 * (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)),
+    minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
+  }
 }));
 
 const headerStyles = makeStyles(theme => ({
@@ -68,12 +76,13 @@ const PersonDisplay = ({ groupId }) => {
   // const persons = fakePersons;
   const filteredPersons = useMemo(() => persons.filter(p => p.fullName.startsWith(filterTerm)), [filterTerm, persons]) ;
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
+  const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
+  const waitingPersons = useSelector(selectWaitingList);
   // group name and hierarchy
   const {
     name: groupName = '...',
     hierarchy = []
   } = group;
-  const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
 
   return (
   <Grid 
@@ -105,10 +114,31 @@ const PersonDisplay = ({ groupId }) => {
       </Grid>
     </Grid>
     <Divider/>
+    <Grid
+      // container
+      item
+      direction='column'
+      className={classes.waitingSection}  
+    >
+      {/* <Grid item> */}
+        <Typography>{`ממתינים (${waitingPersons.length})`}</Typography>
+      {/* </Grid> */}
+      <Grid 
+        item
+        className={classes.waitingPersonsGrid}
+      >
+        <PersonGrid
+          persons={persons}
+          itemWidth={ITEM_WIDTH}
+          itemHeight={ITEM_HEIGHT}
+          spacing={ITEM_SPACING}
+        />
+      </Grid>
+    </Grid>
     <Grid 
-      container
-      justify='center'
-      alignItems='center'
+      item
+      // justify='center'
+      // alignItems='center'
       className={classes.content}>
       {
         loading ? <Spinner size={80}/> :

@@ -30,7 +30,7 @@ const PersonGrid = ({
   const handleGridItemClick = (e, itemData) => {
     setClickedPerson(itemData);
     setDialogOpen(true);
-  }
+  };
 
   return (<>
     <Grid
