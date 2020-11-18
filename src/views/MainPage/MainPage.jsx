@@ -14,36 +14,31 @@ import TreeIcon from 'components/shared/icons/Tree';
 import UserInfo from './UserInfo/UserInfo';
 import LoadingBar from 'components/shared/Loading/Bar';
 import { selectUser } from 'features/auth/authSlice';
-import { useMemo } from 'react';
- 
-
-// const user = {
-//   fullName: 'אלעד נייטרו',
-//   job: 'עייף מאוד',
-//   hierarchy: ['כובעי הקש','swoop','voo'],
-//   personalNumber: '5676403',
-//   identityCard: '312571458',
-//   rank: 'תותחופלצת',
-//   clearance: '7',
-//   phone: '077-65756',
-//   mobilePhone: '050-6711121',
-//   mail: 'nitro@gmail.com',
-//   address: 'עם טקסט ארוך מידי בשביל זה רחוב הנרקומנים',
-// }
+import { useMemo } from 'react'; 
 
 const listHeaderHeight = 90;
-const userDetailsHeight = 200;
+const userInfoHeight = 200;
+const userInfoSmallHeight = 160;
+
 const styles = makeStyles(theme => ({
   root: {
     backgroundColor: '#E4EAEA',
     height: 'calc(100vh - 64px)',
-    // display: 'flex',
     overflowY: 'hidden',
   },
+  userInfoSection: {
+    height: userInfoHeight,
+    [theme.breakpoints.down('lg')]: {
+      height: userInfoSmallHeight,
+    }
+  },
   groupsAndMembers: {
-    height: `calc(100% - ${userDetailsHeight}px)`,
+    height: `calc(100% - ${userInfoHeight}px)`,
     display: 'flex',
     overflowY: 'hidden',
+    [theme.breakpoints.down('lg')]: {
+      height: `calc(100% - ${userInfoSmallHeight}px)`,
+    },
   },
   sideBar: {
       width: '20%',
@@ -100,7 +95,9 @@ const MainPage = props => {
   <Box className={classes.root}>
     <UserInfo 
       user={user}
-      height={userDetailsHeight}
+      classes={{
+        root: classes.userInfoSection
+      }}
     />
     {rootGroupLoading && <LoadingBar/>}
     <Box className={classes.groupsAndMembers}>

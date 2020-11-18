@@ -48,7 +48,7 @@ const UserInfo = (props) => {
       fullName, 
       hierarchy,
       ...details
-    }
+    },
   } = props;
   const classes = styles(props)
   return (

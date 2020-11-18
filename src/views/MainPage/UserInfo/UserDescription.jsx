@@ -10,8 +10,8 @@ const styles = makeStyles(theme => ({
     width: avatarSize,
     height: avatarSize,
     [theme.breakpoints.down('lg')]: {
-      width: 150,
-      height: 150,
+      width: 140,
+      height: 140,
     },
     margin: 'auto auto',
   }),
