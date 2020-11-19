@@ -1,15 +1,11 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createSelector, combineReducers } from '@reduxjs/toolkit';
 import { insertToIdMap } from 'utils/slice.helpers';
 import { SHOW_ERROR_FLAG } from 'features/errorSlice';
+import sliceRoot from './sliceRoot';
 
-const initialState = {
+export const initialState = {
   byId: {},
   byDirectGroup: {},
-  waitingList: {
-    items: [],
-    isFetching: false,
-    error: false
-  },
 };
 
 const personsSlice = createSlice({
@@ -60,46 +56,16 @@ const personsSlice = createSlice({
         error: true 
       })
     },
-    fetchWaitingListOfGroup: {
-      reducer: (state) => {
-        state.waitingList.isFetching = true;
-      },
-      prepare: groupId => ({ payload: { id: groupId } })
-    },
-    fetchWaitingListOfGroupSuccess(state, action) {
-      const { persons } = action.payload;
-      insertToIdMap(state.byId, persons);
-      state.waitingList = {
-        isFetching: false,
-        error: false,
-        items: persons.map(p => p.id)
-      }
-    },
-    fetchWaitingListOfGroupError: {
-      reducer: (state) => {
-        state.waitingList = {
-          isFetching: false,
-          error: true,
-          items: [],
-        }
-      },
-      prepare: (errorPayload) => ({ 
-        payload: errorPayload,
-        meta: { 
-          [SHOW_ERROR_FLAG]: true,
-        },
-        error: true 
-      })
-    }
   }
 });
 
 // selectors
-const byId = (state) => state.persons.byId;
 
-const byGroupId = (state, id) => state.persons.byDirectGroup[id];
+const root = state => sliceRoot(state).entities
 
-const waitingList = state => state.persons.waitingList;
+const byId = (state) => root(state).byId;
+
+const byGroupId = (state, id) => root(state).byDirectGroup[id];
 
 export const selectById = (state, id) => byId(state)[id];
 
@@ -127,11 +93,6 @@ export const selectIsLoadingByGroupId = createSelector(byGroupId,
 export const selectIsErrorByGroupId = createSelector(byGroupId, 
   byGroupIdMap => byGroupIdMap && byGroupIdMap.error);
 
-export const selectWaitingList = createSelector(byId, waitingList, 
-  (byId, waitingList) => waitingList.items.map(personId => byId[personId]));
-
-export const selectIsWaitingListLoading = state => waitingList(state).isFetching;
-
 // helpers
 
 
@@ -149,16 +110,6 @@ export const {
    * @param groupId the id of the group which fetch requset failed.
    */
   fetchByGroupIdError,
-  /**
-   * payload = { persons: Person[] }
-   */
-  fetchWaitingListOfGroupSuccess,
-  /**
-   * @param groupId the group id to fetch waiting members of
-   * dispatched payload = { id: groupId }
-   */
-  fetchWaitingListOfGroup,
-  fetchWaitingListOfGroupError,
   /**
    * payload = person Object
    */
