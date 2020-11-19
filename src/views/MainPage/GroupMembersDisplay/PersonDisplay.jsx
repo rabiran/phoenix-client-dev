@@ -3,16 +3,20 @@ import { makeStyles } from '@material-ui/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Spinner from 'components/shared/Loading/Spinner'
-import { selectPersonsByGroupId, selectIsLoadingByGroupId, selectWaitingList } from 'features/persons/personsSlice';
+import { selectPersonsByGroupId, selectIsLoadingByGroupId } from 'features/persons/personsSlice';
+import { selectWaitingList, fetchWaitingListOfGroup } from 'features/persons/waitingList';
 import { selectGroupByid } from 'features/groups/groupsSlice';
+import { selectIsUserCanEdit } from 'features/auth/authSlice';
 import PersonGrid from './PersonGrid';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import _, { fromPairs } from 'lodash';
 import SearchInput from './SearchInput';
 import Collapse from '@material-ui/core/Collapse';
 import faker from 'faker/locale/en';
+import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
+import { useEffect } from 'react'; 
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
 const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
@@ -73,12 +77,14 @@ const PersonDisplay = ({ groupId }) => {
   const filterInputChange = useCallback(value => {
     setFilterDebounced(value);
   }, [setFilterDebounced]);
+  // redux selectors
   const persons = useSelector(state => selectPersonsByGroupId(state, groupId)) || [];
   // const persons = fakePersons;
   const filteredPersons = useMemo(() => persons.filter(p => p.fullName.startsWith(filterTerm)), [filterTerm, persons]) ;
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const waitingPersons = useSelector(selectWaitingList);
+  const disableDialogEdit = !useSelector(selectIsUserCanEdit);
   const showWaitingSection = !!waitingPersons && waitingPersons.length !==0;
   // group name and hierarchy
   const {
@@ -86,11 +92,33 @@ const PersonDisplay = ({ groupId }) => {
     hierarchy = []
   } = group;
 
-  return (
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [clickedPerson, setClickedPerson] = useState({});
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  const handleGridItemClick = (e, itemData) => {
+    setClickedPerson(itemData);
+    setDialogOpen(true);
+  };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchWaitingListOfGroup())
+  }, [dispatch]); 
+
+
+  return (<>
+  <ProfileDialog
+    open={dialogOpen}
+    onClose={handleDialogClose}
+    person={clickedPerson}
+    disableEdit={disableDialogEdit}
+  />
   <Grid 
     className={classes.root} 
     container 
-    // spacing={1}
     direction="column">
     <Grid
       item
@@ -118,7 +146,6 @@ const PersonDisplay = ({ groupId }) => {
     </Grid>
     <Divider/>
     {
-      // showWaitingSection &&
       <Collapse in={showWaitingSection}>
         <Grid
           item
@@ -132,6 +159,7 @@ const PersonDisplay = ({ groupId }) => {
               itemWidth={ITEM_WIDTH}
               itemHeight={ITEM_HEIGHT}
               spacing={ITEM_SPACING}
+              onGridItemClick={handleGridItemClick}
             />
           </div>
         </Grid>
@@ -150,10 +178,12 @@ const PersonDisplay = ({ groupId }) => {
           itemWidth={ITEM_WIDTH}
           itemHeight={ITEM_HEIGHT}
           spacing={ITEM_SPACING}
+          onGridItemClick={handleGridItemClick}
         />
       }
     </Grid>
-  </Grid>);
+  </Grid>
+  </>);
 };
 
 PersonDisplay.propTypes = {

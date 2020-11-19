@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Grid from 'components/shared/VirtualGrid';
 import PersonGridItem from 'components/persons/personGrid/PersonGridItem';
-import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
+// import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
 import { makeStyles } from '@material-ui/styles';
 
 
@@ -18,19 +18,10 @@ const PersonGrid = ({
   persons,
   itemWidth,
   itemHeight,
-  spacing
+  spacing,
+  onGridItemClick,
 }) => {
   const gridItemClasses = gridItemStyles();
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [clickedPerson, setClickedPerson] = useState({});
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
-  const handleGridItemClick = (e, itemData) => {
-    setClickedPerson(itemData);
-    setDialogOpen(true);
-  };
 
   return (<>
     <Grid
@@ -46,15 +37,10 @@ const PersonGrid = ({
             label={person.fullName}
             width={style.width}
             style={style}
-            onClick={e => handleGridItemClick(e, person)}
+            onClick={e => onGridItemClick(e, person)}
           />
         )
       }}
-    />
-    <ProfileDialog
-      open={dialogOpen}
-      onClose={handleDialogClose}
-      person={clickedPerson}
     />
   </>);
 }
