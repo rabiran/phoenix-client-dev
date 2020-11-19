@@ -1,4 +1,4 @@
-import { fetchGroupMembers } from '../groups/api'
+import { fetchGroupMembers, fetchWaitingMembersOfGroup } from '../groups/api'
 import axoisClient from '../axiosClient';
 
 const BASE_URL = '/api/persons';
@@ -47,6 +47,9 @@ const fetchByGroupId = async id => {
   return res.map(personFromApiResponse);
 };
 
+const fetchWaitingListByGroupId = async id => 
+  ((await fetchWaitingMembersOfGroup(id)) || []).map(personFromApiResponse);
+
 const personFromApiResponse = person => {
   const { _id, ...rest } = person;
   return rest;
@@ -58,7 +61,8 @@ export {
   fetchAll,
   fetchByPersonalNumber,
   fetchById,
-  fetchByGroupId
+  fetchByGroupId,
+  fetchWaitingListByGroupId
 };
 
 export default {
@@ -67,5 +71,6 @@ export default {
   fetchAll,
   fetchByPersonalNumber,
   fetchById,
-  fetchByGroupId
+  fetchByGroupId,
+  fetchWaitingListByGroupId
 }

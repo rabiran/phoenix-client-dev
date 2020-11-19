@@ -44,6 +44,9 @@ const fetchGroupMembers = async id => {
   // return directMembers;
 }
 
+const fetchWaitingMembersOfGroup = async id => 
+  (await axoisClient.get(`${BASE_URL}/${id}/waitingMembers`)).data
+
 const fetchGroupByPath = async path => {
   const res = (await axoisClient.get(`${BASE_URL}/path/${encodeURIComponent(path)}`)).data;
   return groupFromApiResponse(res);
@@ -76,7 +79,8 @@ export {
   fetchGroupById,
   fetchSubtree,
   fetchGroupMembers,
-  fetchGroupByPath
+  fetchGroupByPath,
+  fetchWaitingMembersOfGroup
 };
 
 export default {
@@ -84,5 +88,6 @@ export default {
   getRootGroupId,
   fetchGroupById,
   fetchSubtree,
-  fetchGroupByPath
+  fetchGroupByPath,
+  fetchWaitingMembersOfGroup
 }

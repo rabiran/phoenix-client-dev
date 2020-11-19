@@ -4,6 +4,7 @@ export const {
   fetchByGroupId,
   fetchById,
   fetchAll,
+  fetchWaitingListByGroupId,
   fetchByPersonalNumber,
   updateDirectGroup,
   updatePerson

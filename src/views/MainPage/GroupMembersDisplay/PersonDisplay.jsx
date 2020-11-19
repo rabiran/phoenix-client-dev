@@ -11,7 +11,7 @@ import PersonGrid from './PersonGrid';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import SearchInput from './SearchInput';
-
+import Collapse from '@material-ui/core/Collapse';
 import faker from 'faker/locale/en';
 const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
 const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
@@ -28,6 +28,7 @@ const styles = makeStyles(theme => ({
   membersSection: {
     flexGrow: 1,
     minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
+    marginTop: theme.spacing(1),
   },
   waitingSection: {
     backgroundColor: 'white',
@@ -78,6 +79,7 @@ const PersonDisplay = ({ groupId }) => {
   const group = useSelector(state => selectGroupByid(state, groupId)) || {};
   const loading = useSelector(state => selectIsLoadingByGroupId(state, groupId));
   const waitingPersons = useSelector(selectWaitingList);
+  const showWaitingSection = !!waitingPersons && waitingPersons.length !==0;
   // group name and hierarchy
   const {
     name: groupName = '...',
@@ -115,21 +117,26 @@ const PersonDisplay = ({ groupId }) => {
       </Grid>
     </Grid>
     <Divider/>
-    <Grid
-      item
-      className={classes.waitingSection}  
-    >
-      <Typography component='span'>{`ממתינים`}</Typography>
-      <Typography component='span' variant='button'>{`(${waitingPersons.length})`}</Typography>
-      <div className={classes.waitingPersonsGrid}>
-        <PersonGrid
-          persons={persons}
-          itemWidth={ITEM_WIDTH}
-          itemHeight={ITEM_HEIGHT}
-          spacing={ITEM_SPACING}
-        />
-      </div>
-    </Grid>
+    {
+      // showWaitingSection &&
+      <Collapse in={showWaitingSection}>
+        <Grid
+          item
+          className={classes.waitingSection}  
+        >
+          <Typography component='span'>{`ממתינים`}</Typography>
+          <Typography component='span' variant='button'>{`(${waitingPersons.length})`}</Typography>
+          <div className={classes.waitingPersonsGrid}>
+            <PersonGrid
+              persons={waitingPersons}
+              itemWidth={ITEM_WIDTH}
+              itemHeight={ITEM_HEIGHT}
+              spacing={ITEM_SPACING}
+            />
+          </div>
+        </Grid>
+      </Collapse>
+    }
     <Grid 
       item
       container
