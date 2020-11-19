@@ -6,6 +6,12 @@ import { makeStyles } from '@material-ui/styles';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import { Link } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 
 const labelStyles = makeStyles(theme => ({
@@ -45,6 +51,10 @@ const styles = makeStyles(theme => ({
   },
   name: {
     paddingBottom: theme.spacing(1),
+  },
+  title: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText
   }
 }));
 
@@ -52,7 +62,8 @@ const styles = makeStyles(theme => ({
 const PersonProfileDialog = ({ 
   open, 
   onClose,
-  person = {}
+  person = {},
+  disableEdit,
 }) => {
   const labelClasses = labelStyles();
   const detailClasses = detailStyles();
@@ -65,6 +76,7 @@ const PersonProfileDialog = ({
     job,
     ...details
   } = person;
+  const identifier = details.identityCard || details.personalNumber;
   return (
     <Dialog
       classes={{
@@ -75,15 +87,31 @@ const PersonProfileDialog = ({
       fullWidth
       maxWidth='md'
     >
-      <DialogTitle>פרטים אישיים</DialogTitle>
+      <DialogTitle className={classes.title}>פרטים אישיים</DialogTitle>
       <DialogContent>
-        <Typography 
-          className={classes.name}
-          variant='h5' 
-          component='div'
-        >
-          {fullName}
-        </Typography>
+        <Grid container spacing={1}>
+          <Grid item>
+            <Typography 
+              className={classes.name}
+              variant='h5' 
+              component='div'
+            >
+              {fullName}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Tooltip title='עריכה' placement='left'>
+            <IconButton 
+              size='small' 
+              disabled={disableEdit}
+              to={`editPerson/${identifier}`} 
+              component={Link}
+            >
+              <EditIcon/>
+            </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
         <LabeledValue
           classes={{...labelClasses}}
           label='היררכיה:'
