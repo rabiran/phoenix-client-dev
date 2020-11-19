@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import personsReducer from './persons/personsSlice';
+import personsReducer from './persons';
 import groupsReducer from './groups/groupsSlice';
 import { componentReducers } from "./apiComponents";
 import errorReducer, { SLICE_NANE as errors} from './errorSlice';
