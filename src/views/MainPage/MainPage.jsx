@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import GroupList from 'components/groups/groupTree';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchByGroupIdIfNeeded } from 'features/persons/personsSlice';
+import { fetchByGroupIdIfNeeded, fetchByGroupId } from 'features/persons/personsSlice';
 import { selectRootGroupsIds } from 'features/groups/groupsSlice';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -79,7 +79,7 @@ const MainPage = props => {
   // fetch members on selection change
   useEffect(() => {
     if(selectedGroupId) {
-      dispatch(fetchByGroupIdIfNeeded(selectedGroupId));
+      dispatch(fetchByGroupId(selectedGroupId));
     }
   }, [selectedGroupId, dispatch]);
  
