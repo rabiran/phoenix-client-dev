@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeListContext from './TreeListContext';
-import { selectGroupByid, areChildrenFetched } from '../../../features/groups/groupsSlice';
+import { selectGroupByid, areChildrenFetched, selectChildrenIds } from '../../../features/groups/groupsSlice';
 import VisibilityOptimizer from 'components/shared/visibilityObserver/VisibilityOptimizer';
 import { DEFAULT_VISIBILITY_CHILDREN_THRESHOLD } from './TreeList'
 
@@ -130,7 +130,7 @@ const mapStateToProps = (state, ownProps) => {
 
   let nestedItemsIds = null;
   if(!isLeaf && childrenFetched) {
-    nestedItemsIds = children;
+    nestedItemsIds = selectChildrenIds(state, id);
   }
 
   return {

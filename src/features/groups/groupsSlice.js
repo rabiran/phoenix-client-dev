@@ -1,8 +1,9 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { createIdMap } from 'utils/slice.helpers';
+import { createIdMap, insertToIdMap } from 'utils/slice.helpers';
 
 const initialState = {
   byId: {},
+  byParentId: {},
   rootGroupsIds: [],
   subtreeLoaded: {},
 };
@@ -14,16 +15,26 @@ const groupsSlice = createSlice({
     fetchChildrenSuccess(state, action) {
       const { groups, upsert, parentId } = action.payload;
       let groupsToInsert = groups;
-      if(!upsert) {
+      if(!upsert) { // filter out existing groups
         groupsToInsert = groups.filter(g => !state.byId[g.id]);
       }
       if(groupsToInsert.length > 0) {
-        const newChildrenById = createIdMap(groups);
-        Object.assign(state.byId, newChildrenById);  
+        // insert to "byId"
+        insertToIdMap(state.byId, groupsToInsert)
+        // update "byParentId"
+        for(const g of groupsToInsert) {
+          const parentId = g.ancestors[0];
+          if(!parentId) break; // root group - skip
+          if(!state.byParentId[parentId]) {
+            state.byParentId[parentId] = [];
+          }
+          state.byParentId[parentId].push(g.id);
+        } 
       }
+      // update "subtreeLoaded"
       if(parentId) {
         state.subtreeLoaded[parentId] = true;
-      } else {
+      } else { // root group
         state.rootGroupsIds = groupsToInsert.map(g => g.id);
       }
     },
@@ -32,6 +43,7 @@ const groupsSlice = createSlice({
 });
 
 // selectors
+const root = state => state.groups;
 const getGroupMap = state => state.groups.byId;
 export const selectRootGroupsIds = state => state.groups.rootGroupsIds;
 export const selectRootGroups = createSelector(
@@ -49,12 +61,13 @@ export const selectGroupByid = (state, id) => getGroupMap(state)[id];
 export const areChildrenFetched = (state, id) => {
   const parent = selectGroupByid(state, id);
   if (parent.isAleaf) return true;
-  if (parent.children && parent.children.length !== 0) {
-    // if the first child exists, we can safely assume the rest were fetched as well
-    return !!selectGroupByid(state, parent.children[0]);
-  }
-  // not a leaf and does not have children
-  return false;
+  return !!selectChildrenIds(state, id);
+  // if (parent.children && parent.children.length !== 0) {
+  //   // if the first child exists, we can safely assume the rest were fetched as well
+  //   return !!selectGroupByid(state, parent.children[0]);
+  // }
+  // // not a leaf and does not have children
+  // return false;
 };
 
 /**
@@ -66,6 +79,8 @@ export const areChildrenFetched = (state, id) => {
 const isSubtreeLoaded = (state, id) => {
   return !!state.groups.subtreeLoaded[id];
 };
+
+export const selectChildrenIds = (state, id) => root(state).byParentId[id];
 
 // Actions
 export const { 

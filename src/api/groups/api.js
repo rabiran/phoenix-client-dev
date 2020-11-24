@@ -65,8 +65,8 @@ const getRootGroupId = () => {
  * @param {object} groupFromApi - group object
  */
 const groupFromApiResponse = groupFromApi => {
-  const { id, name, isALeaf: isAleaf, children, hierarchy } = groupFromApi
-  const group = { id, name, isAleaf, hierarchy };
+  const { id, name, isALeaf: isAleaf, children, hierarchy, ancestors } = groupFromApi
+  const group = { id, name, isAleaf, hierarchy, ancestors };
   if(children) group.children = children;
   return group;
 };
