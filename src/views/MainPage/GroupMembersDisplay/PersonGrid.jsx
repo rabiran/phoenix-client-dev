@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import Grid from 'components/shared/VirtualGrid';
 import PersonGridItem from 'components/persons/personGrid/PersonGridItem';
 // import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
@@ -14,7 +14,7 @@ const gridItemStyles = makeStyles(theme => ({
   }
 }));
 
-const PersonGrid = ({
+const PersonGrid = memo(({
   persons,
   itemWidth,
   itemHeight,
@@ -43,6 +43,6 @@ const PersonGrid = ({
       }}
     />
   </>);
-}
+})
 
 export default PersonGrid;
