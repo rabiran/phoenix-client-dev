@@ -1,5 +1,5 @@
-import { put, call, takeLeading, all, select } from 'redux-saga/effects';
-import { safeCall, safe } from 'utils/saga.helpers';
+import { put, takeLeading, all, select } from 'redux-saga/effects';
+import { safeCall } from 'utils/saga.helpers';
 import { fetchWaitingListByGroupId } from 'api/persons';
 import {
   fetchWaitingListOfGroup, 
@@ -14,8 +14,7 @@ function* watchFetchWaitingList () {
   yield takeLeading(fetchWaitingListOfGroup.type, fetchWaitingList);
 }
 
-function* fetchWaitingList(action) {
-  console.log('yayyyyy');
+function* fetchWaitingList() {
   const fetchWaitingList = yield select(selectIsUserCanEdit);
   if(!fetchWaitingList) {
     return;
@@ -30,6 +29,7 @@ function* fetchWaitingList(action) {
 }
 
 export default function* init() {
+  yield put(fetchWaitingListOfGroup());
   yield all([
     watchFetchWaitingList()
   ]);
