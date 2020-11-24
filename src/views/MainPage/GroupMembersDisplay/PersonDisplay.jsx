@@ -11,13 +11,16 @@ import { selectGroupByid } from 'features/groups/groupsSlice';
 import { selectIsUserCanEdit } from 'features/auth/authSlice';
 import PersonGrid from './PersonGrid';
 import PropTypes from 'prop-types';
-import _, { fromPairs } from 'lodash';
+import _ from 'lodash';
 import SearchInput from './SearchInput';
 import Collapse from '@material-ui/core/Collapse';
 import faker from 'faker/locale/en';
 import ProfileDialog from 'components/persons/personDetails/PersonProfileDialog';
+import CollapseIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@material-ui/icons/ChevronLeft';
+import Button from '@material-ui/core/Button';
 import { useEffect } from 'react'; 
-const fakePersons =  [...Array(1000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
+const fakePersons =  [...Array(10000).keys()].map(i => ({id: i, fullName: `${faker.name.findName().toLowerCase()}`}));
 const fakePersons2 =  [...Array(99).keys()].map(i => ({id: i, fullName: `elad${i}`}));
 
 const ITEM_HEIGHT = 130;
@@ -42,7 +45,15 @@ const styles = makeStyles(theme => ({
     // maxHeight: 2 * (ITEM_HEIGHT + theme.spacing(ITEM_SPACING)),
     // minHeight: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
     height: ITEM_HEIGHT + theme.spacing(ITEM_SPACING),
-  }
+  },
+  waitingPersonsTitle: {
+    // cursor: 'pointer',
+    // display: 'flex',
+    // '&:hover': {
+    //   backgroundColor: theme.palette.action.hover
+    // }
+  },
+
 }));
 
 const headerStyles = makeStyles(theme => ({
@@ -86,6 +97,10 @@ const PersonDisplay = ({ groupId }) => {
   const waitingPersons = useSelector(selectWaitingList);
   const disableDialogEdit = !useSelector(selectIsUserCanEdit);
   const showWaitingSection = !!waitingPersons && waitingPersons.length !==0;
+  const [waitingPersonsGridOpen, setWaitingPersonsGridOpen] = useState(true);
+  const toggleWaitingPersonsGrid = useCallback(() => {
+    setWaitingPersonsGridOpen(prev => !prev);
+  }, [setWaitingPersonsGridOpen]);
   // group name and hierarchy
   const {
     name: groupName = '...',
@@ -98,10 +113,10 @@ const PersonDisplay = ({ groupId }) => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
-  const handleGridItemClick = (e, itemData) => {
+  const handleGridItemClick = useCallback((e, itemData) => {
     setClickedPerson(itemData);
     setDialogOpen(true);
-  };
+  },[setClickedPerson, setDialogOpen]);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -149,11 +164,24 @@ const PersonDisplay = ({ groupId }) => {
       <Collapse in={showWaitingSection}>
         <Grid
           item
-          className={classes.waitingSection}  
+          className={classes.waitingSection}
         >
-          <Typography component='span'>{`ממתינים`}</Typography>
-          <Typography component='span' variant='button'>{`(${waitingPersons.length})`}</Typography>
-          <div className={classes.waitingPersonsGrid}>
+          <Button
+            disableRipple
+            className={classes.waitingPersonsTitle}
+            onClick={toggleWaitingPersonsGrid}
+          >
+            {`ממתינים`}
+            {` (${waitingPersons.length})`}
+            {waitingPersonsGridOpen ? <CollapseIcon fontSize='small'/> : <ExpandMoreIcon fontSize='small'/>}
+          </Button>
+          <Collapse
+            in={waitingPersonsGridOpen}
+            classes={{
+              wrapperInner: classes.waitingPersonsGrid
+            }}
+            timeout={100}
+          >
             <PersonGrid
               persons={waitingPersons}
               itemWidth={ITEM_WIDTH}
@@ -161,7 +189,7 @@ const PersonDisplay = ({ groupId }) => {
               spacing={ITEM_SPACING}
               onGridItemClick={handleGridItemClick}
             />
-          </div>
+          </Collapse>
         </Grid>
       </Collapse>
     }
