@@ -1,5 +1,4 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { insertToIdMap } from 'utils/slice.helpers';
+import { createSlice } from '@reduxjs/toolkit';
 import { SHOW_ERROR_FLAG } from 'features/errorSlice'
 import sliceRoot from '../sliceRoot';
 
@@ -53,12 +52,6 @@ const root = state => sliceRoot(state)[sliceName];
 export const selectWaitingList = state => root(state).persons;
 
 export const selectIsWaitingListLoading = state => root(state).fetching;
-
-// export const {
-//   fetchWaitingListOfGroup,
-//   fetchWaitingListOfGroupSuccess,
-//   fetchWaitingListOfGroupError
-// } = waitingListSlice.actions;
 
 export const actions = waitingListSlice.actions;
 export const selectors = {

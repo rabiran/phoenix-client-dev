@@ -1,4 +1,4 @@
-import { createSlice, createSelector, combineReducers } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { insertToIdMap } from 'utils/slice.helpers';
 import { SHOW_ERROR_FLAG } from 'features/errorSlice';
 import sliceRoot from './sliceRoot';
@@ -18,8 +18,6 @@ const personsSlice = createSlice({
     },
     fetchByGroupIdSuccess(state, action) {
       const { groupId, persons } = action.payload;
-      // const newPersonsIdMap = createIdMap(persons);
-      // Object.assign(state.byId, newPersonsIdMap);
       insertToIdMap(state.byId, persons);
       state.byDirectGroup[groupId] = {
         isFetching: false,
