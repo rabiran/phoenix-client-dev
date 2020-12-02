@@ -12,6 +12,8 @@ import { selectIsUserCanEdit } from 'features/auth/authSlice';
 import { useSelector } from 'react-redux';
 
 
+const HEADER_TITLE = 'Phoenix'
+
 const styles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -21,7 +23,7 @@ const styles = makeStyles(theme => ({
 export default function Header() {
   const classes = styles();
   const userHasEditorPrivilege = useSelector(selectIsUserCanEdit);
- 
+  
   // drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const openDrawer = () => setDrawerOpen(true);
@@ -78,7 +80,7 @@ export default function Header() {
             <HomeIcon/>
           </IconButton>
           <Typography variant="h6" className='header-title'>
-            עוף החול נייטרו
+            {HEADER_TITLE}          
           </Typography>
         </Toolbar>
       </AppBar>
